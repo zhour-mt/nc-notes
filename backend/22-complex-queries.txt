@@ -1,0 +1,77 @@
+Complex Queries
+Optional WHERE
+
+There may be times where a query string needs to be built conditionally depending on values passed to the model, such as specified column names.
+
+This code example shows the query string and query values being conditionally constructed based on the values passed to the model:
+
+// inside of the model
+
+const queryValues = [];
+let queryStr = "SELECT * FROM table_name";
+
+if (/* optional query value is present */) {
+  queryValues.push(/* optional query value 1 */);
+  queryStr += ` WHERE column_name = $1`;
+}
+
+if (/* second optional query value is present */) {
+  if (queryValues.length) {
+    queryStr += " AND";
+  } else {
+    queryStr += " WHERE";
+  }
+  queryValues.push(/* optional query value 2 */);
+  queryStr += ` column_name = $${queryValues.length}`;
+}
+
+LIKE patterns
+
+When adding conditions with WHERE clauses, an expression that returns a boolean is used, such as those with =, > or <.
+
+When working with strings, it is also possible to check for a specified substring or pattern, as opposed to an exact match. This can be done with a LIKE statement and wildcards:
+
+    _ - match any character
+    % - match any number of characters
+
+"Northcoders" LIKE "North%"      -> true
+"Northcoders" LIKE "%coders"     -> true
+"Northcoders" LIKE "%code%"      -> true
+"Northcoders" LIKE "_orthcoders" -> true
+
+An I can be added in front of the LIKE statement to make it case-insensitive:
+
+"Northcoders" ILIKE "north%"     -> true
+
+This can then be used in models to partially match column values to a given value. The example below returns all rows where the column_to_search includes the searchTerm at any point:
+
+const queryValues = [`%${searchTerm}%`];
+let queryStr = "SELECT * FROM table_name WHERE column_to_search ILIKE $1";
+
+Greenlisting
+
+Greenlisting is a defensive programming technique, where instead of blacklisting certain inputs commonly associated with SQL injection attacks, a whitelist is used instead.
+
+In greenlisting, only certain safe inputs are allowed as parameters of a query string, and anything else is rejected. This approach ensures that only known, safe inputs are accepted.
+
+For example:
+
+// in model.js
+
+const allowedInputs = ["input1", "input2", "input3", "input4"];
+
+let queryStr = `SELECT * FROM table_name`;
+let queryValues = [];
+
+if (!allowedInputs.includes(passed_in_value)) {
+  return Promise.reject({ status: 404, msg: "Invalid Input" });
+};
+
+if (passed_in_value) {
+  queryValues.push(passed_in_value);
+  queryStr += `WHERE value = $1`;
+};
+
+return db.query(`${queryStr} GROUP BY table_name.id;`, queryValues);
+
+Learn To Code

@@ -1,0 +1,27 @@
+Asynchronous Code
+
+Synchronous code is code that is executed only once the operation that ran before it is complete. Asynchronous code can be executed while waiting for another operation to complete.
+I/O
+
+I/O stands for input/output and refers to any process where the computer's central processing unit (CPU) communicates with an external device. Inputs are the signals or data received by the CPU, and outputs are the signals or data sent from it. A typical I/O operation could be a user entering an input on a keyboard and the computer outputting some text on the screen.
+
+Blocking I/O operations are ones in which the thread is effectively held up while waiting for the I/O operation to complete. This means that it is impossible for the thread to be executing any other tasks. When trying to build applications that handle lots of different requests, blocking I/O operations can make the performance of the application much slower.
+Concurrency vs parallelism
+
+Concurrency refers to different tasks with different goals being executed at the same time. Parallelism is also asynchronous, but refers to different parts of the code running simultaneously to execute the same task.
+Multithreading
+
+Multithreading refers to a program that can complete multiple tasks at the same time with multiple threads of execution.
+Problems with asynchronous code
+Need for resynchronising code
+
+If two tasks run at the same time, one might take longer than the other. Imagine a scenario where a user is searching for results on a website. Before displaying the results of their search on the frontend, it would require waiting for the database search to complete and for the results to be returned.
+Inversion of control
+
+Inversion of control occurs when the control of the program is passed to a third-party. This could be an issue if the third-party library does not work as we expect it to.
+
+Imagine an online bookshop that makes use of a function (checkCardDetails) from a separate third-party library to verify card details before making a purchase. As well as the user's payment details, checkCardDetails takes another function (completePayment) as an argument. The completePayment function instructs payment to be taken from the user's card and will be invoked by checkCardDetails if the card details are deemed valid.
+
+However, imagine that there is a bug in the checkCardDetails function, and it invokes the completePayment function multiple times. This is the problem with passing control to a third-party.
+
+Learn To Code

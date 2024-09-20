@@ -1,0 +1,150 @@
+Value vs Reference
+
+The latest ECMAScript standard defines eight data types in the JavaScript language. These values can be divided into two main categories: primitives and objects.
+Primitives
+
+There are 7 primitive data types in JavaScript: string, boolean, null, undefined, number, bigint and symbol.
+
+Primitive data types in JavaScript are the fundamental data types. Other more complex data structures are built up from the primitive data types.
+
+Variables can be reassigned to hold a new value of any given data type at any point.
+
+let container = 'fruit';
+
+typeof container; // "string"
+
+container = 2;
+
+typeof container; // "number"
+
+container = true;
+
+typeof container; // "boolean"
+
+Primitives are immutable
+
+Properties on primitive values cannot be created or overwritten.
+
+const fruit = "banana:;
+fruit.age = 28; // write - ignored
+fruit.age; // read - undefined
+
+fruit[2] = "A"; // write - ignored
+fruit; // read - "banana"
+
+Primitives are compared by value
+
+To compare primitives, JavaScript looks at the values of the two variables. Two primitive values can be compared in JavaScript using the comparison operator ===. When variables are assigned to other primitive values, then the value of the variable is copied over into the other variable.
+
+let a = 10;
+const b = a;
+a = a * 2;
+// a - 20
+// b - 10
+
+Objects
+
+The remaining data type in JavaScript is the object which includes functions and arrays.
+Objects are mutable
+
+Objects are mutable. Unlike primitive values, operations can be performed on objects that will update their state or content.
+
+const jonnyLocker = {};
+jonnyLocker.pen = 'biro'; // write
+jonnyLocker.pen; // read - "biro"
+delete jonnyLocker.pen; //delete
+jonnyLocker.pen; // read - undefined
+
+To see other ways objects can be mutated, refer to the notes on objects.
+Objects are held on reference
+
+Objects are stored by their reference - an address or location in memory. Every time a new object is declared, then a new reference is created that points to a specific address in memory. Consider the following example:
+
+const sam = { name: 'Sam' };
+const samDoppelganger = sam;
+sam.age = 30;
+samDoppelganger === sam; // true
+
+The variable sam is assigned to the object { name: "Sam" }. Another variable samDoppelganger is assigned the same object reference as sam, meaning that both variables point to the same place in memory. This implies that any changes made to one variable will be reflected in the other since they both reference the same object. While mutation of objects can be useful when storing state, it can also have unintended consequences and lead to undesirable behaviours.
+
+const david = { name: 'David' };
+const davidTwin = { name: 'David' };
+david === davidTwin; // false
+
+In the above example, david and davidTwin are declared and assigned different object literals. Every time a new object literal is declared, a new address in memory is being created. The two variables hold two different objects.
+Arrays
+
+Arrays are a special type of object and therefore showcase the same behaviours as objects. They are mutable and are stored and compared by reference.
+
+const samsFilingCabinet = ['books'];
+const davidsFilingCabinet = samsFilingCabinet;
+samsFilingCabinet === davidsFilingCabinet; // true
+// davidsFilingCabinet - ["books"]
+// samsFilingCabinet - ["books"]
+
+In the above example, davidsFilingCabinet points to the same array as samsFilingCabinet and therefore updates to either of these variables are affecting the same array.
+Copying objects
+
+It is often necessary to create copies of objects, which have the same key-value pairs but a different reference in memory from the original object.
+
+There are numerous ways of achieving this in JavaScript, including:
+
+    using a for loop to build an array with the same values
+    Array.prototype.slice()
+    the spread operator
+
+Testing and values vs ref
+toBe vs toEqual
+
+In the Jest library, there are lots of different assertions that can be made about different values. Consider the following assertion:
+
+expect([1, 2, 3]).toBe([1, 2, 3]); // AssertionError
+
+The above test will produce an AssertionError when using Jest. This is because Jest's toBe method compares the references of the two arrays in the same way as the comparison operator ===. Since each array literal is stored at a unique memory address, Jest will throw an AssertionError because they are not pointing to the same location.
+
+To check if the contents of the two arrays are the same, rather than their references, toEqual can be used.
+
+expect([1, 2, 3]).toEqual([1, 2, 3]); // test passes
+
+toEqual really means to deeply equal here, and it is checking that the contents of both arrays are the same (including order). Deeply means that the arrays will be checked at every level of nesting, i.e. the nested contents will also be checked to see if they are the same as the other array. There is no native function that will deeply check the contents of two objects, so it's necessary to rely on 3rd party libraries for this functionality.
+Returning a new object
+
+Consider a function createNewPeople that needs to create a new array of objects but with each age property replaced with a yearOfBirth property:
+
+const people = [
+  {
+    name: 'Sam',
+    age: 29
+  },
+  {
+    name: 'Jonny',
+    age: 31
+  },
+  {
+    name: 'Mitch',
+    age: 27
+  }
+];
+
+There are several test cases that are important when implementing a function such as createNewPeople. One of the test cases might be in order to check that the function createNewPeople returns a new array, i.e. the output array is pointing to a different array from the input.
+
+test('returns a new array', () => {
+  const input = ['a', 'b', 'c'];
+  const returnValue = createNewPeople(input);
+  expect(input).not.toBe(returnValue);
+});
+
+The above test checks to see that the return value of createNewPeople is pointing to a new array from input. If a new array is not returned, then transforming the array later could result in mutating the input array.
+Checking for mutation
+
+Even if a new array is returned from the function, it is still possible for the input array to have been mutated. It is necessary to test directly that the input array has not been mutated. A test case could be as follows:
+
+test('does not mutate the input array', () => {
+  const input = ['a', 'b', 'c'];
+  createNewPeople(input);
+  expect(input).toEqual(['a', 'b', 'c']);
+});
+
+Notice that in this test the return value of createNewPeople isn't relevant, as it's only important to check that the input array's contents have not been modified by the call to the function. This test checks that our function has had no side effects, such as mutating the original input array.
+
+Learn To Code

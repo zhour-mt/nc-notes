@@ -1,0 +1,47 @@
+Pair Programming
+
+Pair programming, or pairing, is an agile software development technique where two people share a single keyboard station and work through the coding task together. It is often used in agile software development teams.
+
+Agile software development is an umbrella term for a number of principles and methodologies that aim to produce software in an iterative, incremental way.
+
+Agile methodologies focus on collaboration, communication, cross-functional teams, continuous improvement, adaptivity and responsiveness and pair programming contributes to this.
+Why Companies Use Pair Programming
+
+The fewer errors that make it into production code the better. These errors are not only a resource cost to fix but they can also be a cost to the business in terms of revenue (e.g. the website goes down, or an app has to go offline for unscheduled maintenance).
+
+Having two people working to produce the same piece of code decreases the number of errors it contains and therefore the amount of errors that make it into a production code base. This, despite the upfront cost increase incurred, is proven to deliver savings.
+
+As well as the potential cost savings, pair programming can also be used as a technique for training new staff by pairing them with more senior developers. This leads to a culture of knowledge exchange which helps staff to grow and develop, in turn leading to more value for a company.
+Pair Programming at Northcoders
+
+Beyond gaining experience in pair programming it is an opportunity for an exchange of ideas and techniques and as such can augment learning beyond the course content. Being exposed to another developer’s way of approaching problems can further develop skills, knowledge and experience.
+
+Having to verbally express thoughts and ideas about something which is very technical forges an ability to communicate technical ideas and use technical vocabulary - an extremely valuable skill. Also, having to talk about code out loud is a useful way of consolidating personal knowledge and understanding.
+
+Pairing also has the possibility to be an opportunity to gain experience in helping others to learn - another valuable skill.
+
+Ultimately, pair programming is a collaborative way of working and learning skills that are extremely desirable as a developer beyond the single ability to write good code.
+How to Pair Programme
+
+Pair programming can be done in-person or remotely and it has two distinct roles - the driver role and the navigator role. It should be agreed at the start of the session who will be undertaking which role to begin with and then these roles should be swapped frequently - at a time agreed by both pairs (for example after a set amount of time, or when a particular task is committed).
+Driver
+
+The driver will be the person actually using the keyboard and actively writing the code. They will implement the direction as given by the navigator using their lower-level code of choice. This is a role that requires focus but should not be done without direction or input from the navigator.
+Navigator
+
+The navigator is responsible for the direction that the code takes from a high-level point of view. They will not touch the keyboard or mouse but will help the driver in their role as needed e.g. noticing syntax errors, looking up documentation, reviewing the code and making suggestions. It is not a passive role.
+
+Remember that pair programming is a collaborative process and as such some overlap of roles can sometimes occur. As such never straying from these above-defined roles might be unrealistic but it should be something to be aimed for. For example, it can be easy to fall into the trap of being a driver but taking on the role of navigator too, leads to a poor pairing experience and an uncollaborative situation.
+
+Some best practices to consider to make a pair programming session run well are:
+
+    Work hard at communicating
+    Solicit and accept feedback
+    Work hard to improve
+    Stick to navigating OR driving
+    Be reflective
+    Be kind
+    Be mindful of your pair’s needs
+    Turn frustration into a learning experience
+
+Learn To Code

@@ -1,0 +1,52 @@
+Passing JSX as Children
+
+React components often need to display content that isn't predetermined. This is typical for layout components like sidebars or popups, which have consistent behaviour but varying content.
+
+React enables the creation of
+composed components
+that can render dynamic content using children.
+Component children
+
+When rendering components, self-closing tags or regular closing tags can be used, similar to HTML. Using a closing tag allows passing any number of children to the components.
+
+<Popup>
+  <h2>Accept cookies?</h2>
+  <button>Sure</button>
+  <button>No way</button>
+</Popup>
+
+<Popup>
+  <h2>Thanks for ordering</h2>
+  <p>Your item is on its way</p>
+</Popup>
+
+React passes any child elements of a component as a prop called children. The value of props.children can be a single element, an array of elements, or null if no children are passed.
+
+Since arrays can be rendered in React, this prop can be used inside the return statement of the component to render the children.
+Example 1: Basic usage
+
+const FancyBorder = (props) => {
+  return <div className="fancy-border">{props.children}</div>;
+};
+
+This allows the FancyBorder component to render any child elements passed to it, maintaining flexibility and reusability.
+Example 2: Adding state and logic
+
+Composed components are not limited to styling or layout; they can have state, side-effects, or any other functionality that regular components possess.
+
+The Expandable component below adds a button to toggle showing or hiding its content:
+
+const Expandable = ({ children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleOpen = () => setIsOpen((currOpen) => !currOpen);
+
+  return (
+    <div>
+      <button onClick={toggleOpen}>{isOpen ? "Close" : "Open"}</button>
+      {isOpen && children}
+    </div>
+  );
+};
+
+Learn To Code

@@ -1,0 +1,59 @@
+Higher-Order Functions
+
+A higher-order function a function that does at least one of the following:
+
+    returns a function
+    takes one or more functions as an argument
+
+Benefits of higher-order functions
+
+Higher-order functions can be a good way of making our code more reusable, readable, and DRY (Don't Repeat Yourself).
+
+Consider the example below, where both declared functions share similar logic:
+
+function copyArrayAndSquare(list) {
+  const output = [];
+
+  for (let i = 0; i < list.length; i++) {
+    output.push(list[i] ** 2);
+  }
+  return output;
+}
+
+function copyArrayAndTriple(list) {
+  const output = [];
+
+  for (let i = 0; i < list.length; i++) {
+    output.push(list[i] * 3);
+  }
+  return output;
+}
+
+const nums = [1, 2, 3, 4, 5, 6, 7];
+const squaredNums = copyArrayAndSquare(nums); // [1, 4, 9, 16, 25, 36, 49];
+const tripledNums = copyArrayAndTriple(nums); // [3, 6, 9, 12, 15, 18, 21];
+
+Instead of repeating the functionality, a higher-order function can be created that takes an array and a function:
+
+function copyArrayAndDoStuff(list, instructions) {
+  const output = [];
+  // create a variable to hold the new values
+
+  for (let i = 0; i < list.length; i++) {
+    // invoke the instructions function with the current element, then push the result to the output array
+    output.push(instructions(list[i]));
+  }
+  return output;
+}
+
+This works similarly to the map array method, as it iterates through the input array and uses a function to build up a new array to return.
+
+function tripleNum(num) {
+  return num * 3;
+}
+
+const nums = [1, 2, 3];
+const tripledNums = copyArrayAndDoStuff(nums, tripleNum);
+console.log(tripledNums); // [3, 6, 9]
+
+Learn To Code

@@ -1,0 +1,138 @@
+Sorting Data
+
+Rendering a list of items in a specific order is a common task for most websites and apps. Sorting data needs to be handled carefully in React to avoid directly mutating state.
+Avoid mutation of state
+
+Consider a React component that renders a basic list:
+
+const List = () => {
+  const [items, setItems] = useState(["banana", "aardvark"]);
+
+  return (
+    <div>
+      <ul>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+      <button
+        onClick={() => {
+          setItems((items) => items.sort()); // This is bad
+        }}
+      >
+        Sort alphabetically
+      </button>
+    </div>
+  );
+};
+
+One common mistake is using the sort method directly on an array to change its order. This is problematic because the sort() method sorts the elements of an array in place, which means it modifies the original array. Therefore, state is mutated, which goes against the important React rule: "Do not mutate state".
+
+To prevent mutation, it is necessary to create a shallow copy of the array before sorting it. This can be done using various methods, such as the spread operator, which copies all elements of the original array into a new array that can then be safely mutated.
+
+<button
+  onClick={() => {
+    setItems((items) => [...items].sort());
+  }}
+>
+  Sort alphabetically
+</button>
+
+A single source of truth
+
+In the example above, a user action (clicking a button) directly caused a change in the order of the rendered list. However, it could be useful for the component to indicate to the user how the list is currently sorted.
+
+Consider the following example:
+
+const List = () => {
+  const [items, setItems] = useState(["banana", "aardvark"]);
+  const [sort, setSort] = useState("a -> z");
+
+  return (
+    <div>
+      <ul>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+      <p>Sorted {sort}</p>
+      <button
+        onClick={() => {
+          setSort("a -> z");
+          setItems((items) => [...items].sort());
+        }}
+      >
+        Sort a to z
+      </button>
+      <button
+        onClick={() => {
+          setSort("z -> a");
+          setItems((items) => {
+            return [...items].sort((a, b) => {
+              return b.localeCompare(a);
+            });
+          });
+        }}
+      >
+        Sort z to a
+      </button>
+    </div>
+  );
+};
+
+Here, the list of items and the sort value are stored in state. When a user clicks a button, both parts of the state are updated independently.
+
+This is not ideal as there is a possibility for the sort and the actual order of items to become "out of sync" as more features are added to the component. Using a single source of truth can help to avoid this situation.
+
+In the example below, instead of setting the sort and updating the list in the click handlers, only the sort value is altered. Then, the useEffect hook is used to trigger an update to the items array whenever the sort value changes:
+
+const List = () => {
+  const [items, setItems] = useState(["banana", "aardvark"]);
+  const [sort, setSort] = useState("a -> z");
+
+  useEffect(() => {
+    if (sort === "a -> z") {
+      setItems((items) => [...items].sort());
+    } else {
+      setItems((items) => {
+        return [...items].sort((a, b) => {
+          return b.localeCompare(a);
+        });
+      });
+    }
+  }, [sort]);
+
+  return (
+    <div>
+      <ul>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+      <button onClick={() => setSort("a -> z")}>Sort a to z</button>
+      <button onClick={() => setSort("z -> a")}>Sort z to a</button>
+    </div>
+  );
+};
+
+Sorting with API calls
+
+A dynamic list in a React application is usually generated from some call to an API. In this case, it is not appropriate to just re-order the array on the client-side because the API may not serve up all of the items in a single request.
+
+Instead, it is better to make a new API call to request data sorted in the correct order:
+
+useEffect(() => {
+  setIsLoading(true);
+  api
+    .getItems({ sort })
+    .then((items) => {
+      setItems(items);
+      setIsLoading(false);
+    })
+    .catch((err) => {
+      // error handling
+      setIsLoading(false);
+    });
+}, [sort]);
+
+Learn To Code

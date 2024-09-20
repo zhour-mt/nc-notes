@@ -1,0 +1,105 @@
+Routing
+
+Routing refers to how an application’s endpoints respond to client requests. In Express, a basic route is composed of a method and a path. For example, the route to handle a GET request to the /api/users path would look like:
+
+app.get("/api/users", (req, res) => {
+  // logic to handle the request
+})
+
+express.Router()
+
+A server may require multiple routes to handle different requests, and keeping the logic for these routes in a single file can make code difficult to read and update.
+
+To help with this, Express allows for the separation of server routes into smaller sub-routers.
+
+Consider an app.js file with the following routes:
+
+// app.js
+
+app.get("/api", (req, res) => {
+  res.status(200).send("All OK from /api");
+});
+
+app.get("/api/users", (req, res) => {
+  res.status(200).send("All OK from /api/users");
+});
+
+app.get("/api/users/:id", (req, res) => {
+  res.status(200).send("All OK from /api/users/:id");
+});
+
+Instead, a router can be used on all routes that begin with /api:
+
+// api-router.js
+
+const apiRouter = require("express").Router();
+
+apiRouter.get("/", (req, res) => {
+  res.status(200).send("All OK from /api");
+})
+
+This can then be used in app.js:
+
+const apiRouter = require("./routes/api-router");
+
+app.use("/api", apiRouter);
+
+Subrouters
+
+To refactor the routes for /api/users and /api/users/:id, a subrouter can be created for the users endpoint:
+
+// users-router.js
+
+const usersRouter = require("express").Router();
+
+usersRouter.get("/", (req, res) => {
+  res.status(200).send("All OK from /api/users");
+});
+
+usersRouter.get("/:id", (req, res) => {
+  res.status(200).send("All OK from /api/users/:id");
+});
+
+module.exports = usersRouter;
+
+This subrouter can then be added to the apiRouter:
+
+// api-router.js
+
+const apiRouter = require("express").Router();
+const usersRouter = require("./users-router");
+
+apiRouter.use('/users', usersRouter);
+
+apiRouter.get("/", (req, res) => {
+  res.status(200).send("All OK from /api");
+})
+
+router.route()
+
+Routes can be organised further when a particular route accepts different types of HTTP methods by using .route().
+
+// users-router.js
+userRouter
+  .route("/")
+  .get((req, res) => {
+    res.status(200).send("All OK from GET /api/users");
+  })
+  .post((req, res) => {
+    res.status(200).send("All OK from POST /api/users");
+  })
+  .patch((req, res) => {
+    res.status(200).send("All OK from PATCH /api/users");
+  });
+
+userRouter
+  .route("/:id")
+  .get((req, res) => {
+    res.status(200).send("All OK from GET /api/users/:id");
+  })
+  .patch((req, res) => {
+    res.status(200).send("All OK from PATCH /api/users/:id");
+  });
+// ...
+
+Learn To Code

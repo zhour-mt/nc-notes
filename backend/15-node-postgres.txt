@@ -1,0 +1,111 @@
+Node-Postgres
+
+node-postgres is an npm package that allows users to create a connection to a PostgreSQL database and make SQL queries directly using JavaScript.
+Connection setup
+
+Run npm install pg to install node-postgres.
+
+The node-postgres connection can be configured within a db directory, alongside the SQL seeding script for the database that is to be connected to.
+
+ └── node_modules/
+ └── db/
+ │  ├──── index.js <-- node-postgres connection pool
+ │  └──── seed.sql
+ ├── .gitignore
+ ├── package-lock.json
+ └── package.json
+
+In order to connect to a database with node-postgres, a new instance of the Client or Pool class from the pg package must be instantiated.
+Connecting with a single client
+
+For single queries after which the connection to the database will be closed, the Client class can be used:
+
+const { Client } = require("pg");
+
+const client = new Client();
+
+client
+  .connect()
+  .then(() => {
+    console.log(`connected to ${process.env.PGDATABASE}!`);
+  })
+  .catch((err) => {
+    console.log("connection error:", err);
+  });
+
+Connection pooling
+
+When working with frequent queries to a database, connection pools can be used. This allows an app to access a reusable group of clients which is more efficient than creating a new client connection for each query.
+
+Generally, an app will want a limited number of pools, as creating an unbounded number of pools defeats the purpose of pooling at all.
+
+Connection pooling with node-postgres follows a similar syntax to connecting with a single client, but with the option of additional config options and methods.
+
+A pool of client connections can be created like so:
+
+const { Pool } = require("pg");
+
+const db = new Pool();
+
+module.exports = db;
+
+Queries
+
+To use the connection to make queries to the database, the query method on the Client or Pool object can be used:
+
+const db = require("./db/index.js");
+
+db.query("SELECT * FROM animals;")
+  .then((result) => console.log(result))
+  .catch((err) => console.log(err));
+
+Both promises and callbacks are supported by the node-postgres library for making queries.
+Result
+
+The result object that is returned by node-postgres for a successful query has a key of rows, which is an array of JSON-like objects representing the output of the SQL query.
+
+{
+  rows: [
+    { animal_name: "Parrot", legs: 2 },
+    { animal_name: "Elephant", legs: 4 },
+    { animal_name: "Seahorse", legs: 0 }
+  ]
+  // additional properties
+}
+
+Using environment variables
+
+It is possible to inform node-postgres which database to connect to using PGDATABASE. This is done using environment variables, which can be set when running files:
+
+PGDATABASE=my_database_name node queryFile.js
+
+If no PGDATABASE environment variable is set, node-postgres will connect to the default database.
+
+Accidental connections to the default database can be prevented by checking that a database name is provided to the environment variables in the connection file:
+
+const { Pool } = require("pg");
+
+if (!process.env.PGDATABASE) {
+  throw new Error("No PGDATABASE configured");
+}
+
+module.exports = new Pool();
+
+Parameterized queries
+
+When passing parameters to queries, it is important to avoid SQL injection attacks. Bad actors may try to insert malicious SQL code, which could lead to data loss or corruption.
+
+To avoid this, when passing variables to queries, template literals or string concatenation should be avoided. Instead, parameterized queries built in to node-postgres should be used.
+Using parametrized queries
+
+In a parametrized query, variable values are replaced with placeholders, such as $1. An array of values is then passed as the second argument to the query method, where each element corresponds to a placeholder value.
+
+A query to select a specific snack from the database could be set up as follows:
+
+exports.selectSnackById = (snack_id) => {
+  return db
+    .query("SELECT * FROM snacks WHERE snack_id = $1;", [snack_id])
+    .then((result) => result.rows); // [ { snack: "crunchie", price: 1.50 } ]
+};
+
+Learn To Code

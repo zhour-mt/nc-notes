@@ -1,0 +1,64 @@
+Factory Functions
+
+A factory function is a function that creates and returns objects. It is a simple way to produce multiple objects with the same properties and behaviours.
+
+function createCar() {
+  const newCar = {};
+
+  newCar.model = "Ford Fiesta";
+  newCar.engineSize = 1.2;
+  newCar.colour = "red";
+
+  return newCar;
+}
+
+const nicksCar = createCar();
+const poppysCar = createCar();
+
+Each time the createCar function is invoked, an object is initialised with the properties model, engineSize and colour. This means that nicksCar and poppysCar will be separate instances of the same car object.
+Property assignment
+
+Factory functions can be given parameters to make them more dynamic. This allows the created objects to have values that match the arguments passed in to the factory function when the object is instantiated.
+
+function createCar(model, engineSize, colour) {
+  const newCar = {};
+
+  newCar.model = model;
+  newCar.engineSize = engineSize;
+  newCar.colour = colour;
+
+  return newCar;
+}
+
+const nicksCar = createCar("Ford Fiesta", 1.2, "blue");
+const PoppysCar = createCar("Ford Explorer", 4, "purple");
+
+Method assignment
+
+Functions can also be assigned to properties within objects; these are called methods. When the function is declared and assigned directly inside the factory function, it creates an issue. Each time the factory function is invoked, it will create a new instance of that function, each with its own reference in memory.
+
+It is much better to declare the function once, outside the factory function, and then reference the object using the this keyword.
+
+function createCar(colour) {
+  const newCar = {};
+
+  newCar.model = "Ford Fiesta";
+  newCar.engineSize = 1.2;
+  newCar.colour = colour;
+  newCar.settings = [];
+  newCar.addSetting = addSetting;
+
+  return newCar;
+}
+
+function addSetting(setting) {
+  this.settings.push(setting);
+}
+
+In the example above, the addSetting property references the addSetting function, which has been declared outside of the createCar factory function.
+
+This means that a single function can be declared, and multiple objects can reference and use it.
+
+As the addSetting function is now being used by multiple objects, the this keyword is needed to enable the function to bind to the correct object instance that has invoked the function.
+
+Learn To Code

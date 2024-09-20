@@ -1,0 +1,55 @@
+Testing
+
+Code is not only interpreted by computers. Code is written, read, and maintained by humans. Any code that is written must be clear and well-documented. One way this can be achieved is with rigorous, formal testing of the code base.
+
+A well-organised test suite acts as a persistent checklist to grade the code against. It acts as documentation, describing the behaviours we expect it to perform and indicates if they have been achieved. Ultimately, it gives the development team confidence to make changes to the code whilst preserving previous behaviours. As a result, the time invested in practising formal testing helps to prevent unforeseen bugs in the future and speeds up the development process overall. In many development teams, code that has not been tested will not be accepted into production as it cannot be trusted to perform as per the specification.
+Types of Testing
+
+Testing is a broad field and there are many types of tests that developers use to make sure code works:
+
+    Unit Testing - Testing a small unit of code (typically a function) for specific inputs/outputs. These are quick and simple and are generally written while the code is being built up.
+    Integration Testing - Testing that multiple units work together as expected. These are usually slower and more complex than unit tests.
+    End-to-End Testing - Testing the application flow as a complete system. Typically used to test vital functionality such as user login or payments.
+
+Test-driven Development
+
+Test-driven development (TDD) is the practice of using a formal testing suite to guide the code that will be written. Isolating a functionality into individual behaviours can help to break a problem down and ensure that each part of the code works as expected. Additionally, TDD can help prevent bugs, as complexity is built up incrementally in a logical manner.
+
+Consider the real-world process of purchasing a book from a bookstore and how it may broken down into distinct behaviours:
+
+    The book is given to the buyer
+    The value equal to the cost of the book is removed from the buyer's bank account
+    The bookstore's stock count is decreased by 1
+    If the buyer's bank account has insufficient funds, the book is not given and the stock quantity is not decreased
+    If the buyer requests a bag, the cost is increased by 20p and taken from the account
+    If the buyer requests a bag, the bag stock count is decreased by 1
+
+Red - Green - Refactor Cycle
+
+The TDD process is referred to as the red-green-refactor cycle.
+
+    Highlight a behaviour to design.
+    Red - Build a test to assert that the functionality should perform as expected. Run the test. It should fail, if it doesn't the code already accomplishes the task.
+    Green - Write the minimum amount of code that will make that test pass.
+    Refactor - Review the code to check for potential improvements, whether that be in performance or code clarity.
+    Focus on a new test to drive the development.
+
+Following the red - green - refactor cycle helps avoid false positives from improper testing and ensures that every line of code is required.
+Happy Path
+
+TDD is a good way to systematically consider how a function will perform in different scenarios. Tests should first focus on the happy path. The happy path is a well-defined test case using known inputs which execute without errors or edge-case behaviours. It is considered to be the behaviour of the code 99% of the time and therefore should be the focus of development. Any edge-case or error behaviours, sometimes called sad path tests, should be considered once the base behaviour is achieved.
+Extensible Testing
+
+It's important to keep an eye on the end goal while building up a testing suite. A good test is one which should still be valid even when the testing suite is complete.
+
+A basic example of this is testing that a function returns an object. This object may require a lot of complex calculations to create, so it is decided that the testing suite will focus on each property one at a time. The first test might just check for the first property.
+
+// test: the object should look like { age: 30 }
+
+This is considered a brittle test, as a new property will be added in the next test case which will cause this one to fail.
+
+// test: the object should have a property "age" with the value of 30
+
+A better way to test for these sorts of changes incrementally is to focus on the property itself. This will always remain true even if future tests add more properties.
+
+Learn To Code

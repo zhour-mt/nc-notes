@@ -1,0 +1,30 @@
+Git
+
+Git is an open-source distributed version control system that is used to track changes to files over time. A developer can save or commit their work at a sensible checkpoint in their workflow. Git will save the differences between the contents of the files now, compared to the state of the files in the previous commit. This builds up a timeline of how the project has changed over time. Git permits developers to traverse the timeline, build parallel timelines (branches), and merge timelines to manage the complexities of project collaboration.
+Branches
+
+A branch is a series of commits that forms a timeline representing some work in a project. By default, a branch will point to the most recent commit, as each commit also refers to the prior commit.
+
+The branch that is created by default in a new empty git repository is called the main branch. Whenever a new git commit is created, the main branch is updated so it points to the most recent commit.
+
+When working on software projects, it's useful to be able to separate concerns and work on different tasks in isolation.
+
+Git provides this functionality via branches. Each branch maintains its version of the code and can be worked on independently without affecting the code on other branches.
+
+Developers can work on their branches and merge branches at a point of their choosing which is very useful for collaboration.
+Command Line Interface
+
+Git has a rich command line interface:
+
+    git init creates a new git repository. This is the place where git stores the content of files and folders in each snapshot on your timeline.
+    git status lists tracked and untracked files that are present in the git repository.
+    git add <file path> adds the contents of the passed file to the staging area - the list of files which will be committed to the timeline.
+    git restore --staged <file path> removes the specified files from the staging area so they won't be committed. Running the command without a file path will remove all files in the staging area.
+    git commit -m <commit message> saves a snapshot of the contents of files that are added to the staging area. Commits are saved with a message that describes the functionality that has been added that makes this work worthy of saving. A new point in the git timeline is created.
+    git log lists all the commits stored inside a git repository. It's used to print the timeline of commits in the project.
+    git branch lists local branches. The current branch is marked by an asterisk (*).
+    git checkout -b <new branch name> creates a new branch from the current branch.
+    git checkout <branch name> changes to an existing branch by name.
+    git branch -D <branch name> deletes a local branch by name.
+
+Learn To Code

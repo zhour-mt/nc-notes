@@ -1,0 +1,126 @@
+Forms and Validation
+
+HTML forms encompass a variety of input controls, including text input fields, radio buttons, and more. These controls are designed to accept different types, which are interpreted by browsers. There is a comprehensive list of 'input types' on W3Schools.
+Actions and Methods
+
+Form tags can accept action and method attributes:
+
+    action: Specifies the URL to where the data is sent, typically an endpoint like an API. If not specified it defaults to action="/".
+    method: Specifies the HTTP method (e.g., GET or POST) to be used when submitting the form. If not specified it defaults to method="GET".
+
+These attributes determine how and where the data is sent when a form is submitted.
+
+Note: If each input box on the form is given a name attribute, a GET request will append a query containing the input box names and the values of the inputs to the URL: e.g. ?fullname=obi&username=obiNC. This means that GET requests should not be used for sending sensitive data like passwords. POST requests do not show the data in the URL and instead send form-data in the HTTP body.
+
+To comply with RESTful principles, which dictate that HTTP servers should be stateless, all necessary information must come from the client. If information must be sent without user visibility, use the hidden attribute in input elements. For more information, see the MDN page on <input type="hidden">
+Submit Events
+
+A submit event is triggered when a form is submitted, either by clicking a submit button or pressing Enter while focused on a form field. This event can be used to perform actions before the form data is sent to the server, such as validation or preventing the default form submission behaviour:
+
+const form = document.querySelector("form");
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault(); // Prevents the default form submission
+  // Perform validation or other actions here
+  console.log("Form submitted");
+});
+
+Accessing the URL
+
+Forms typically make requests to a server rather than to another page, but it is possible to define any URL in the action attribute of the form, including another web page. The Location api allows access to the current page's URL. Both the document and the window point to the Location object:
+
+console.log(document.location); // A Location object
+console.log(window.location); // The same Location object
+
+There are several useful properties on this object. The queries can be accessed using Location.search which provides them as a raw string.
+
+Parsing these queries can be handled in a number of ways. Most browsers come with URLSearchParams which will parse the raw queryString to give access to methods for the retrieval of values associated with queries.
+
+// If the current URL is https://example.com/?name=Paul&age=34
+
+const searchStr = document.location.search; // '?name=Paul&age=34'
+
+const queries = new URLSearchParams(searchStr);
+
+const name = queries.get('name'); // 'Paul'
+const age = +queries.get('age'); // 34 
+
+Note: All query values are strings, so any other type of value, such as numbers, will need to be converted to their associated type before use. This applies to the age query in the example above.
+Semantic Forms
+
+Semantic HTML elements provide meaningful structure to web content, making it easier for screen readers to interpret and navigate. By using semantic elements like labels, buttons, fieldsets, and legends, we ensure that our forms are accessible to all users, including those with disabilities.
+
+    Labels: Use elements with the for attribute matching the id of the input. This allows users, including those who rely on screen readers, to click on the label to focus on the input, enhancing navigation and usability.
+    Buttons: Buttons have default keyboard accessibility and can be tabbed between and activated using the Enter key. This ensures that users who navigate with keyboards or other assistive devices can easily interact with form buttons without relying solely on mouse input.
+    Fieldsets and Legends: Use <fieldset> to group related elements within a form and <legend> to provide a title for the grouped elements. Screen readers interpret fieldsets and legends as semantic grouping elements, providing context and structure to the form for users who rely on auditory cues to navigate web content.
+
+Some useful articles on what semantic html is and why it's needed:
+
+    The Importance of Semantic HTML
+    Semantic HTML
+
+A nice guide on form design can be found here.
+Validation
+
+Forms should provide feedback to users if their inputs are incorrect before submitting to an API. This is client-side validation and is performed by the user's browser before the data is sent to the server. This allows us to provide immediate feedback to the user.
+HTML Validation
+
+Some validation can be provided by HTML and provides a basic level of feedback to the user. For example, ensure that necessary fields are not left empty by using the required attribute:
+
+<input type="text" id="username" name="username" required>
+
+Likewise, if input types are defined, the browser will perform basic input validation:
+
+<input type="number" id="age" name="age">
+
+JavaScript Validation in Event Handlers
+
+JavaScript validation allows for more complex and customised validation logic that goes beyond what HTML validation can provide. It can be used in conjunction with HTML validation.
+
+Validation logic can be added to various events and consideration should be given to which events trigger validation and how the user experience is affected.
+
+Some things have to be validated server-side, e.g. a new username that hasn't been taken. Do as much as possible client-side to smooth out this experience. A form is the final point of a sale and should be treated as such.
+Confirmations
+
+Use event listeners to provide feedback as users fill out forms. For example:
+
+    Change Event: Evaluates input as it changes.
+    Blur Event: Evaluates input when the user moves to the next field.
+
+Common events also include input, submit, click and focus. Refer to this list on W3Schools for more events.
+
+const handleChange = (event) => {
+  console.log(event.target.value)
+};
+
+usernameInput.addEventListener('change', handleChange);
+
+In this example, handleChange is an event handler attached to the usernameInput element. It logs the input's value whenever a change event occurs. Event handlers are invoked with an HTML DOM Event object.
+
+This DOM Event contains lots of information - for example, at the event.target key we can find the HTML element that experienced that event. This means that, in the example above, we could access the usernameInput's value through event.target.value.
+In general, here are some common rules for client side validation
+Good
+	
+Bad
+Confirmation of completed fields when you move on to the next
+	
+Not validating until the whole thing is completed and having to go back to it to correct mistakes.
+Clear prompts of what's expected e.g. password restrictions
+	
+Unclear what the restrictions are.
+Errors are pointed out before you submit.
+	
+Validating too early. When you're halfway through typing something.
+Clear colour schemes, green is good, red is bad.
+	
+Placeholders disappearing when you start typing.
+Good tabbing, sort-codes are a great example of this.
+	
+Everything nested so you can't tab between
+Progress Bars for long forms.
+	
+Deleting all the input on submission so you have to re-type
+
+|
+
+Learn To Code

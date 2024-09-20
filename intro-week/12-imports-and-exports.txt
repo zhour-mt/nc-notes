@@ -1,0 +1,65 @@
+Imports and Exports
+
+When writing JavaScript, we will often separate out functionalities into different files. These files are referred to as modules.
+
+To use these modules within a different JavaScript file, they must be exported from one file, and then imported into another file.
+
+Originally, JavaScript had no concept of modules, and there is a variety of different competing formats. The CommonJS and ES Module formats are most commonly used.
+CommonJS
+
+require() is a function that is built into Node.js. It reads a JavaScript file, executes it and returns the exported object.
+Creating and Exporting Modules
+
+By default, each file has a module object available within it. One important property of this object is the .exports property, the value of which is returned when the module is required into another file. The default value for this property is an empty object.
+
+To export a variable or function, the value of module.exports can be reassigned like in the example below:
+
+function greet() {
+  return "Welcome to Northcoders!";
+};
+
+module.exports = greet;
+
+Require
+
+To import something from another file, use the require function and assign the return value to a variable. The name of this variable can be different to the one originally used in the exporting file, but it helps to keep them the same.
+
+const greet = require("./greeting");
+`Greeting: ${greet()}`; // Greeting: Welcome to Northcoders!
+
+ES6
+
+import is a keyword that originates from ES6. It can be used to import both modules as well as individual exports from modules.
+Creating and Exporting
+
+To export a module using the ES6 format, you need to use different syntax. You can label your declarations as exported by using the export keyword before it.
+
+export function getGreeting() {
+  return "Welcome to Northcoders!";
+};
+
+Or you can declare your variables or functions first and export them at the bottom of your file.
+
+function getGreeting() {
+  return "Welcome to Northcoders!";
+}
+
+export { getGreeting };
+
+Importing Modules
+
+If there is a lot you need to import from a file, you can import everything as an object.
+
+import * as greeting from "./greeting";
+`Greeting: ${greeting.getGreeting()}`; // Greeting: Welcome to Northcoders!
+
+More commonly, you can also import a list using the import keyword and curly braces.
+
+import { getGreeting } from "./greeting";
+`Greeting: ${getGreeting()}`; // Greeting: Welcome to Northcoders!
+
+Which Module System Should I Use?
+
+Nowadays, since ES6 modules are part of the standard, the import and export syntax is most commonly used. In order to use it with Node, you must update the package.json's "type" key with the value of "module". Some libraries such as Jest only have experimental support for the import syntax or require extra configuration. Whilst on the course, the commonJS require syntax will be used for ease.
+
+Learn To Code

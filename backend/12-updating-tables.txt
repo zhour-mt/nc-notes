@@ -1,0 +1,31 @@
+Updating Tables
+
+There are times when an existing table that already contains data will need to be updated to add or remove columns. In these cases, the table cannot be dropped and re-created, as this would lose all of the data contained within. Instead, the ALTER TABLE command can be used to change the structure of an existing table:
+
+ALTER TABLE animals
+ADD COLUMN cuteness_rating INT;
+
+ON DELETE
+
+When one table references another, it is important to explicitly state what should happen to the entry in the referenced table upon deletion:
+
+FOREIGN KEY(column_name)
+REFERENCES parent_table(parent_key_column)
+ON DELETE [delete_action]
+
+In the case that the parent entry is deleted, two common actions are:
+
+    SET NULL, which sets the value of this field to NULL
+    CASCADE, which triggers the deletion of the child record as well
+
+Other options include SET DEFAULT, NO ACTION andRESTRICTED.
+
+In the following example, if one of the animals were deleted, any Northcoders whose favourite_animal_id referenced the deleted animal would now have that field set to NULL.
+
+CREATE TABLE northcoders (
+  northcoder_id SERIAL PRIMARY KEY,
+  northcoder VARCHAR(40),
+  favourite_animal_id INT REFERENCES animals(favourite_animal_id) ON DELETE SET NULL
+);
+
+Learn To Code

@@ -1,0 +1,53 @@
+Routing
+Server-side routing
+
+Server-side routing refers to the method of navigation that uses HTML pages for each different view of an application.
+
+When a user navigates to a new page, the current page is discarded and the HTML of the new page is loaded.
+Client-side routing
+
+Applications making use of client-side routing use one HTML page.
+
+When a user navigates to a new page, instead of discarding the current page and loading a new one, the current page is updated through DOM manipulation to render the new content associated with the user request.
+Multi-page applications and single-page applications
+Multi-page applications
+
+Multi-page applications (MPAs) are web applications that consist of multiple HTML pages. They are a popular choice for developing complex websites that possess a lot of functionality and need to prioritise browser compatibility and SEO (search engine optimisation).
+
+MPAs typically make use of server-side routing to determine which page to deliver based on the user’s request. When a user navigates to a new page in an MPA, the URL is updated and a HTTP GET request is made to the associated route. The server then responds with the requested HTML.
+
+Examples of MPAs include:
+
+    Most e-commerce websites (e.g. Amazon, eBay)
+    Wikipedia
+    WordPress
+
+Single-page applications
+
+Single-page applications (SPAs) are web applications that use a single HTML page and dynamically update the content rendered on that page using JavaScript based on user interaction.
+
+HTTP requests still happen in the background but not for displaying different page views, only for getting or sending data to servers. While the page itself never reloads, components being added and removed to and from the DOM gives the illusion of navigation.
+
+React web applications are single-page applications.
+
+As a result, in comparison to MPAs, SPAs appear to respond faster and load content quicker despite having longer initial loading times on average. SPAs are a popular choice for developing highly polished applications that aim to provide a seamless user experience.
+
+Examples of SPAs include:
+
+    Netflix
+    Spotify
+    Gmail
+
+Because SPAs use a single HTML page to render all content, everything is served up on the static home path.
+
+There are a few negatives to this setup:
+
+    Different areas of the application are not individually addressable, which means it is not possible to share links to specific page views.
+    It is not possible to navigate backwards and forwards through the application using the browser history as all content exists on the same URL.
+    If a user refreshes the page, they will be sent back to the initial state of the application, losing any information or progress made previously.
+
+These drawbacks each denote key UX expectations for websites established as a result of the many years that MPAs have been the standard.
+
+Fortunately, there are many routing libraries available which allow for building this behaviour back into single-page applications.
+
+Learn To Code

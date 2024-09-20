@@ -1,0 +1,89 @@
+Jest
+Jest Setup
+
+Jest is a delightful JavaScript Testing Framework with a focus on simplicity. - Jest docs
+
+Testing frameworks are considered as dev dependencies and so should be installed with the -D flag.
+
+npm i -D jest
+
+As tests will likely be run frequently, it's common practice to create a script to run the tests.
+
+// package.json
+"scripts" : {
+  "test": "jest"
+}
+
+The script executes the jest executable that has been installed. It is possible to pass jest an argument to a particular path file path. Without an argument, Jest will look for files which match the following criteria:
+
+    any files in a directory of __tests__ with:
+        the file extensions of .js, jsx, .ts, .tsx
+        the suffix of .spec or .test
+    files called test.js or spec.js
+
+Test Suites
+
+Using jest to run a file provides a globally available jest object, which can be utilized to organise test behaviours, separate tests, and make assertions regarding expected outcomes.
+
+Below is an example of how a test may be structured
+
+// __tests__/myFunc.test.js
+
+describe('myFunc', () => {
+  test('first behaviour to be tested', () => {
+    // assert the functionality works as expected
+  });
+  test('second behaviour to be tested', () => {
+    // assert the functionality works as expected
+  });
+  // tests increasing in complexity...
+});
+
+    describe - a function that takes two arguments: a description string and a callback function. Its purpose is to group linked behaviours and tests. The description string is used to label the test outputs and has no programmatic significance. All tests associated with this grouping should be placed inside the callback function.
+    test - a function similar to describe in terms of its function signature. It takes a description string that describes the behaviour being tested and a callback function. All assertions made in this test will be written within the callback function. it is an alias for test to align Jest frameworks with other frameworks that only use it. When running a file with jest, a test block will automatically pass unless there is an error thrown inside it. Errors are generally thrown using Jest's assertion matchers.
+
+Jest Matchers
+
+Jest provides an assertion library: a collection of tools to assert that the behaviour of a function is as expected.
+
+// __tests__/sumArgs.test.js
+const sumArgs = require('../index');
+
+describe('sumArgs', () => {
+  test('returns a single passed number', () => {
+    const actual = sumArgs(1);
+    const expected = 1;
+    expect(actual).toBe(expected);
+  });
+});
+
+Expect allows the use of the semantic matcher functions that come with Jest (e.g..toBe). These matchers can be chained onto the function invocation to tailor the expected behaviour of the code. Matchers will throw an error if the statement made is not true, causing the test to fail.
+
+Common matchers include:
+
+    .toBe - tests the two variables are the same
+    .toEqual - tests the two variables look the same
+    .toContain - tests if an array or iterable contains a given value
+    .toMatchObject - tests if an object contains given properties
+
+It is also possible to use .not to negate any expected behaviour.
+
+Jest provides a lot of matchers for a whole host of situations. The Jest docs cover all of the options available.
+Jest Hooks
+
+In more advanced testing, an action may be required to run before or after each test. It's important that tests are run in sterile environments in order to have consistent results between runs. For example, a function may be designed to create a new file. The first time this test is run, the test passes. The second time, the file already exists, the test fails because the effects of the first test persisted through to the second test. Jest hooks can register functions to run automatically during points of the testing suite:
+
+    beforeAll
+    beforeEach
+    afterEach
+    afterAll
+
+beforeEach(() => {
+  console.log('hello');
+});
+
+The above example registers a function to be invoked before each test block is run.
+
+More information on setup and teardown can be found in the Jest docs.
+
+Learn To Code

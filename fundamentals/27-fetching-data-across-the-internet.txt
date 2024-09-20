@@ -1,0 +1,126 @@
+Fetching Data Across The Internet
+
+The internet is a network of computers connected by wires and routers. The World Wide Web is the collection of documents served by the internet.
+
+Every connection to the internet has its own IP (internet protocol) address which allows it to be identified, much like a house address. IP addresses can also be used in browsers to request data from the same connected computer. However, IP addresses aren't human friendly, so in place of these strings of numbers, servers use the Domain Name System (DNS). This manages the assignment of more familiar web addresses to IP addresses.
+
+Every computer/device also has a MAC address. This is a unique identifier for the device, unlike an IP address that can be shared by multiple devices on the same network.
+Client/server relationship
+
+A client is any application or system that sends requests to a server. A server can be thought of as a computer, device or program that is able to receive incoming requests and send an outgoing response. Servers themselves can also make requests to other servers.
+
+Servers are often used to serve up raw data that is not styled for consumption by the average internet user, and instead is provided in a format that developers can use and manipulate. These servers are often known as Web APIs (Application Programming Interfaces).
+
+A good example is GitHub and the GitHub API. A request for data filtered by 'javascript' can be made to https://api.github.com/search/repositories?q=javascript. The returned data is in unstyled, JSON format. Alternatively, you could visit the GitHub website and use the search bar to get this exact same data in a more user-friendly format.
+CRUD operations
+
+In order for the request and response to be valid, they will need to adhere to specific protocols for requesting or sharing information across the internet.
+
+Web developers primarily deal with HTTP (hypertext transfer protocol) and the more secure counterpart, HTTPS. These protocols are concerned with the transfer of text, characterised as a request and response, which is suitable for transferring most types of information across the internet.
+
+Requests are often separated into four different types, often given the name CRUD operations:
+
+    Create a resource
+    Read a resource
+    Update a resource
+    Delete a resource
+
+HTTP methods
+
+CRUD refers to a set of generic request types, but HTTP formalises these approaches as methods:
+
+    GET - used when asking for resources to be sent back
+    POST - used for adding something to a database. These requests include a request body which contains the data we want to add
+    PATCH/PUT - used to partially update a resource in a database
+    DELETE - used to remove a resource
+
+By default, when entering a URL, a browser will make a GET request to fetch the resources that are then displayed to the user in the browser.
+
+However, all information over the internet is transmitted in plain text. The browser recieves a plaintext website, with HTML, CSS and JavaScript, and our browser builds it into something useful.
+
+Programs such as Insomnia can allow users to make different types of requests to endpoints and display the plaintext responses that are sent back from a server. This is useful for testing whether an API/server works as expected or checking the format of a response.
+Sending data
+
+As the data sent by these APIs is essentially text, there are conventions for formatting the string so they can be easily interpreted by clients. One of the most popular is JSON, or JavaScript Object Notation. JSON is a string representation of a JavaScript value.
+
+JavaScript provides a JSON.stringify function that turns a JavaScript object into a correctly formatted JSON object, and a JSON.parse function that creates an object from a JSON string:
+
+const northcoder = { name: "Paul" };
+const stringifiedNorthcoder = JSON.stringify(northcoder); // "{"name":"Paul"}"
+const parsedNorthcoder = JSON.parse(stringifiedNorthcoder); // { name : 'Paul' }
+
+Most other programming languages have similar functions to parse and construct JSON. The format is inspired by JavaScript, but otherwise isn't tied to a particular language.
+Headers
+
+Each request and response that is made contains a header. The header contains additional information about the request or response, such as API keys for authentication or the type of data being sent back by the response. When sending a request, the headers can be set when configuring the options object that is passed to the request:
+
+const options = {
+  host: url,
+  method: "GET",
+  headers: {
+    "X-Auth-Token": apiKey
+  }
+};
+
+The response headers are set by the API/server that sends back back the response.
+Body
+
+Both requests and responses can contain a body too. In a POST request, for example, the body would contain the data that the user wants to add to a database via the request. A response body for this request may contain the resource that has been added to the database. For example:
+
+const options = {
+  method: "POST",
+  body: JSON.stringify({
+    firstname: "John",
+    lastname: "Smith",
+    email: "johnsmith@northcoders.com"
+  }),
+  headers: {
+    "Content-type": "application/json"
+  }
+};
+
+Status codes
+
+All HTTP responses are transmitted with status codes.
+
+There are the following ranges:
+
+    100s - informational status codes
+    200s - successful operations
+    300s - redirects
+    400s - client errors, such as accessing a resource that doesn't exist
+    500s - server errors, such as the server being down
+
+URLs
+
+URLs, or uniform resource locators, combine the DNS-provided web addressed with other information that the server and browser use to determine what should be requested, responded with, and displayed on the page. Using https://api.github.com/search/repos?page=2 as an example:
+Element
+	
+Details
+https://
+	
+The protocol - how the data should be requested and responded to
+api
+	
+Conventionally informs user of the type of server
+github
+	
+DNS-provided address name
+.com
+	
+the top level domain, in this case owned by the DNS
+/search/repos
+	
+the path or route used by the server to get the precise information requested - also known as an endpoint
+?page=2
+	
+a query for more specific information
+Queries
+
+Any information following a ? in the URL will be treated as a query. Multiple queries are separated by the & symbol:
+
+https://itunes.apple.com/search?term=beyonce&limit=5
+
+Queries are added on to the end of an existing route. They do not change the path, just add additional conditions. They provide actions, such as filtering and ordering, that the server should conduct on the data before responding with it. Invalid queries are generally ignored (unlike invalid paths, which will return an error).
+
+Learn To Code

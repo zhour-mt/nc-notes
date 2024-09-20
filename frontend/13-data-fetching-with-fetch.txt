@@ -1,0 +1,36 @@
+Data Fetching with Fetch
+
+In order to make HTTP requests in a React app, there is the option of importing modules like Node's http client or npm packages such as Axios. As the code runs in the browser, the Fetch API can be used without the need to install additional packages.
+Fetch API
+
+The Fetch API provides a promise-based interface for making HTTP requests.
+Basic Usage
+
+The first argument to fetch is the URL of the resource to fetch. Unless specified, the HTTP method defaults to GET.
+
+fetch("https://itunes.apple.com/search?term=beyonce")
+  .then((response) => response.json())
+  .then((body) => console.log(body));
+
+When fetch is called, it returns a promise that resolves with a response object. This response object contains metadata about the response, such as headers and the status code, but it does not include the response body directly.
+
+To access the body content, a method provided by the response object must be used to parse the body based on its format. For example, to parse a JSON response, use the response.json() method. Other methods are available for different formats, and these are detailed in the documentation. Each of these methods also returns a promise that resolves with the parsed data.
+Configuring Requests
+
+HTTP request properties, such as the method, headers, and body, can be customised by passing a second options argument to fetch. This options object contains specific keys that modify the request properties.
+
+Here is an example:
+
+fetch("https://www.example.com/api/people", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ name: "Paul" }),
+}).then((response) => response.json());
+
+The documentation contains a full list of configuration options.
+
+Note: When passing an object to the body property, it will first need to be stringified. Other libraries may do this automatically, but with fetch stringifying objects is the developer's responsibility.
+
+Learn To Code

@@ -1,0 +1,50 @@
+Array Methods
+
+Arrays are a type of object which store an ordered collection of data. Arrays have behaviours, or methods, available to them which help to manipulate and work with the data they store. Methods are functions available on an instance of an object. They are accessed using dot notation.
+
+Below is a list of some of the more popular array methods. They are all examples of higher order functions. There are many more array methods to discover in the MDN docs.
+forEach
+
+The forEach method takes a callback function known as an iteratee. It invokes this function for every element of the array.
+
+The function will be invoked with three arguments: the current element, the index of the current element, and a reference to the whole array. forEach always has a return value of undefined.
+
+const numbers = [1, 2, 3, 4];
+
+numbers.forEach((number) => {
+  console.log(number);
+});
+
+Further examples and details are available on the MDN docs.
+map
+
+The map method takes a callback function known as an iteratee and returns a new array. It invokes this function for every element of the array. The function is designed to return a value, which will replace the current value in the new array.
+
+It is invoked with three arguments: the current element, the index of the current element, and a reference to the whole array. You cannot change the length of the array with map; you can only replace the element with a new value.
+
+const numbers = [1, 2, 3];
+
+const doubles = numbers.map((number) => {
+  return number * 2;
+});
+
+// doubles [2, 4, 6]
+
+Further examples and details are available on the MDN docs.
+filter
+
+The filter method takes a callback function known as a predicate and returns a new array. It invokes this function for every element of the array. The function is designed to return a boolean. If the value is truthy the new array will include the current element, if it is falsy, it will not.
+
+You cannot make changes to the elements of the array with filter; you can only create a filtered version of the array.
+
+const numbers = [1, 2, 3, 4, 5];
+
+const smallNumbers = numbers.filter((number) => {
+  return number < 3;
+});
+
+// smallNumbers [1, 2]
+
+Further examples and details are available on the MDN docs.
+
+Learn To Code

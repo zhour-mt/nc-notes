@@ -1,0 +1,44 @@
+Capturing Errors
+
+Errors, or exceptions, can occur when executing JavaScript code. Sometimes, these errors can be foreseen ahead of execution, like preempting an invalid argument type being passed to a function. In these cases, errors can be handled by introducing some additional logic for what should happen when an error is thrown.
+
+In contrast, unhandled errors occur in software when a program encounters a problem or unexpected condition that it doesn't know how to handle. These errors typically result in the program crashing or behaving unpredictably.
+
+For error handling, JavaScript provides mechanisms like try...catch and custom error throwing for these cases.
+Try...Catch
+
+A try...catch statement is used to wrap code that may throw an exception. In the try block, code is placed that is monitored for errors, which are then caught in the catch block:
+
+try {
+  // Code that might throw an error
+  functionThatWillErrorOut();
+} catch (error) {
+  // Handle the error here
+  console.log(error);
+};
+
+The catch block can then handle those errors by performing additional tasks, such as logging the error or executing additional code. If no error occurs in the try block, the code in the catch block will not be executed.
+Throwing Custom Errors
+
+Some problems during code execution will automatically throw an error, but custom errors can also be thrown in JavaScript. Custom errors messages are particularly useful for providing meaningful error messages when certain conditions are met.
+
+To throw a custom error, use the throw keyword:
+
+throw new Error("This is a custom error message.");
+
+Try...Catch...Finally
+
+In addition to try and catch blocks, JavaScript also has a finally block for the error-handling process. The code in the finally block always runs, whether or not an error was thrown. This is particularly useful for cleaning up processes, such as closing files.
+
+try {
+  // Code that might throw an error
+  functionThatMightError();
+} catch (error) {
+  // Handle the error here
+  console.log("I will only log if there is an error.");
+} finally {
+  // Code that always runs, regardless of errors
+  console.log("I will log whether or not there is an error.");
+};
+
+Learn To Code

@@ -1,0 +1,66 @@
+Updating the UI
+
+When fetching data from an API in a client-side application, the behaviour of GET requests is usually intuitive. Users expect the freshest data upon each request, which remains static until the next request.
+
+This expectation must be considered when updating data via other methods, such as POST or PATCH, especially when multiple users are interacting with the API simultaneously.
+Refreshing data
+
+Consider a component displaying a list of cakes fetched from an API. If a CakeAdder component allows users to add new cakes to this list, the UI should be updated after each POST request to give visual feedback to the user.
+
+To do this, the updated cake list can either be fetched again from the API, or the UI can be updated locally with the new cake that was added. The latter approach of updating the data locally is generally preferred for immediate visual feedback.
+
+const CakeList = () => {
+  const [cakes, setCakes] = useState([]);
+
+  useEffect(() => {
+    getCakesFromApi().then((cakesData) => setCakes(cakesData));
+  }, []);
+
+  const addNewCake = (cakeFormData) => {
+    postCakeToApi(cakeFormData).then((newCakeFromApi) => {
+      setCakes((currentCakes) => [newCakeFromApi, ...currentCakes]);
+    });
+  };
+
+  return (
+    <section>
+      <h2>Tasty Cakes</h2>
+      <CakeAdder addNewCake={addNewCake} />
+      <ul>
+        {cakes.map((cake) => <CakeCard cake={cake} key={cake.id} />)}
+      </ul>
+    </section>
+  );
+};
+
+In the code above, the local cakes state is also updated by adding the newly added cake to the array upon a successful POST request. This means that the list of cakes will update to include the new cake without having to fetch the list of cakes again.
+Example
+
+Consider a component showing the number of messages sent by a user.
+
+const MessageStats = () => {
+  const [sentMessageCount, setSentMessageCount] = useState(0);
+
+  useEffect(() => {
+    api.getSentMessageCount().then(setSentMessageCount);
+  }, []);
+
+  const handleSendMessageClick = () => {
+    api.sendMessage().then(() => {
+      setSentMessageCount((currentCount) => currentCount + 1);
+    });
+  };
+
+  return (
+    <button onClick={handleSendMessageClick}>Send message</button>
+  );
+};
+
+The sentMessageCount updates:
+
+    When the component mounts, using useEffect.
+    When a message is sent, incrementing the count locally.
+
+This approach ensures users see immediate feedback, maintaining a perception of impact from their interactions. It also avoids the UI updating to include interactions from other users, which may see the count increment significantly depending on the number of simultaneous users. Through this method, the UI is up to date with a single user's interactions, reducing any potential confusion.
+
+Learn To Code

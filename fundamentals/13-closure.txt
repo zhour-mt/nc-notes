@@ -1,0 +1,95 @@
+Closure
+
+Closure refers to a function that contains references to variables and arguments from its outer or lexical environment. When a function is nested inside another function, the inner function will always have access to its parent function's variables and arguments, even after the parent function has finished executing.
+The Garbage Collector
+
+Consider the example below:
+
+function incrementCounter() {
+  let count = 0;
+  return ++count;
+}
+
+incrementCounter(); //  1
+incrementCounter(); //  1
+
+The function incrementCounter is called twice. Each time it is called, a new local execution context is created, and a local variable named count is declared. Once the return statement is reached, these execution contexts are closed. The garbage collector removes any variables from memory that are no longer in use. In the example above, once the local execution context for incrementCounter is closed, the count variable is removed from memory by the garbage collector.
+
+In this example, incrementCounter is incorrectly named as it cannot increase the value of count on each successive call. Its return value is always fixed as 1.
+Returning Functions
+
+Consider the example below:
+
+function makeCounter() {
+  function innerCounter() {
+    let count = 0;
+    return ++count;
+  }
+  return innerCounter;
+}
+
+const counter = makeCounter();
+counter(); // 1
+counter(); // 1
+
+In this example, makeCounter returns a new function. makeCounter is a higher order function as it returns a new function. The returned innerCounter function is assigned the the variable counter. Whenever the newly assigned function counter is called, a new execution context is created and a new local counter is initialized. The outcome is the same as the previous example: count is reset to 0 every time counter is invoked.
+
+function makeCounter() {
+  let count = 0; // count now declared in parent context
+  function innerCounter() {
+    return ++count;
+  }
+  return innerCounter;
+}
+
+const counter = makeCounter();
+counter(); //  1
+counter(); // 2
+
+Moving the declaration of count to the parent's context alters the behaviour of counter. This example demonstrates that innerCounter is a closure because it still has access to its parent's state, even after the context has closed and the garbage collector has cleared the memory.
+Using Closure
+
+Consider the following example below:
+
+function createMultiplier(mult) {
+  function multiplyNum(num) {
+    return num * mult;
+  }
+  return multiplyNum;
+}
+
+const multiplyBy5 = createMultiplier(5);
+const result = multiplyBy5(9);
+
+The variable multiplyBy5 is assigned the value returned by the function createMultiplier, which is the function multiplyNum. Once this is done, JavaScript closes the createMultiplier context and removes any local variables. However, since the returned function multiplyNum references the parameter mult, it cannot be removed. Instead, it is stored in a region called the closed-over variable environment or COVE, effectively becoming a private variable accessible only to the inner function.
+
+Invoking multiplyby5 will always have access to mult, which has been set to 5.
+
+This example shows how closure helps us create a more generic function, which can create a function that could multiply by any number - dependent on what we pass as an argument to createMultipler.
+Enhanced functions
+
+Closures can be used to create functions with restricted behaviour, like a function that can only be invoked a set number of times and then returns undefined.
+
+add3TimesOnly(10, 32); // 42
+add3TimesOnly(4, 20); // 24
+add3TimesOnly(50, 100); // 150
+add3TimesOnly(34, 17); // undefined
+
+The add3TimesOnly function can only return the sum three times. Consider how to generate such a function:
+
+const add = (a, b) => a + b;
+
+function createLimitedFunc(func, maxCalls) {
+  function limitedFunc(a, b) {
+    if (--maxCalls >= 0) return func(a, b);
+  }
+  return limitedFunc;
+}
+const limitedAdd = createLimitedFunc(add, 3);
+
+Every time the limitedFunc is invoked, the maxCalls stored in the COVE is decremented and we can only return func(a, b) provided the maxCalls is bigger than 0.
+Further resources:
+
+MDN: Closures
+
+Learn To Code

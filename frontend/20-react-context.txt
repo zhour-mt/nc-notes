@@ -1,0 +1,156 @@
+React Context
+
+When passing information between components in React, values are held in state and passed between components using props. In complex applications, state might need to be used by several components at various levels of nesting in the component tree.
+
+This often leads to state being held very high (often in App) and passed down through a long chain of props - a process called prop-drilling. React offers a solution to this called the Context API.
+Context API
+
+The Context API is designed for state that needs to be shared by multiple components or for state that can be considered global. It allows a parent component to make information available to any component in the tree below it without the need for prop-drilling. It is not a wholesale replacement for props and should be used selectively.
+
+Common candidates for contexts include logged-in users, themes, or language settings.
+
+An example of a theme to switch between light and dark mode could be implemented as follows:
+
+// src/contexts/Theme.jsx
+import { createContext, useState } from "react";
+
+export const ThemeContext = createContext();
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState("light");
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+// src/App.jsx
+const App = () => {
+  return <div>{/* Rest of the app including <ToggleTheme /> */}</div>;
+};
+
+// src/main.jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { ThemeProvider } from "./contexts/Theme";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
+
+// src/components/ToggleTheme.jsx
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/Theme";
+
+const ToggleTheme = () => {
+  const { theme, setTheme } = useContext(ThemeContext);
+
+  const toggleTheme = () => {
+    setTheme((currTheme) => {
+      return currTheme === "light" ? "dark" : "light";
+    });
+  };
+
+  return (
+    <button onClick={toggleTheme} className={`button__${theme}`}>
+      Change theme
+    </button>
+  );
+};
+
+export default ToggleTheme;
+
+This example shows how to share the state of the theme from App using a context provider and access the value using useContext. Different CSS class names like App__light and App__dark can be used to change the look of the site.
+Creating contexts
+
+Contexts can be created using React.createContext(). The createContext function can be passed an initial value to use when there is no provider. This can be useful when writing frontend tests for components.
+
+In this example, the context is left blank as there will always be a provider:
+
+import { createContext } from "react";
+
+export const ThemeContext = createContext();
+
+Context.Provider
+
+Once a context is created, a value can be provided to it from a component.
+
+A value prop is passed to the Context.Provider, and this value is available to all the children of that provider. Therefore, the application should be wrapped in the providers at a high level to ensure the values are available everywhere:
+
+<ThemeContext.Provider value={{ theme, setTheme }}>
+  {/* Rest of the app */}
+</ThemeContext.Provider>
+
+This can be done anywhere in the app, but a typical pattern is to create a dedicated Provider component that will hold any necessary state and wrap the whole app:
+
+// src/contexts/Theme.jsx
+import { createContext, useState } from "react";
+
+export const ThemeContext = createContext();
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState("light");
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+// src/App.jsx
+const App = () => {
+  return <div>{/* Rest of the app */}</div>;
+};
+
+// src/main.jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { ThemeProvider } from "./contexts/Theme";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
+
+Note: The ThemeProvider component renders its children, which in this case is <App />.
+useContext
+
+To access the value of the provider, use the useContext Hook.
+
+This Hook returns the value from the nearest parent provider. Typically, there will be only one parent provider, but it is possible to have multiple. The values can be used just as if they had been passed as props, and the component will re-render when those values are updated.
+
+For example, to toggle the theme between light and dark, set the theme state as you would with local state:
+
+// src/components/ToggleTheme.jsx
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/Theme";
+
+const ToggleTheme = () => {
+  const { theme, setTheme } = useContext(ThemeContext);
+
+  const toggleTheme = () => {
+    setTheme((currTheme) => {
+      return currTheme === "light" ? "dark" : "light";
+    });
+  };
+
+  return (
+    <button onClick={toggleTheme} className={`button__${theme}`}>
+      Change theme
+    </button>
+  );
+};
+
+export default ToggleTheme;
+
+Learn To Code

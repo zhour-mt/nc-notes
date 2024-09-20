@@ -1,0 +1,26 @@
+GitHub
+What is GitHub?
+
+GitHub is a website that provides a collaborative environment for version control and source code management. It stores repositories in the cloud, allowing multiple users to manage their code, track changes and collaborate on projects.
+
+GitHub repositories can be created from the command line or on the GitHub website.
+Remotes
+
+A remote repository on GitHub is accessible to others and can be updated from local computers. The common practice involves a main remote repository, and users create copies (clones) on their local machines. Users can make local changes, then add them to the remote repository. Origin is the customary name for a remote repository.
+
+A remote repository can be linked to a local one using the git remote command:
+
+$ git remote add origin <origin-repository-url>
+
+A local repository's remote origin can be seen by using the git remote -v command.
+Pushing
+
+Pushing refers to the process of adding commits on a local machine to the remote repository. Using the command git push origin main will push local commits to the origin repository's main branch.
+Fetching
+
+Fetching will retrieve the latest changes from a remote repository without immediately merging them into your current branch. This can be done with the command git fetch origin main, which will update the local repository's knowledge of any remote branches and their latest commits. This is useful for keeping local repositories up to date without affecting working code.
+Pulling
+
+The command git pull can be used in order to update a local repository with any of the more recent commits from a remote repository.
+
+Learn To Code

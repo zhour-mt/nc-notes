@@ -1,0 +1,239 @@
+React Router
+
+React Router is a popular routing library that enables client-side routing in React apps.
+
+It provides access to a selection of routing components which work by monitoring changes in the browser URL (in the context of web app development) and rendering different components accordingly.
+Installing React Router
+
+React Router can be installed via npm using the following command:
+
+npm i react-router-dom
+
+Accessing the browser URL with BrowserRouter
+
+React Router's BrowserRouter component stores the current app location in the browser's address bar and enables forwards and backwards navigation via the browser's built-in history stack.
+
+The BrowserRouter must be wrapped around the whole App to provide sufficient access to the browser's current URL:
+
+// src/main.jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+
+The React Router documentation provides more information on BrowserRouter.
+Using Routes and Route
+
+A Routes component takes a number of Route components as children. It will render the Route that matches the current app location taken from the browser's address bar via the BrowserRouter.
+
+A Route component takes a prop of path and a prop of element. The path is a string that represents the URL path to be compared to the current browser URL. The element is the component to be rendered when the path value and the actual browser URL match.
+
+// src/App.jsx
+import { Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import Animals from "./components/Animals";
+import About from "./components/About";
+
+const App = () => {
+  return (
+    <div className="App">
+      <h1>My App </h1>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/animals" element={<Animals />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </div>
+  );
+};
+
+Configuring navigation using Link
+
+React Router provides a useful <Link> component that removes the default page reload behaviour of anchor tags (<a />). It takes a to prop that will set the URL to the specified path.
+
+Link components are useful for connecting up navigation between different pages such as in a NavBar component. For example:
+
+<nav>
+  <Link to="/">Home</Link>
+  <Link to="/about">About</Link>
+  <Link to="/animals">Animals</Link>
+</nav>
+
+A Link component can take any number of children:
+
+<ul>
+  <li>
+    <Link to="/animals/bear">
+      <h2>Bears</h2>
+      <img src="http://example.com/bear.jpg" alt="bear in the forest" />
+      <p>Tagline about bears</p>
+    </Link>
+  </li>
+</ul>
+
+Parametric endpoints with useParams
+
+Route component paths can include parametric endpoints.
+
+The syntax for a parametric endpoint is denoted by a colon (:) in the path, followed by the chosen parameter name:
+
+<Route path="/animals/:species_name" element={...} />
+
+React Router parses the current URL and extracts the values of any parameters, making them accessible through the match.params prop on Route components.
+
+Passing these props around can become complicated. To avoid prop-drilling, the useParams hook from React Router can be used to get access to any parameters on the current URL from inside of the component it is called from:
+
+// src/components/SingleAnimal.jsx
+import { useParams } from "react-router-dom";
+
+const SingleAnimal = () => {
+  const { species_name } = useParams();
+  
+  console.log(species_name); // { species_name: "frog" }
+
+  return (
+    <div>
+      <h2>Rendering {species_name}</h2>
+    </div>
+  );
+};
+
+Fetching data
+
+A common pattern is to use the value from the current URL parameters to fetch data from an API.
+
+In the below example, the value of species_name is used in conjunction with a useEffect to fetch more data about that animal type from an API.
+
+// src/components/SingleAnimal.jsx
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { fetchAnimalBySpecies } from "../utils/api";
+
+const SingleAnimal = () => {
+  const [animal, setAnimal] = useState({});
+  const { species_name } = useParams();
+
+  useEffect(() => {
+    fetchAnimalBySpecies(species_name).then((animalData) => {
+      setAnimal(animalData);
+    });
+  }, [species_name]);
+
+  return (
+    <div>
+      <h2>Rendering info about {species_name}</h2>
+      // more data rendered here...
+    </div>
+  );
+};
+
+If the species_name is changed by the user navigating to a different animal species' page each time, it would be expected that a fresh API request would be made with the new species_name value, and the component would be re-rendered with the new information.
+
+In such scenarios, it is important to make sure that any dependencies in side-effects correct. For example, the species_name needs to be specified as a useEffect dependency, since anytime its value changes, the effect should be re-run to fetch the new data.
+Queries with useSearchParams
+
+Queries can be added to endpoints to provide additional functionality. The useSearchParams hook from React Router can be used to access parsed URL queries. Common use cases are for utilising search strings or filtering options in forms.
+
+When invoked, the useSearchParams hook returns an array containing the current browser location's search params (searchParams) and a function (setSearchParams) that can be used to update them.
+
+The value of searchParams is an instance of the browser URLSearchParams constructor. This is an object containing methods that will return the value of a passed query key. If the query does not exist, this method will return null.
+Example implementation
+
+If the client made a request to GET /animals?sort_by=average_weight, the value of the sort_by query could be accessed like so:
+
+// src/components/Animals.jsx
+import { useSearchParams } from "react-router-dom";
+
+const Animals = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const sortByQuery = searchParams.get("sort_by");
+
+  return (
+    <section>
+      <h2>Animals</h2>
+    </section>
+  );
+};
+
+Queries are optional and adding them to an endpoint doesn't change the path. In the above example, the route for the Animals component would still be <Route path="/animals" element={<Animals />} />.
+Updating Queries with useSearchParams
+
+To update queries programmatically, Link components can be hard coded to contain queries as part of the to prop string:
+
+<Link to="/animals?sort_by=average_weight">Animals by weight</Link>
+
+Queries can also be added or changed on a page view that is already active. This is common when adding filtering options to preserve any existing queries while updating others.
+
+The setSearchParams function can be used to update the queries programmatically in this case:
+
+// src/components/Animals.jsx
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+
+const Animals = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sortByQuery = searchParams.get("sort_by");
+  const orderQuery = searchParams.get("order");
+
+  const setSortOrder = (direction) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("order", direction);
+    setSearchParams(newParams);
+  };
+
+  useEffect(() => {
+    // fetch new data based on the queries
+  }, [sortByQuery, orderQuery])
+
+  return (
+  <section>
+    <h2>Animals</h2>
+    <button onClick={() => setSortOrder("asc")}>Ascending</button>
+    <button onClick={() => setSortOrder("desc")}>Descending</button>
+  </section>
+  )
+};
+
+Programmatic navigation with useNavigate
+
+The useNavigate hook returns a function that enables programmatic page navigation. It can be used to redirect a user to a different page view after an action is taken, such as submitting a form.
+
+The navigate function takes one of two different argument types:
+
+    A string that represents the to path value (the same as with <Link to="/path">).
+    A number that represents how many steps forwards (positive numbers) or backwards (negative numbers) to traverse through the browser history. For example, navigate(-1) is the same as clicking the back button once.
+
+Note: This is not a replacement for <Link> components!
+Example
+
+import { useNavigate } from "react-router-dom";
+
+function MyComponent() {
+  const navigate = useNavigate();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    doSomething()
+      .then(() => {
+        navigate("/somewhere/else");
+      })
+      .catch((err) => {
+        // handle error
+      });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* labels, inputs and form things... */}
+    </form>
+  );
+}
+
+Learn To Code

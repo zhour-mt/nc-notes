@@ -1,0 +1,54 @@
+The Promise Constructor
+
+The Promise constructor is used to create a new Promise object.
+
+To create a Promise object, use the new keyword and its constructor. The constructor takes a function, called the executor function as its argument.
+
+const returnsPromise = () => {
+  return new Promise((resolve, reject) => {
+    someAsyncFunction((err, data) => {
+      if (err) reject(err);
+      else resolve(data);
+    });
+  });
+};
+
+The executor function take two functions as parameters. The first of these functions (resolve) is called when the asynchronous task completes successfully and returns the results of the task as a value. The second (reject) is called when the task fails, and returns the reason for failure (typically an error object).
+Refactoring Callbacks
+
+The Promise constructor can be used to refactor asynchronous code that uses callback functions to use promises instead.
+
+Consider the following example:
+
+const callbackNameAfterOneSecond = (name, callback) => {
+  setTimeout(() => {
+    if (!name) return callback(new Error('no name passed in!'));
+    return callback(null, name);
+  }, 1000);
+};
+
+callbackNameAfterOneSecond('Paul', (err, name) => {
+  if (err) console.log(err);
+  else console.log(`Hello ${name}!`); // logs 'Hello Paul!' after one second
+});
+
+We could promisify the above function in this way:
+
+const promiseNameAfterOneSecond = (name) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (!name) return reject(new Error('no name passed in!'));
+      return resolve(name);
+    }, 1000);
+  });
+};
+
+promiseNameAfterOneSecond('Paul')
+  .then((name) => {
+    console.log(`Hello ${name}`); // logs 'Hello Paul!' after one second
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+Learn To Code

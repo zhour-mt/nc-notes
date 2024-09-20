@@ -1,0 +1,210 @@
+Aggregate Functions
+
+Aggregate functions perform a calculation on a set of rows and return a single row. There are many aggregate functions detailed in the PostgreSQL documentation, with some of the most common including COUNT, SUM, AVG, MAX, and MIN.
+SUM example
+
+The following generates a SUM of the total number of legs for all the animals in the animals table:
+
+SELECT SUM(number_of_legs) AS total_number_of_legs
+FROM animals;
+
+This will return a result like so:
+
+| total_number_of_legs |
+| -------------------- |
+|                   22 |
+
+GROUP BY
+
+Often, it is useful to query multiple tables and perform calculations on subsets of the data while being able to view other information from the queried tables. To do so, implement a combination of aggregate functions and a GROUP BY statement.
+
+Consider building a query to display each animal's name and the total number of Northcoders who have selected the animal as their favourite.
+
+In order to to calculate this, information is needed from both tables. A JOIN will connect the two tables together:
+
+SELECT *
+FROM animals
+LEFT JOIN northcoders ON northcoders.favourite_animal_id = animals.animal_id;
+
+This will result in a table similar to the following:
+animal_id
+	
+animal_name
+	
+number_of_legs
+	
+northcoder_id
+	
+northcoder
+	
+favourite_animal_id
+2
+	
+Butterfly
+	
+6
+	
+1
+	
+Rose
+	
+2
+4
+	
+Koala
+	
+4
+	
+2
+	
+Kev
+	
+4
+2
+	
+Butterfly
+	
+6
+	
+3
+	
+Ali
+	
+2
+3
+	
+Unicorn
+	
+4
+	
+4
+	
+Rayhaan
+	
+3
+1
+	
+Spider
+	
+8
+	
+	
+	
+
+Note: A left join is appropriate here to ensure that any records in the animals table that are not referenced by the northcoders table are not excluded from the query.
+
+Having a row for every unique animal-Northcoder combination isn't optimal. The rows created can be consolidated together using GROUP BY:
+
+SELECT animal_name
+FROM animals
+LEFT JOIN northcoders ON northcoders.favourite_animal_id = animals.animal_id
+GROUP BY animals.animal_id;
+
+This should produce a result similar to the following:
+
+| animal_name |
+| ----------- |
+| Koala       |
+| Butterfly   |
+| Unicorn     |
+| Spider      |
+
+At this point, the results look as if only the animals table has been queried. However, that data is not accessible in the northcoders table.
+
+An aggregate function can now be used to count the number of Northcoders associated with each animal. To do this, the northcoder_ids associated with each animal can be counted:
+
+SELECT animals.*, COUNT(northcoder_id) AS number_of_fans
+FROM animals
+LEFT JOIN northcoders ON northcoders.favourite_animal_id = animals.animal_id
+GROUP BY animal_id;
+
+This will show up as a new column on the result of the query called COUNT:
+animal_id
+	
+animal_name
+	
+number_of_legs
+	
+number_of_fans
+4
+	
+Koala
+	
+4
+	
+1
+2
+	
+Butterfly
+	
+6
+	
+2
+3
+	
+Unicorn
+	
+4
+	
+1
+1
+	
+Spider
+	
+8
+	
+0
+A common error
+
+A common error when using GROUP BY with an aggregate function is: ERROR: column "..." must appear in the GROUP BY clause or be used in an aggregate function.
+
+To fully appreciate why SQL will throw this error, look at the following example:
+
+my_table:
+column_1
+	
+column_2
+1
+	
+10
+2
+	
+15
+2
+	
+90
+1
+	
+10
+
+SELECT column_1, column_2 FROM my_table GROUP BY column_1;
+
+Because SQL cannot decide how to display this data, the above query would return the following error: ERROR: column "my_table.column_2" must appear in the GROUP BY clause or be used in an aggregate function
+Fixing the error
+
+There are two ways to fix this error:
+
+    Add column_2 into the GROUP BY clause:
+
+    SELECT column_1, column_2 FROM my_table GROUP BY column_1, column_2;
+
+    This means that the rows will only be combined wherever the combination of the values in column_1 and column_2 are duplicated, giving the result:
+
+    | column_1 | column_2 |
+    | -------: | -------: |
+    |        1 |       10 |
+    |        2 |       15 |
+    |        2 |       90 |
+
+    Use column_2 as part of an aggregate function:
+
+    SELECT column_1, SUM(column_2) FROM my_table GROUP BY column_1;
+
+    Now SQL has a way to combine the non-unique values from column_2, summing them. It has no problem when producing a result:
+
+    | column_1 | column_2 |
+    | -------: | -------: |
+    |        1 |       20 |
+    |        2 |      105 |
+
+Learn To Code

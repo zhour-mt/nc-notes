@@ -1,0 +1,45 @@
+Data Types and Variables
+
+There are eight data types in JavaScript:
+
+    string - a series of characters surrounded by quotation marks.
+    number - includes integers (whole numbers) and floating points (decimal numbers).
+    boolean - a value that is either true or false.
+    undefined - something that has no specified value.
+    null - null a value used to represent an empty or unknown value.
+    symbol - represents a unique identifier that can be used in various ways.
+    bigInt - a special numeric type used to represent large numbers.
+    object - a collections of values and behaviours which represent a complex entity.
+
+Variables
+
+A variable is used to store a piece of data or information. To declare a variable, you use a keyword of either let or const.
+
+let is used for a variable you will reassign or add to. To reassign a variable, use the variable name and the assignment operator (=) to assign it a new value.
+
+const is used when you will not be reassigning the value. If you try, JavaScript will throw an error when the code is run.
+
+let currentMood = "happy";
+currentMood = "excited";
+
+currentMood; // "excited"
+
+const daysInAWeek = 7;
+daysInAWeek = 13; // error thrown 
+
+daysInAWeek; // 7
+
+You can use variables to store various pieces of information:
+
+const firstWord = "hello northcoders".slice(0, 6);
+
+Let's break this down:
+
+    const - the keyword which indicates you are creating a new variable.
+    firstWord - the identifier, or name, of the variable.
+    = - the assignment operator which is used to assign a value to your variable.
+    "hello northcoders".slice(0, 6) - the expression which will be assigned to firstWord.
+
+It is worth noting that you can also declare variables with var. You may see cases of this in examples online. However, var is now obsolete and best avoided.
+
+Learn To Code

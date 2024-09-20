@@ -1,0 +1,73 @@
+Getters And Setters
+
+Getters and setters are mechanisms for controlling access to the properties of an object. They are used to implement encapsulation, which is one of the four fundamental pillars of object-oriented programming. In functional programming and factory functions, encapsulation is achieved through the creation of closures.
+Private Properties
+
+In JavaScript, developers often use an underscore prefix for properties and methods to communicate that they're for internal use and should be considered private.
+
+const counter = { _count: 0 };
+
+counter._count; //  please don't access this directly!
+
+Recent updates to JavaScript have introduced real private properties, which can be used for achieving true encapsulation. To make a property private, prefix it with #. This will prevent access from outside the class declaration. To assign a value to a private field within the constructor method, you must declare the field within the class first.
+
+class TimeSheet {
+  #hoursWorked = 0;
+  #hourlyRate;
+  #shiftLength = 8;
+
+  constructor(name, hourlyRate) {
+    this.name = name;
+    this.#hourlyRate = hourlyRate;
+  }
+}
+
+const davidsTimeSheet = new TimeSheet('David', 9.9);
+
+davidsTimeSheet.name; // "David" - public field
+davidsTimeSheet.hoursWorked; // undefined - private field
+
+Defining private fields prevents the fields from being read or reassigned in the same manner as public fields.
+Getters
+
+By defining predetermined actions that expose variables, there is more control over how a user interacts with private fields. Consider the following method which retrieves the number of hours worked. Getter functions should not accept any arguments.
+
+getTotalHours() {
+  return `${this.name} has worked ${this.#hoursWorked} hours.`;
+};
+
+davidsTimeSheet.getTotalHours()
+
+One way to achieve this is by using a getter, which is an accessor function syntax that works like a property. When accessed, a getter calculates its value. It's important to name getters following the variable naming protocol, using a noun, rather than a function, which should be named using a verb.
+
+// ...
+get totalHours(){
+    return `${this.name} has worked ${this.#hoursWorked} hours.`;
+}
+// ...
+
+davidsTimeSheet.totalHours // "David has worked 40 hours."
+
+When using the getter syntax, a method can be invoked as if it were a property. This approach is commonly used when data can be calculated from a private variable, as shown in the function below.
+
+// ...
+get totalPay(){
+  return `£${this.#hoursWorked * this.#hourlyRate}`;
+}
+// ...
+
+davidsTimeSheet.totalPay // "£396"
+
+Setters
+
+If a user wants to assign a value to a property, they can use the setter syntax. This syntax works similarly to the getter syntax, but instead of getting the value of a property, it assigns a new value to the property. However, in reality, it invokes the setter function with the new assigned value. Setter functions should accept one argument.
+
+// ...
+set shiftsWorked(numOfShifts){
+    this.#hoursWorked = this.#shiftLength * numOfShifts;
+};
+// ...
+
+davidsTimeSheet.shiftsWorked = 4;
+
+Learn To Code

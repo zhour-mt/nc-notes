@@ -1,0 +1,94 @@
+Optimistic Rendering
+
+Optimistic rendering is a pattern whereby the UI of a page is updated before a response is received from the server. For example, the number of likes on a post can be incremented by one when a user clicks on the like button, even before a successful response is received from an external API.
+
+The opposite of optimistic rendering is pessimistic rendering which relies on a response being successfully received before any UI changes occur. Both have their own advantages and disadvantages depending on the context, so it is important to consider how important a successful reponse is and the best way to facilitate a good user experience on the site or app.
+Example
+
+Here is an example of a component that displays how many likes a blog post has, based on the blogId being passed as a prop, and allows a user to add more likes by clicking a button:
+
+const LikesCounter = ({ blogId }) => {
+  const [likesCount, setLikesCount] = useState(0);
+
+  useEffect(() => {
+   getLikesCount(blogId).then((likesCount) => {
+    setLikesCount(likesCount);
+   })
+  }, []);
+
+  const handleLike = () => {
+    setLikesCount((currentLikesCount) => currentLikesCount + 1);
+    postLike();
+  };
+
+  return (
+    <div>
+      <button onClick={handleLike}>Like +1</button>
+      <p>{likesCount}</p>
+    </div>
+  );
+};
+
+In this example, the likesCount value is updated on two occasions:
+
+    When the component is first rendered via the useEffect Hook.
+    When the user clicks on the like button and the handleLike function is invoked.
+
+Whenever the user clicks the like button, the UI will be updated to increment the like counter by 1. This happens before the request to the API occurs and regardless of whether it is successful.
+
+However, for situations like this, where the chance of failure is low, the user will not have to wait as long to receive visual feedback from clicking the button.
+Error Handling
+
+Faster UI updates based on user interactions are great, but it is important to consider how these UI changes may need to be reversed if the request to the server was not actually successful.
+
+Handling these errors and providing appropriate feedback to users is essential. It may be sufficient to undo the change made so that the user can try again, or it may be necessary to keep an error state to provide more detailed feedback:
+
+const LikesCounter = ({ blogId }) => {
+  const [likesCount, setLikesCount] = useState(0);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    getLikesCount(blogId).then((likesCount) => {
+      setLikesCount(likesCount);
+    });
+  }, []);
+
+  const handleLike = () => {
+    setLikesCount((currentLikesCount) => currentLikesCount + 1);
+    setError(null);
+    postLike().catch((err) => {
+      setLikesCount((currentLikesCount) => currentLikesCount - 1);
+      setError("Your like was not successful. Please try again!");
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={handleLike}>Like +1</button>
+      {error ? <p>{error}</p> : null}
+      <p>{likesCount}</p>
+    </div>
+  );
+};
+
+In this example, the likes counter will be reduced by one should the POST request fail, meaning that the UI will reflect the original count before the button was clicked. The error message will also provide some additional user feedback, letting them know that the like was not added, and the button will need to be clicked again.
+Optimistic vs pessimistic rendering
+
+To summarise the differences between these approaches:
+Optimistic rendering
+	
+Pessimistic rendering
+Both setState and the API request trigger simultaneously
+	
+setState only happens after the API response
+Cannot use data from the API response
+	
+Data from the API response is available
+Both actions will always trigger
+	
+setState will only trigger if the API response is not an error
+Does not accurately represent the database
+	
+Can accurately represent the database at the time of response
+
+Learn To Code

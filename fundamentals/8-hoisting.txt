@@ -1,0 +1,54 @@
+Hoisting
+
+JavaScript has a unique feature called hoisting. In JavaScript, the interpreter moves variable declarations and function declarations to the top of the code. This means that var and function declarations become accessible at the beginning of the code. To illustrate this behaviour, let's take a look at some examples.
+Function Declarations
+
+Consider the following example:
+
+sayHello(); // "Hello"
+
+function sayHello() {
+  console.log('Hello');
+}
+
+The JavaScript interpreter moves the entire function declaration to the top of the current scope, which enables it to be accessed before its actual lexical declaration. This means that not only the variable sayHello is hoisted, but also the reference to the function itself.
+Function Expressions
+
+JavaScript does not hoist function expressions.
+
+sayHello(); // ReferenceError
+const sayName = function sayHello() {
+  console.log('Hello');
+};
+
+Declaration with let, const and class
+
+let and const technically do go through a form of hoisting but because these declarations are made within a Temporal Dead Zone (can't be accessed until the time the line is read), in practice they appear not to undergo hoisting.
+
+const num = 4;
+
+function doSomething() {
+  num += 2; // ReferenceError
+  const num = 6;
+}
+
+doSomething();
+
+The fact that doSomething throws a ReferenceError indicates that the interpreter knows that num is going to be declared but hasn't yet happened, otherwise JavaScript would access the value of num declared in the parent scope.
+Declarations with var
+
+Variable declarations using var also exhibit a form of hoisting behaviour.
+
+console.log(num); // undefined
+
+var num = 100;
+
+console.log(num); // 100
+
+In this example, JavaScript hoists the variable declaration num and not the value assigned to it.
+
+The console logs undefined instead of throwing a ReferenceError. In JavaScript, undefined is a placeholder for a variable that has not been assigned a value.
+
+It is simpler to think of this behaviour by splitting the above expression var num = 100 into its component declaration (i.e. var num;) and assignment parts (i.e. num = 100).
+
+Learn To Code

@@ -1,0 +1,75 @@
+Git Branching
+
+Git branches maintain their own version of code changes and can be worked on independently without affecting the code on other branches.
+
+A git repo will have a default branch. This will typically be named main when creating new repos with services such as GitHub, but older repos may instead have a default branch called master.
+Listing branches
+
+When working on a git repo, it is possible to check the name of the branch currently being worked on by using the git branch command. This will show all local branches and the currently selected branch.
+
+To view just the current branch name, the --show-current flag can be added: git branch --show-current.
+Creating a branch
+
+To create a new branch, run the command git checkout -b <new_branch_name>.
+
+This will create a new branch from the current branch, with the same commit history and code. While this branched is checked out, any further commits will be made on the branch rather than on main:
+mainnew_branchCommit 1Commit 2Commit 3Commit 4
+Commit 5
+Common commands
+
+Below are some useful git commands related to branching:
+
+    git branch - list local branches (current branch is marked by *)
+    git checkout -b <new_branch_name> - create a new branch from the current branch
+    git checkout <branch_name> - change to an existing branch by name
+    git branch -D <branch_name> - delete a local branch by name
+    git push origin <branch_name> - push to the origin remote at the named branch (Creates the branch if it doesn't already exist)
+
+Pull requests
+
+When the work on a branch has been completed, branches can be merged together.
+
+Once the code on a feature branch is complete, committed and pushed to GitHub, a new pull request (PR) can be opened from the GitHub UI.
+
+Select the branches to be merged in order to open a new PR:
+
+An example pull request from the GitHub UI
+
+The PR will stay open to allow changes to be reviewed or approved if necessary, and the changes can be merged when ready.
+
+Multiple pull requests can be open at the same time.
+
+Once a PR is merged into the main branch on GitHub, changes can then be pulled down locally using git pull origin main.
+Merge conflicts
+
+When working on multiple branches, endeavour as much as possible to split up work and have branches dedicated to separate features. This prevents branches from having conflicting changes.
+
+Sometimes, this isn't possible, and multiple changes may be made to the same line of code from different sources. This will generate a merge conflict, and the version of code to be kept will need to be selected.
+Fixing merge conflicts locally
+
+These steps assume a branch called feature is being merged into main. To resolve the merge conflicts locally:
+
+Update the local versions of the code:
+
+$ git checkout main
+$ git pull origin main
+$ git checkout feature
+$ git pull origin feature
+
+Merge the local main branch into feature:
+
+git merge main
+
+The conflicting versions will be added to the relevant files. VSCode will add some highlighting of the conflicts and provide some options like Accept Current Change:
+
+An example merge conflict from within VSCode
+
+Select the version of the code that should be saved, either by selecting one of the options provided by VSCode, or by deleting any unneeded code manually.
+
+Once all conflicts have been resolved, save any changes, and then add and commit the files with git.
+
+Finally, push the changes up to GitHub, and the option to merge the PR should be available.
+
+For simple merge conflicts, GitHub offers an interface to update files that have conflicting code. Handling merge conflicts locally or on GitHub is fine, but more complex conflicts will need to be managed locally.
+
+Learn To Code

@@ -1,0 +1,25 @@
+NPM Scripts
+
+Scripts are used to allow shorthand terminal commands.
+
+Most scripts will be configured in the package.json file that npm init creates. NPM scripts are written as JSON key-value pairs, where the key is the name of the script and the value contains the script to be executed.
+
+A common example is:
+
+"scripts": {
+  "test": "jest"
+}
+
+This script specifies that when npm test is run in the command line, it should run the Jest npm package that is installed in the node_modules directory.
+
+A script to use node to run the listen.js file would look like this:
+
+"scripts": {
+  "dev": "node listen.js"
+}
+
+This script would be run with the following command: npm run dev. This is the equivalent of running node listen.js in the terminal.
+
+The word run is needed here, because dev is not a predefined npm script in the way that test is.
+
+Learn To Code

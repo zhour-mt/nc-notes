@@ -1,0 +1,20 @@
+Integration Testing
+
+Unlike unit testing, which tests individual functions, integration testing checks that multiple parts of a project work cohesively together to successfully achieve their goal. This is useful when developing a server, where each endpoint will require the controllers, models and database to work together to respond with the correct data.
+Example
+
+An integration test could make a request to the server and test that the response is correct. Unlike unit testing, integration tests would confirm that the server, controller, and models are all interacting correctly to provide the expected result.
+
+Because testing an endpoint involves testing the flow from a user request all the way to the database, there is potential overlap here with end-to-end testing. Also known as E2E testing, this refers to tests that check an entire user journey.
+Advantages of integration testing
+
+Integration testing should be used alongside unit testing to ensure that entire processes work, as well as the functions that make them up.
+
+Integration testing:
+
+    Can be used to test complex integrated systems rather than isolated components
+    Complements unit testing by making sure that entire processes work
+    Can highlight issues that occur from how systems interact with one another
+    Gives extra confidence that the software functions as expected before deploying
+
+Learn To Code

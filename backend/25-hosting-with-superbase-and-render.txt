@@ -1,0 +1,118 @@
+Hosting with Supabase and Render
+
+There are many ways to host APIs online. These notes will be using Supabase to create an online location for a database, and Render to host the API.
+1. Set up a database instance using Supabase
+
+    Create a Supabase account by signing up with an email address, or sign in using an existing GitHub account.
+    After logging in, create a new project from the dashboard. If there is no option to create a project, navigate to the All Projects tab in the sidebar.
+    Click the + New Project button.
+    On creating a project for the first time, there may be a prompt to create a new organisation. Give the organisation a name, although it doesn’t matter what this is called.
+    Make sure that the type of organisation selected is Personal and select the Free pricing plan option.
+    Next, give your project a name and create a database password. Copy this to the clipboard and paste it somewhere safe. This password will be required to connect the database instance and it cannot be retrieved again, only reset.
+
+Note: The database password used here must only contain alphanumeric characters. Not doing so can lead to connection errors and prevent seeding to our hosted database from happening successfully as dotenv may not be able to parse the connection string properly.
+
+    Select any region. This will be the location of the hosted server, so it may be beneficial to choose the location closest to you.
+    Confirm to create the project.
+    If any of these settings need to be changed later they can be reset in the Project Settings dashboard (including the database password).
+    Now that the database instance has been created, navigate back to Home using the menu on the left of the screen.
+    Click the Connect button in the top-right corner.
+    Copy the URI connection string (postgres://...) to your clipboard, or keep this tab open while you move on to the next step.
+
+2. Set up a production environment variable in the local repo
+
+    An environment variable called DATABASE_URL will be needed for the API to connect to the production database. This will provide the online location of the database that was just created using Supabase.
+    Add a new .env file called .env.production, which must be added to your ..gitignore to prevent the production database URL being publicly exposed.
+    In this file, create a variable of DATABASE_URL with value of the URI connection string that was copied from the database configuration in the previous step.
+    Make sure to paste in the database password from earlier where directed in the connection string, removing the square brackets too.
+
+3. Update the connection pool
+
+Checkout to the main branch before proceeding.
+
+At the top of the database connection file (e.g. connection.js), assign the value of the NODE_ENV to a variable if one does not already exist.
+
+const ENV = process.env.NODE_ENV || "development";
+
+It is important to check that either the development/test PGDATABASE variable or the production DATABASE_URL exists. If both are missing from the process.env, then throw an error:
+
+if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
+  throw new Error("PGDATABASE or DATABASE_URL not set");
+}
+
+Next, add a config variable. If the ENV is set to production, this variable should hold a config object containing the DATABASE_URL at the connectionString key. This will allow a connection to the hosted database from a local machine. The config object also needs a max property to limit how many connections the pool will have available.
+
+const ENV = process.env.NODE_ENV || "development";
+// ...
+const config = {};
+
+if (ENV === "production") {
+  config.connectionString = process.env.DATABASE_URL;
+  config.max = 2;
+}
+module.exports = new Pool(config);
+
+4. Add a listen file
+
+If you don't have one already, add a listen.js file in the root of the repo. This will allow the hosting provider to start up the server.
+
+const app = require("./app.js");
+const { PORT = 9090 } = process.env;
+
+app.listen(PORT, () => console.log(`Listening on ${PORT}...`));
+
+5. Update the package.json
+
+In the package.json file, set the main key to the listen.js file. Missing this will result in an error from the hosting provider, as it won't know where to enter the app.
+
+"main": "listen.js"
+
+Add the following keys to the scripts:
+
+{
+  "scripts": {
+    "start": "node listen.js",
+    "seed-prod": "NODE_ENV=production npm run seed"
+  }
+}
+
+Make sure that dotenv and pg are installed as dependencies and not devDependencies, as Render will need access to these libraries.
+6. Commit these changes to GitHub
+
+Add, commit and push the changed files to the main branch on GitHub.
+
+If these changes have been pushed to a branch by accident, a pull request will need to be created to merge them into main.
+7. Seed the online database
+
+The package.json should have a seed-prod script (if it doesn't, check the previous step).
+
+Run the seed-prod script using the following command:
+
+npm run seed-prod
+
+This script will check whether the app is in a production environment and, if so, connect to the production database.
+
+To see if this has worked, navigate to the Table Editor section in the sidebar of the Supabase project dashboard. Here, it is possible to view any tables and data to see if the seed has been successful.
+8. Host the API on Render
+
+    Sign up to Render. Then, click on the New + button and create a new Web Service.
+    Render also allows users to connect a GitHub account to give Render permission to access the app's repo. Alternatively, paste in the URL of the git repository as long as it is a public repo.
+    Give the app a name.
+    Most of the other options can be left on the default settings, meaning the app will be hosted in the EU using the main branch.
+    The default build command should be changed to yarn and the default start command should be changed to yarn start. Yarn is an alternative package manager to npm.
+    At the bottom, underneath the payment tier options, provide the following environment variables by clicking on the Advanced button and selecting Add Environment Variable.
+        Set DATABASE_URL to the URL of the database from Supabase (the same as in the .env.production file).
+        Set NODE_ENV to production.
+    Create the service and it will begin the deploy process. This will take a few minutes the first time, so be patient.
+    Progress for this can be seen by selecting the Events tab followed by Logs.
+
+Note: If any edits are required or more environment variables need to be added, select the Environment tab on the app dashboard to go back and edit them. Once any changes are saved, Render will re-deploy the app with the new environment.
+9. Check the API online
+
+Once deployed, there will be a link to the hosted application at the top of the page.
+
+This link is to the / path by default, to which the server should respond with a 404. Make a request to an existing endpoint such as /api to check that data is being fetched correctly.
+
+Note: If the data appears on one line, it can be hard to read. Installing a JSON formatter extension to your browser can make data like this easier to view. This JSON Formatter on the Chrome store is a good one.
+
+Learn To Code

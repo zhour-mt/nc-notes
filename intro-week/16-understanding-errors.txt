@@ -1,0 +1,92 @@
+Understanding Errors
+
+JavaScript code can encounter different errors when it is executed. These can be caused by programming mistakes, incorrect input, or other unforeseen events. When this happens, JavaScript stops and generates an error message. The technical description for this is that JavaScript throws an exception.
+
+There are three types of errors you will see most commonly:
+
+    Syntax errors - the code has a mistake in the pre-defined syntax.
+    Runtime errors - the code throws an exception while you're running it.
+    Logical errors - the code produces a logical mistake and thus your program doesn't produce the desired output.
+
+Common JavaScript Errors
+
+Luckily, JavaScript has built-in errors that help in further understanding where the error is coming from.
+ReferenceError
+
+This error is thrown when the variable referenced doesn't exist or hasn't been initialized yet.
+
+const cuteDogs = ["Samoyed", "Shiba Inu", "Golden Retriever"]
+console.log(cuteDog)
+
+This code produces the following error:
+
+/workspace/index.js:2
+console.log(cuteDog)
+            ^
+
+ReferenceError: cuteDog is not defined
+    at Object.<anonymous> (/workspace/index.js:2:13)
+    at Module._compile (node:internal/modules/cjs/loader:1254:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1308:10)
+    at Module.load (node:internal/modules/cjs/loader:1117:32)
+    at Module._load (node:internal/modules/cjs/loader:958:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)
+    at node:internal/main/run_main_module:23:47
+
+This error can often be fixed by making sure that the variable is declared, referenced correctly or available in the current scope. This is a runtime error.
+TypeError
+
+This error is thrown whenever a value is used in a way it was not made for. For example, an incompatible argument being passed to a function or trying to modify values that cannot be changed would be type errors.
+
+const greeting = "hello" 
+greeting = "goodbye"
+
+This code produces the following error:
+
+/Users/northcoder/documents/errors/main.js:2
+greeting = "goodbye"
+         ^
+
+TypeError: Assignment to constant variable.
+    at Object.<anonymous> (/Users/northcoder/documents/errors/main.js:2:10)
+    at Module._compile (node:internal/modules/cjs/loader:1191:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1245:10)
+    at Module.load (node:internal/modules/cjs/loader:1069:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:904:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)
+    at node:internal/main/run_main_module:22:47
+
+This error can be fixed by using appropriate data types and not trying to reassign a variable initialised with const. This is a runtime error.
+SyntaxError
+
+This error is thrown whenever JavaScript tries to interpret code that is syntactically wrong. This error could relate to typos, mismatched brackets or even missing parentheses.
+
+const favouriteDinosaur = "diplodocus";
+console.log(favouriteDinosaur
+
+This code produces the following error:
+
+/workspace/index.js:2
+console.log(favouriteDinosaur
+            ^^^^^^^^^^^^^^^^^
+
+SyntaxError: missing ) after argument list
+    at Object.compileFunction (node:vm:360:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1088:15)
+    at Module._compile (node:internal/modules/cjs/loader:1123:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1213:10)
+    at Module.load (node:internal/modules/cjs/loader:1037:32)
+    at Module._load (node:internal/modules/cjs/loader:878:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:82:12)
+    at node:internal/main/run_main_module:23:47
+
+This error can be fixed by making sure that the syntax in the code is correct. Keeping code readable and clean helps, and there are also certain extensions that help to make matching up braces and parentheses easier. As the name suggests, this is a syntax error.
+Reading Errors
+
+As a developer, you will experience errors. Because of this, it is important to get comfortable with deciphering what errors are telling you.
+
+The errors shown in the previous examples are mostly straight forward, but whenever you encounter an error, make sure to take the time to read through it and concentrate on the lines of code it is directing you to.
+
+Reading the stack trace, which lists all the calls your application made leading up to the point where the error occured, can be extremely helpful.
+
+Learn To Code

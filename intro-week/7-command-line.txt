@@ -1,0 +1,85 @@
+Command Line
+Hardware vs Software
+
+Computers consist of physical hardware like monitors, keyboards, and chips. Software comprises the instructions that the hardware executes, such as an application.
+Operating Systems
+
+Operating systems are the main programs that manage and co-ordinate the different software and how they get access to the physical hardware of a computer. Without the use of an operating system, programmers would have to directly interface with complicated hardware which would take up time. Operating systems allow people to build software more efficiently by abstracting away the complexities of the hardware on a machine.
+Unix
+
+Unix is an operating system that was initially developed at Bell Labs in the late 1960s. It has influenced many modern operating systems, such as Mac OS. Linux, created in the early 1990s by Linus Torvalds, follows Unix standards and was designed as being open-source. Linux is a popular operating system today for developers and is used by many computers across the world.
+DOS
+
+Windows operating system emerged from the MS-DOS (MicroSoft Disk Operating System). The main difference between MS-DOS and Unix is that MS-DOS was designed for a single user.
+Shells
+
+The term shell and terminal are often used interchangeably: however, they are not the same thing. A terminal allows users to input commands, whereas a shell interprets those commands and executes a relevant program. A shell is a command line interpreter because it interprets and executes the commands inputted by a user.
+Bash
+
+Bash is both a command line interpreter and a programming language. The default terminal used that is started when we open up a terminal will often be bash (when working on Unix-like operating systems such as Mac OS and Linux). The rich set of commands we can use to control our machine from the terminal is also said to form a command line interface.
+echo command
+
+The echo command can be used to print messages to the terminal:
+
+$ echo hello world
+> hello world
+
+pwd command
+
+The pwd command, short for print working directory, will display the file path of the directory that the shell program is currently inside.
+
+$ pwd
+/Users/mitch
+
+ls command
+
+The ls command can be used to print the contents of a specified directory.
+
+$ ls <name-of-directory>
+
+If no directory name is provided, the command will print the contents of the current working directory:
+
+$ ls
+Applications  Desktop  Documents  Downloads  Movies  Music  Pictures  Public
+
+cd command
+
+The cd command stands for change directory and can be used to navigate between directories on your machine.
+
+$ pwd
+/Users/mitch
+
+$ ls
+Applications  Desktop  Documents  Downloads  Movies  Music  Pictures  Public
+
+$ cd Documents
+
+$ pwd
+/Users/mitch/Documents
+
+If no directory name is provided to the cd command, it will navigate back to the root directory.
+
+In order to move from the current directory to a parent ddirectory, two dots can be provided:
+
+$ cd ..
+
+source command
+
+The source command can be used to read and execute commands from the file given as an argument. It is useful for loadings functions, variables, and config files into your shell scripts.
+
+$ source venv/bin/activate
+
+PATH variable
+
+Unix systems have a PATH variable that specifies a set of colon (:) separated directories that contain executable programs.
+
+$ echo $PATH
+
+# You will see something like this though it may have different directories
+/Users/dcrawley/bin:/usr/local/bin:/Users/dcrawley/.local/bin/usr/local/bin
+
+Executable programs contained in these directories are able to be used without specifying the file path. This is the reason why commands like ls are available globally.
+
+If you want to make a shell script globally available as a command, you could move it into the /usr/local/bin directory or any others listed there.
+
+Learn To Code

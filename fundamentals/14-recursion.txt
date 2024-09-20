@@ -1,0 +1,77 @@
+Recursion
+
+Recursion is a mathematical approach to problem-solving, where the solution can be broken down into smaller instances of the same problem. To illustrate this concept, consider the task of running a marathon, which is approximately 42 kilometers long. We can represent the act of running 1 kilometer with the function.
+
+function run() {
+  const distance = 1;
+  const distanceLeft = distance - 1;
+  console.log("I've finished!");
+}
+
+run(); // I've finished!
+
+Recursion is a technique that can be used to solve the marathon problem by calling the run function repeatedly until the desired distance is covered. In each call, the function is passed a smaller distance until the distance becomes 0, at which point the function stops executing.
+
+function run(distance) {
+  const remainingDistance = distance - 1;
+  if (remainingDistance > 0) {
+    console.log(`${remainingDistance} km left`);
+    run(remainingDistance);
+  } else {
+    console.log("I've finished!");
+  }
+}
+
+run(42);
+
+Creating a Recursive Algorithm
+
+Every recursive algorithm has:
+
+    a base case, specifying when to stop
+    a recursive step, to help progress towards the base case
+    a recursive call (a call to the function written)
+
+Looking at the run function these features can be identified:
+
+    if (remainingDistance > 0) - this identifies a base case which if met will prevent the function from calling itself.
+    const remainingDistance = distance - 1 - reduces the complexity of the problem so the next invocation works on a smaller problem. The recursive step should bring the problem closer to the base case.
+    return run(remainingDistance) - recursive call runs the function again, with the result of the recursive step.
+
+Comparing recursive and iterative approaches
+
+Following the functional programming paradigm, problems which require repeated logic should be solved recursively. Some purely functional languages such as Haskell, do not natively support iterative loops.
+
+Recursion is often preferred over iteration for its cleaner solutions and easier debugging. Here are two functions that calculate the factorial of a given number: one iteratively and the other recursively.
+
+function factorial(n) {
+  let total = 1;
+
+  for (n; n > 1; n--) {
+    total *= n;
+  }
+
+  return total;
+}
+
+function recursiveFactorial(n) {
+  if (n <= 1) return n;
+  return n * recursiveFactorial(n - 1);
+}
+
+Nested data structures
+
+Recursion can be particularly useful when traversing nested data structures. Being able to search through a file system for a particular file is a common feature of any OS. Breaking the functionality down, it would need to traverse the root directory, if it finds a directory it should traverse through it, and if that directory contains a directory, it too needs to be traversed. This tree-like structure of unknown depth lends itself well to recursion as each level can be treated as as a recursive call.
+The Execution Context and Stack
+
+It's important to consider how execution contexts are tracked when using recursion. Each time a function calls itself a reference to the execution context is added to call stack. If a recursive function has no means of reaching the base case then execution contexts will keep piling up until the call stack limit is reached and the execution is halted with a stack overflow error.
+
+function func() {
+  func();
+}
+
+func(); // Stack overflow
+
+The above example is a naïve implementation of recursion as there is no means to stop calling itself. func() will keep being added to the call stack until a stack overflows. Ensure that all recursive functions have a base case and a way to get to it - recursive step.
+
+Learn To Code

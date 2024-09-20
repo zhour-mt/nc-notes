@@ -1,0 +1,87 @@
+CSS
+
+Cascading Style Sheets, or CSS, is a style sheet language that defines the presentation of structured documents. A CSS file tells the browser how to display elements within the linked HTML document.
+Linking CSS to HTML
+
+To apply CSS styling, create a link between your HTML and CSS files. Include a <link> tag within the <head> section of your HTML, with a href attribute that contains the path to the CSS file:
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="mystyle.css">
+  </head>
+  <body>
+  </body>
+</html>
+
+CSS Selectors
+
+A CSS ruleset targets elements based on a selector. Common selectors include element selectors, class selectors and ID selectors.
+Element Selector
+
+The most basic selector targets a specific HTML element. For example, all <p> elements can be targeted using:
+
+p {
+  /* Your styling rules here */
+}
+
+Class Selector
+
+Classes provide a way to group elements and style them consistently. Multiple elements can share the same class name. Classes can be defined in HTML by using the class attribute:
+
+<ul class="links-list">
+  <li>W3Schools</li>
+  <li>MDN</li>
+</ul>
+
+To apply styles to elements with a specific class, use the class selector (.) and class name:
+
+.links-list {
+  /* Your styling rules here */
+}
+
+ID Selector
+
+IDs are used to uniquely identify individual elements. IDs can be denoted in HTML by using the id attribute.
+
+<h1 id="page-title">Welcome to Our Website</h1>
+
+Use the ID selector (#) and ID name to apply styles to the specific element:
+
+#page-title {
+  /* Styling rules for element with ID "page-title" */
+}
+
+Documentation for other selectors can be found on MDN.
+CSS Hierarchy
+
+The order in which CSS rulesets are written matters. When two rulesets are applied to an element with the same selector, the last ruleset will take precendence.
+
+When multiple rulesets are applied to an element with different selectors, the order of priority is as follows:
+
+    Inline styles, e.g. <h1 style='color: pink;'>
+    IDs, e.g. <h1 id='main-header'>
+    Classes, e.g. <h1 class='heading'>
+    Elements, e.g. using the h1 element selector
+
+CSS Resets
+
+Different browsers will apply default styling to an HTML document if there is no CSS provided. To have full control over our CSS styles, a CSS reset can be used to provide default styling to all elements using the wildcard selector *:
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: 0;
+}
+
+This should be applied at the top of the CSS file, so that any other style rulesets will override it as needed.
+Useful Resources
+
+    MDN
+    W3Schools
+    CSS Tricks
+    CSS Battle
+    CSS Grid Garden
+    CSS Flexbox Froggy
+
+Learn To Code

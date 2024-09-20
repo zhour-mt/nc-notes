@@ -1,0 +1,95 @@
+Mocks and Spies
+Mock functions
+
+Jest provides mock functions that can be substitutes for other functions when testing code. Mock functions capture extra information that can be asserted against, such as what the mock function was called with or how many times it was invoked.
+
+Mock functions in Jest are created with jest.fn().
+
+const myFunc = jest.fn();
+
+myFunc("hello");
+myFunc("goodbye");
+
+console.log(myFunc.mock.calls); // [["hello], ["goodbye"]]
+
+Mock function return values
+
+By default, mock functions return undefined. Passing a function to jest.fn will create a mock function that returns values as per the logic of the function that was passed in.
+
+const doubleNumMock = jest.fn((num) => num * 2);
+
+console.log(doubleNumMock(5)); // --> 10
+
+Mock function matchers
+
+Mock functions have access to various matchers available in the Jest mock function API.
+
+function fruityFunc(fruitArray, callbackFunc) {
+  const count = 0;
+  fruitArray.forEach((fruit) => {
+    count++;
+    callbackFunc(fruit, count);
+  });
+}
+
+const myMockFunc = jest.fn();
+const fruitInput = ["apple", "berry"];
+fruityFunc(fruitInput, myMockFunc);
+
+expect(myMockFunc).toHaveBeenCalledTimes(2);
+expect(myMockFunc).toHaveBeenCalledWith("apple", 1);
+expect(myMockFunc).toHaveBeenCalledWith("berry", 2);
+
+The first expect checks how many times myMockFunc was called. The second and third assertions check that myMockFunc has been called specifically with those values on each invocation.
+Spies in Jest
+
+Spies can be used to wrap an existing function. The spy will behave like the original method, but it is possible to assert against extra information, much like with mocks.
+
+Spies are created using jest.spyOn(), and information for creating and using spies can be found in the Jest documentation.
+
+The below example sets up a spy for console.log.
+
+test("should log hello to the console", function () {
+  const consoleSpy = jest.spyOn(console, "log");
+
+  console.log("hello");
+
+  expect(consoleSpy).toHaveBeenCalledTimes(1);
+  expect(consoleSpy).toHaveBeenCalledWith("hello");
+});
+
+Resetting mocks
+
+Unless they are reset, the extra information that spies and mocks provide will persist between function calls. Jest provides methods, such as .mockReset() and .mockRestore(), that reset the data about the mock function.
+
+test("should log hello to the console", function () {
+  const consoleSpy = jest.spyOn(console, "log");
+
+  console.log("hello");
+
+  expect(consoleSpy).toHaveBeenCalledTimes(1);
+
+  consoleSpy.mockRestore();
+});
+
+Jest Hooks can run these methods programmatically before or after each test.
+
+describe("spying on console log", () => {
+  const consoleSpy = jest.spyOn(console, "log");
+
+  afterEach(function () {
+    consoleSpy.mockRestore();
+  });
+
+  it("console log has been called once", () => {
+    console.log("hello");
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
+    expect(consoleSpy).toHaveBeenCalledWith("hello");
+  });
+
+  it("console log has not been called", () => {
+    expect(consoleSpy).not.toHaveBeenCalled();
+  });
+});
+
+Learn To Code

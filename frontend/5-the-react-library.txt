@@ -1,0 +1,105 @@
+The React Library
+
+React is a JavaScript-based user interface (UI) library developed by Facebook that allows developers to build user interfaces from individual pieces called components.
+Key React features
+JSX
+
+React utilises JSX (JavaScript XML), which is a syntax extension to JavaScript allowing for HTML code to be written directly in a JavaScript file. When JSX is written in React code, it is compiled to regular JavaScript using a tool called esBuild. For example:
+
+const element = <h1>Hello world</h1>;
+
+Compiles down to:
+
+import { jsx } from "react/jsx-runtime";
+
+const element = /*#__PURE__*/ jsx("h1", {
+  children: "Hello world",
+});
+
+Note: This behaviour of automatically importing the jsx-runtime is new to React 17. Previous versions of React complied JSX to React.createElement instead.
+React Elements
+
+JavaScript can be embedded within JSX using curly braces, e.g.
+
+const sum = <p>1 plus 2 = {1 + 2}</p>; // {1 + 2} will be evaluated to 3
+
+Several JavaScript data types can be embedded, but objects are not valid and React will throw an error.
+Lists and keys
+
+React allows arrays to be rendered, with each element being rendered to the DOM in order. Good semantically correct HTML should be made up of a <ul> or <ol> tag containing <li> tags as their children.
+
+A common technique is to use the map method to transform an array of values into an array of <li> tags:
+
+const listItems = ["One", "Two", "Three", "Four o'clock rock"];
+
+const rockSchedule = (
+  <ul>
+    {listItems.map((item) => {
+      return <li key={item}>{item}</li>;
+    })}
+  </ul>
+);
+
+Each item in the array must be given a key prop. This is for React to identify each element when adding, removing or re-ordering elements in the array. The key should be stable and unique, with the best practice being to use an id or some unique feature of each element.
+
+Using indexes as keys should be avoided, as any changes to the order or length of an array may cause all of the associated indexes to change. This may result in React rerendering elements more than is needed.
+
+See the React documentation on keys for more detail on how they are used and why indexes should only be used as a last resort.
+The virtual DOM
+
+The virtual DOM is an in-memory representaiton of the real DOM that React uses to identify what nodes have changed and need to be updated.
+
+The virtual DOM is a more lightweight version that is easier to traverse and compare than the real DOM. This helps increase the speed by which changes needed to the DOM are indentified by React and ensures that only updated nodes are actually changed.
+Benefits of React
+
+    React's use of components encourages a resuable approach to building user interfaces by breaking HTML code down into smaller chunks.
+    The virtual DOM used by React is much faster and more efficient to update, as instead of manually traversing through the parent and child nodes of the DOM, the virtual DOM will check itself against the previous version and only update what is necessary, based on the updated UI that has been declared.
+    React allows for a declarative approach to building user interfaces using JavaScript. This means that rather than having to describe each step in the transition to an updated UI using DOM methods, developers can leave this underlying logic to the React library.
+    As one of the most popular libraries, React has a lot of developer support in the form of documentation, as well as integrations with various JavaScript libraries that can help to speed up the development process.
+
+React Setup
+
+React can be used as part of a larger framework to provide out-of-the-box features like routing, or be set up as a standalone React project using Vite. This is an example of what's known as a build tool, with Vite being recommended by the React docs.
+Creating a React App
+
+New apps can be made using:
+
+npm create vite@latest
+
+This will prompt a few choices for setting up an app:
+
+    A name - this will be used to create the directory for the project. When naming an app, it's generally a good idea to use snake or kebab case to avoid capital letters.
+    A framework - Vite can set up several frameworks, with React being one of the options
+    A variant - Vite supports various project configurations, such as JavaScript, TypeScript, Tailwind etc.
+
+React Project Structure
+
+The file structure of a typical React application will look something like this:
+
+├── public
+│   ├── vite.svg (plus any other static assets)
+└── src
+    ├── App.css
+    ├── App.jsx
+    ├── index.css
+    └── main.jsx
+├── index.html
+├── package-lock.json
+├── package.json
+
+In the majority of standalone React apps, there will be a <div> with an id of root within an index.html file. This is the single HTML page that the rest of the React code will be injected into.
+
+<div id="root"></div>
+
+This is referred to as the root DOM node because everything inside it will be managed by React.
+
+Within the main.jsx file, a React element can be rendered inside the root DOM node using root.render():
+
+import ReactDOM from "react-dom/client";
+
+const element = <h1>Hello, world</h1>;
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(element);
+
+Learn To Code

@@ -1,0 +1,28 @@
+CORS
+
+Cross-origin resource sharing (CORS) defines a way for client web applications that are loaded in one domain to interact with resources in a different domain. This is done through HTTP headers that let servers describe which origins are permitted to read that information from a web browser.
+Enabling CORS in an Express API
+
+When attempting to access your Express backend API from a web app, a CORS error message will occur. This is because, by default, Express blocks requests from domains other than the one it's hosted on.
+
+To enable CORS for a backend API, begin by installing the cors package:
+
+$ npm install cors
+
+In the app.js file, import the package:
+
+const cors = require('cors');
+
+Within the app.js file, integrate the cors middleware before any other middleware or routers.
+
+app.use(cors());
+
+After implementing these changes, commit and push them to ensure they take effect in the hosted API:
+
+$ git add app.js
+$ git commit -m 'allow cross origin resource sharing'
+$ git push origin main
+
+More information about using the cors package can be found in the Express documentation.
+
+Learn To Code

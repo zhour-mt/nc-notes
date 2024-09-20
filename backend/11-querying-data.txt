@@ -1,0 +1,179 @@
+Querying Data
+SELECT
+
+The SELECT statement can be used to retrieve columns from a table:
+
+SELECT * FROM northcoders;
+
+Note: The * wildcard symbol will return all of the columns. Alternatively, column names can be specified and separated by commas.
+DISTINCT
+
+The SELECT DISTINCT statement is used to return only distinct values, removing any duplicates:
+
+SELECT DISTINCT favourite_animal_id FROM northcoders;
+
+If the favourite_animal_id column had multiple entries of the same id:
+northcoder_id
+	
+northcoder
+	
+favourite_animal_id
+1
+	
+Rose
+	
+2
+2
+	
+Kev
+	
+4
+3
+	
+Ali
+	
+2
+4
+	
+Rayhaan
+	
+3
+
+The above query would return only one instance of each duplicate id:
+favourite_animal_id
+2
+4
+3
+WHERE
+
+The WHERE clause is used to filter records to extract only those that fulfil a specified condition:
+
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;
+
+The following operators can be used in the WHERE clause:
+
+    = - Equal
+    <> - Not equal. In some versions of SQL, this operator may be written as !=.
+    > - Greater than
+    < - Less than
+    >= - Greater than or equal
+    <= - Less than or equal
+    BETWEEN - Between a certain range
+    LIKE - Search for a pattern
+    IN - To specify multiple possible values for a column
+
+SELECT * FROM products
+WHERE product_name = 'ballet shoes';
+
+AND
+
+A WHERE clause with AND requires that two conditions are true. The following example would return a list of all ballet shoes with a price less than or equal to 10.
+
+SELECT * FROM products
+WHERE product_name = 'ballet shoes'
+AND price <= 10;
+
+OR
+
+A WHERE clause with OR requires that one of two conditions is true:
+
+SELECT * FROM products
+WHERE product_name = 'ballet shoes'
+OR price <= 10;
+
+This query would return all entries where product_name is "ballet shoes" and all products that have a price less than or equal to 10.
+NOT
+
+A WHERE clause with NOT negates the specified condition. The following example would respond with all of the products that have a quantity that is not 0.
+
+SELECT * FROM products
+WHERE NOT quantity = 0;
+
+WHERE LIKE
+
+To partially match data in a CHAR/VARCHAR/TEXT column, the WHERE and LIKE operators combined with a wildcard character can be used.
+
+The percentage sign (%) matches any sequence of zero or more characters. Alternatively, an underscore (_) will match any single character.
+
+For example, the following statement will match any product that has a name ending with " shoes":
+
+SELECT * FROM products
+WHERE product_name LIKE '% shoes';
+
+BETWEEN
+
+The BETWEEN operator checks whether a column value falls within two provided values.
+
+The following example will match all products with a release date in the year 2024:
+
+SELECT * FROM products
+WHERE release_date
+BETWEEN '2024-01-01' AND '2024-12-31';
+
+IN
+
+The IN operator matches a value against a list of any number of provided values.
+
+The following example will match any products in the "spring" or "summer" seasons:
+
+SELECT * FROM products
+WHERE season IN ('spring', 'summer');
+
+ORDER BY
+
+The ORDER BY clause allows query results to be sorted based on a sort expression, in a specified order. By default, the order will be ascending.
+
+SELECT * FROM products
+ORDER BY rating DESC;
+
+It is also possible to sort by multiple sort expressions:
+
+SELECT * FROM products
+ORDER BY rating DESC, price ASC;
+
+LIMIT
+
+The LIMIT clause allows query results to be limited to a certain number of rows.
+
+SELECT * FROM products
+LIMIT 5;
+
+AS
+
+The AS keyword can be used to give an alias to a column or table name (temporarily for the current query) in order to improve readability.
+
+SELECT product_name, season, price AS price_in_gbp
+FROM products;
+
+DELETE
+
+The DELETE statement is used to remove matching rows from a table.
+
+The following shows basic syntax using a WHERE clause to specify which rows should be deleted:
+
+DELETE FROM table_name
+WHERE condition;
+
+By default, the output of a DELETE query will be the number of affected rows (i.e. how many have been deleted).
+
+To return the deleted row(s), a RETURNING clause must be included:
+
+DELETE FROM table_name
+WHERE condition
+RETURNING *;
+
+The * returns all columns of the deleted row(s) from the table.
+UPDATE
+
+The UPDATE statement is used to modify matching rows in a table. Combined with the SET keyword, this allows properties of matching records to be updated to new values:
+
+UPDATE table_name
+SET
+  column1 = value1,
+  column2 = column2 + value2
+WHERE condition
+RETURNING *;
+
+Learn To Code

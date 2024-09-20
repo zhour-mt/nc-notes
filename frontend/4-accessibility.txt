@@ -1,0 +1,148 @@
+Accessibility
+
+Accessibility refers to making an app or website available and easy to use for as many different people and situations as possible. This includes accommodating disabilities and impairments, as well as situational needs such as poor connections or limited device access.
+
+Ensuring accessibility allows everyone to access and use a product effectively. There are also legal requirements to meet basic accessibility standards, especially in the public sector.
+Guidelines
+
+The Web Content Accessibility Guidelines (WCAG) contain useful information and recommendations for creating accessible web content.
+
+For additional explanations and examples, refer to MDN's accessibility documentation and the UK government's accessibility guidance.
+The Four Principles
+
+The WCAG guidelines each belong under one of four principles:
+
+    Perceivable: Users must be able to see, read, or hear the content.
+    Operable: Users must be able to navigate and interact with the content.
+    Understandable: Users must be able to understand the content and how to use it.
+    Robust: Content must be accessible across a wide variety of devices and assistive technologies.
+
+Conformance levels
+
+There are three levels of accessibility that can be aimed for. These are A (essential), AA (ideal) and AAA (specialized). Each of the guidelines and principles will list aims for each of these levels.
+
+    A: Basic accessibility features (e.g., no clashing colours, labels on inputs).
+    AA: Mid-range accessibility features (e.g., sufficient colour contrast, navigable with keyboard).
+    AAA: High-level accessibility features (e.g., supports all assistive technologies).
+
+Applying accessibility guidelines
+Use of colour
+
+Whenever presenting information or asking users to perform actions, avoid instructions based solely on colour. Any prompts like these should be presented in at least two ways to account for the very possible situation that the user cannot see colour or the content. For example, instead of saying "click the red link", provide additional context: "click this link for more information".
+Alternative text
+
+All images should have alt text that will be read by screen readers and displayed if the image cannot load. The alt text should convey the same meaning that the image was conveying within the document.
+
+When writing alt text:
+
+    Be accurate and succinct.
+    Avoid redundancy with surrounding text.
+    Describe the image's content and function without using phrases like "image of".
+    Use alt="" for purely decorative images.
+
+The Web Content Accessibility Guidelines alt decision tree is a resource that can help with decisions on alt text.
+Semantic Tags
+
+Semantic tags in HTML provide meaning and context to the content within them, improving both accessibility and search engine optimisation (or SEO - the process of making a website more visible in search results). These tags help browsers and assistive technologies understand the structure and importance of different parts of a webpage.
+Common semantic tags
+Tag
+	
+Description
+<main>
+	
+Represents the main content of the document. There should be only one per page.
+<section>
+	
+Defines a section within a document. Used for thematic grouping of content.
+<article>
+	
+Represents a self-contained piece of content that could stand alone, such as a blog post or news article.
+<header>
+	
+Represents introductory content, typically containing headings, navigation links, or other introductory information.
+<footer>
+	
+Defines a footer for a section or document, typically containing information about the author, related documents, or copyright information.
+<aside>
+	
+Contains content that is tangentially related to the content around it, such as sidebars or call-out boxes.
+<nav>
+	
+Defines a set of navigation links.
+Example
+
+Consider the following non-semantic structure:
+
+<div id="main">
+    <ul>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/Contact">Contact</a></li>
+    </ul>
+</div>
+
+While this structure is understandable to developers, it lacks semantic meaning for assistive technologies and search engines. Here’s an improved version using semantic tags:
+
+<main id="main">
+    <nav>
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/Contact">Contact</a></li>
+        </ul>
+    </nav>
+</main>
+
+In this version:
+
+    <main> indicates the primary content area.
+    <nav> indicates that the unordered list is a set of navigation links.
+
+ARIA
+
+ARIA (Accessible Rich Internet Applications) is a set of attributes that can be added to HTML elements to make web content and applications more accessible to people with disabilities.
+
+While semantic HTML provides much of the needed accessibility, some interactive elements and dynamic content require additional information to be fully accessible. ARIA attributes enhance the accessibility of these elements by providing additional context and controls.
+
+When applying ARIA, consider the following:
+
+    Use native HTML elements first: Always prefer native HTML elements and attributes for accessibility. For example, use <button> for clickable elements instead of using <div> or <span> with ARIA attributes.
+    Use ARIA when necessary: Apply ARIA roles, states, and properties only when there are no suitable native HTML elements.
+    Avoid redundant roles: Do not add ARIA roles to elements that already have implicit roles defined by HTML. For instance, <nav> already has the role of navigation.
+
+Here's an example of the aria-label in action:
+
+<button aria-label="Like">❤️</button>
+
+Many users would understand that the heart represents a 'like' on most platforms. For assistive technology, the browser can provide additional information through an extra label, which here says 'like', so the user knows what the button does.
+ARIA considerations
+
+When applying ARIA, ensure the following:
+
+    Use with care: Improper use of ARIA can create confusion and reduce accessibility. Only use ARIA when familiar with its proper implementation.
+    Test thoroughly: Always test ARIA implementations with various assistive technologies to ensure they work as intended.
+
+More information about ARIA can be found here:
+
+    WAI-ARIA Overview
+    MDN Web Docs - ARIA
+
+Helpful tools
+
+There are a number of tools available to help us with accessibility, ranging from packages for writing tests to browser extensions. Here are some tools to start with:
+
+    Lighthouse: in Chrome's DevTools, there is a tab labelled Lighthouse. In here, there is the option to run basic tests on a page. This will give feedback on things like the colour contrast, lack of semantic tags, and header stepping (e.g. moving from h1 to h3 with no h2 in between).
+    aXe: available as both a package and browser extension from the Chrome webstore, aXe gives more detail than Lighthouse. This appears as an option in the DevTools options, right at the bottom. One caveat is that aXe is best used on local projects with the extension as many sites will block its usage. As mentioned, aXe can be used as a package but this will require your project to have a package.json and usually some set up.
+    WAVE: available as a browser extension from the Chrome webstore and also gives more information than Lighthouse. WAVE will indicate where the issue is and give some suggestions on how to solve the issue.
+
+None of these tools are a fix-all and a truly accessible app or website will have been thoroughly tested by the developers and a multitude of users with different needs.
+Quick tips
+
+    Add labels to any inputs used.
+    Use semantic tags, like <section>, in place of <div> as much as possible.
+    Ensure the chosen colour contrast meets at least the A conformance level.
+    Use buttons for actions, and links for navigation.
+    Write alt text that conveys the same meaning as the image.
+    Use descriptive text for links tags (e.g., not just 'click here' but 'click here to visit our Instagram').
+
+Learn To Code

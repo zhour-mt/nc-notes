@@ -1,0 +1,98 @@
+Controlled Components
+
+In React, a controlled component is one whose behaviour is driven by props rather than its own local state. The opposite, a component that is managed purely by local state, is said to be uncontrolled.
+
+In the context of forms and input fields, a controlled input means that the state of the input field, such as which value has been selected or typed in, is managed by state outside of the element. This means that React is in control of the input state and eliminates the need for DOM manipulation to access current form values.
+Uncontrolled input
+
+Consider the component below for adding a new item to a list:
+
+const ItemAdder = () => {
+  return (
+    <form>
+      <label>
+        Add a new item:
+        <input type="text"/>
+      </label>
+      <button type="submit">Add item</button>
+    </form>
+  );
+};
+
+This input will allow the user to type into it, but its current value is not being tracked by React. The input keeps its own internal state and accessing it requires accessing the DOM directly to read its value. This is what is referred to as an uncontrolled component.
+
+In general, state declared within the React app should be the source of truth for what value the input has at all times.
+Controlled input
+
+A component is controlled if:
+
+    Its value is set with a prop.
+    Changes to that value are handled by React.
+
+Refactoring the uncontrolled input from before to a controlled input would look like the following:
+
+const ItemAdder = () => {
+  const [newItem, setNewItem] = useState("");
+
+  return (
+    <form>
+      <label>
+        Add a new item:
+        <input
+          value={newItem}
+          onChange={(event) => setNewItem(event.target.value)}
+        />
+      </label>
+      <button type="submit">Add item</button>
+    </form>
+  );
+};
+
+Now, the input value is controlled through the newItem state variable. This variable will be updated as the user types into the input field through the setNewItem function.
+onChange
+
+A React onChange event is triggered by any change to the input's value, unlike the DOM onchange event which only triggers when the input box loses focus.
+
+Inside the onChange function, the event.target.value stores the incoming change and is used to update the React state accordingly.
+
+This updates the input as the user types and allows the resetting of the form by changing the state.
+Forms
+
+Forms can be submitted in a number of ways, either by clicking on a button with a type of submit (the default button type when placed within a form) or by pressing enter on a focused input. This triggers the submit event of the form which can be controlled using onSubmit.
+
+In a React single-page web app, it is common to prevent the default form behaviour of navigating away from the page on submission.
+
+Creating a form to handle adding a new item to a list could look like this:
+
+const ItemAdder = ({ setList }) => {
+  const [newItem, setNewItem] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    setList((currList) => {
+      return [newItem, ...currList];
+    });
+
+    setNewItem("");
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Add a new item:
+        <input
+          value={newItem}
+          onChange={(event) => setNewItem(event.target.value)}
+        />
+      </label>
+      <button type="submit">Add item</button>
+    </form>
+  );
+};
+
+Upon submission, the default behaviour of navigating away from the page is prevented. The inputted value, newItem is added to an existing list contained in the parent component, and then newItem is reset to ensure the input field goes back to being empty.
+
+The React docs go into more detail on how to handle different types of input following the principles of controlled components. See select and textarea for some examples.
+
+Learn To Code

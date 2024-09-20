@@ -1,0 +1,110 @@
+Scope
+
+The term scope refers to the region of code where a variable is accessible. A variable that can be accessed is in scope, while one that cannot is out of scope.
+
+For example:
+Local Scope
+
+function sayName() {
+  const name = 'Mitch';
+}
+
+sayName();
+
+console.log(name); // ReferenceError - name is out of scope
+
+The function sayName has its own local scope which can only be accessed from inside, it is not accessible from outside of the function block.
+
+Variables declared within a function block are only accessible within that function. They are locally scoped and exist only while the function is running. Once the function completes its execution and is popped off the call stack, any locally declared variables are disposed of by JavaScript's garbage collector. Therefore, variables declared inside of a function block can not be accessed outside of the function,
+
+Variables which are declared within a function block are locally scoped. They exist whilst the function's context is on the call stack. Once the function has been popped off the stack, JavaScript's garbage collector disposes of any locally declared variables. The variable is out of scope of the console.log.
+Parent Scope
+
+Variables declared in an outer context can be accessed within a local context.
+
+const name = 'Mitch';
+
+function sayName() {
+  console.log(name); // "Mitch"
+}
+
+sayName();
+
+Although the name variable is not declared within the local scope of sayName, it can still be accessed. When a variable is referenced, the JavaScript engine first checks the local variable environment of the current context. If the variable is not found, it will then check the variable environment of the parent context. This is referred to as the outer or parent scope. JavaScript will continue searching each parent's context until it reaches the global context. All variables that are declared in the global scope are in scope and can be accessed by the entire code thread.
+
+Child scopes have access to parent scopes, but not vice versa.
+Shadowing
+
+Variables under the same name can be declared in different scopes. Locally bound variables will shadow variables of the same name in parent scopes.
+
+const name = 'Mitch';
+
+function sayName() {
+  const name = 'Tom';
+  console.log(name); // "Tom"
+}
+
+sayName();
+
+Since the variable name is available in the local scope of sayName, there is no need for JavaScript to search for the variable in the parent scope.
+Lexical Scoping
+
+JavaScript follows a lexical scoping scope model. This means that the scope of variables is determined at author time - when functions are declared not when they are invoked. The variables that are accessible to a function are a direct result of where the functions are declared.
+
+Consider the example below:
+
+let num = 10;
+
+const printNum = function () {
+  console.log(num);
+};
+
+const func = function () {
+  let num = 3;
+  printNum();
+};
+
+func(); // 10
+
+    num is declared and initialised with a value of 10
+    printNum is declared
+    func is declared
+    func is invoked in global, opening a local execution context
+    Inside func’s execution context a local variable called num is declared and initialised with a value of 3
+    printNum is then invoked, opening its own local execution context
+    num is then logged
+
+The value of num that will be logged - 10 or 3 - is determined by how lexical scoping works. The scope of printNum was created at author time (not runtime). Put another way, where a printNum is declared within the code dictates its parent scope and as such the variables that are accessible to it.
+
+In the above example, the printNum declaration is nested inside the global scope. This means that printNum can only access its own local variables (of which there are none) as well as any variables defined in its parent scope (global). As such num gets logged as 10.
+Block Scope
+
+Declaring a variable with let or const creates block scopes. Any variable declared within a block, such as a for-loop or a while-loop, is only available within the scope of that block. For example:
+
+for (let i = 1; i <= 10; i++) {
+  // ...
+}
+console.log(i); // ReferenceError
+
+Above, i has been declared using let, and therefore can only be accessed within the for loop. Attempting to access i outside of the for loop gives a ReferenceError. var is not block scoped.
+
+for (var i = 0; i <= 10; i++) {
+  // ...
+}
+console.log(i); // 11
+
+Non-formal Declarations (Variable Leaking)
+
+If a variable is declared without a declaration keyword, it is assigned to the global scope regardless of where it is declared.
+
+function func() {
+  if (true) {
+    name = 'Mitch';
+  }
+}
+func();
+console.log(name); // "Mitch"
+
+The variable being exposed to the global scope in the example is highly undesirable and illogical since it is intended for use only within func's local execution context.
+
+Learn To Code

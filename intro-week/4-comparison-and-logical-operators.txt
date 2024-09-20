@@ -1,0 +1,45 @@
+Comparison and Logical Operators
+Truthy & Falsy
+
+When a value is encountered within a Boolean context, JavaScript will coerce it to either true or false. A truthy value is one which is coerced to true. A falsy value is coerced to false.
+
+All values are considered truthy, except for false, 0, -0, 0n, "", null, undefined and NaN.
+
+Additional information on type coercion can be found in the MDN docs.
+Operators
+Comparison Operators
+
+Comparison operators are used to compare two values and return either true or false depending on the result.
+
+    === - Strict equality
+    !== - Strict inequality
+    > - Greater than
+    >= - Greater than or equal
+    < - Less than
+    <= - Less than or equal
+
+Logical AND Operator
+
+The logical AND operator, &&, evaluates to a Boolean after checking two values. If both values are truthy, it evaluates to true, if one or both values are falsy it evaluates to false.
+
+1 && 2; // true
+0 && 1; // false
+
+Logical NOT Operator
+
+The logical NOT operator, !, is used to either invert a Boolean value or to invert the truthiness of a non-Boolean value.
+
+!false; // true
+
+const trueWords = "I am always truthful!";
+!trueWords; // false
+
+Logical OR Operator
+
+The logical OR operator, ||, evaluates to a Boolean after checking two values. If one or both values are truthy, it evaluates to true, if both values are falsy it evaluates to false.
+
+1 || 2; // true
+0 || 1; // true
+0 || null; // false
+
+Learn To Code

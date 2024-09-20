@@ -1,0 +1,110 @@
+useEffect
+
+When developing React applications, performing side effects, such as contacting APIs to retrieve data or manipulating the DOM, are often necessary. These actions should be executed at specific times within the component lifecycle. For instance, a GET request to /api/users to fetch all users of a site should occur once when the page loads.
+
+The useEffect Hook allows developers to hook into React's lifecycle and specify when to execute these side effects based on specified dependencies.
+Implementing useEffect
+Arguments
+
+The useEffect Hook takes two arguments:
+
+    A function containing the logic of the side effect to be executed.
+    An array of variables (or dependencies). When any variable in the array changes value, the function will be invoked. This argument is optional, and without it the function will be invoked on each rerender of the component. For this reason, it is usually advised to include at least an empty dependency array.
+
+Syntax
+
+Once imported, useEffect should be invoked with a callback function and a dependency array:
+
+useEffect(() => {}, []);
+// () => {} - effect
+// [] - dependencies
+
+Example
+
+In order to fetch a list of users when a component is first rendered, the useEffect Hook can be used as shown below:
+
+import { useEffect, useState } from "react";
+import { fetchUsers } from "../utils/api.js";
+
+const Users = () => {
+  const [users, setUsers] = useState([]);
+
+  // fetch the users data when the component is first rendered
+  useEffect(() => {
+    fetchUsers().then((usersFromApi) => {
+      setUsers(usersFromApi);
+    });
+  }, []);
+
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+};
+
+There are no dependencies for this effect, so the array is blank. This means the request will happen the first time the component is rendered, and then never again.
+Using dependencies
+
+Sometimes, it is necessary to perform an action more than once, such as fetching an updated list of data from an API when a user inputs a new search term. In this case, useEffect would need to have the search term as a dependency to rerun the API call whenever it was updated.
+
+Similar to the example above, the useEffect Hook can be used to fetch a list of users, but with a value in the dependency array, this data would be fetched again if the dependency was updated:
+
+import { useEffect } from "react";
+import { fetchUsersByName } from "../utils/api.js";
+
+// userName is a string representing a search term that can change depending on user input
+const Users = ({ userName }) => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetchUsersByName(userName).then((usersFromApi) => {
+      setUsers(usersFromApi);
+    });
+  }, [userName]);
+
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+};
+
+By adding userName to the array, React will compare the current value of userName to the value from the previous render. If the values are different, the effect will re-run and fetch an updated list of user data.
+Cleanup effects
+
+Sometimes side effects require cleanup, such as adding an event listener to the window object to track a resize event. When the component mounts, the event listener is attached, but it should be removed when the component unmounts to prevent memory leaks and unexpected behavior.
+
+A cleanup function can be added by returning it from the useEffect function. Whenever the component is removed from the DOM or before each rerender with changed dependency values, the cleanup function will be invoked.
+
+An implementation might look like the following:
+
+const WindowResizeTracker = () => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    // The event listener is attached when the component mounts
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <div>
+      <p>Current window width: {windowWidth}px</p>
+    </div>
+  );
+};
+
+Learn To Code

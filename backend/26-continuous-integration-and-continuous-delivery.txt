@@ -1,0 +1,31 @@
+Continuous Integration and Continuous Delivery
+Continuous integration (CI)
+
+Continuous integration is the practice of frequently merging software changes into a shared repository, followed by automated testing to ensure these changes don't introduce errors.
+
+Changes should be integrated as often as possible, ideally multiple times a day. The more quickly changes can be integrated, the lower the risk of introducing big problems due to large changes to the main codebase. Tests are usually run on a dedicated server so that the integration environment is consistent for every engineer working on the application.
+Continuous delivery (CD)
+
+Continuous delivery (CD) extends CI by ensuring software changes are deployable at any time through automation, eliminating manual deployment processes. As soon as the tests have passed after integrating a change, then it should be possible to deploy that change.
+
+Both CI and CD are structured as pipelines with stages, heavily reliant on automated testing to progress changes towards production deployment. Running the unit tests would most likely be at the start of the pipeline, then the next stage might be deploying the software.
+
+There could be several different environments that the application is deployed to before it gets to production and in front of real users.
+Advantages of CI/CD
+
+CI and CD are crucial practices in modern software development, used to enhance the efficiency, quality, and reliability of software production. The main advantages of applying CI/CD in software development are:
+
+    Consistent code quality due to automated testing.
+    Pipeline prevents app-breaking bugs from making it to the production version of apps.
+    Streamlined deployment process allows for rapid integration of changes.
+    Reduces manual intervention for deployment which frees up developer time.
+    Encourages smaller, manageable changes which avoids large merge conflicts that could occur without frequent updates.
+    Transparency in the workflow helps collaboration between teams and developers.
+    Faster time-to-market of new features, fixes and updates.
+    Creates a continuous feedback loop between users and developers.
+
+The CI/CD environment
+
+To implement a CI/CD pipeline there needs to be a way for checks to run whenever a change is made to a repository. Tools such as Jenkins, CircleCI, AWS Code Pipeline and Github Actions are all used to facilitate CI/CD processes. These tools vary in features but share commonalities in enabling automated code integration and deployment.
+
+Learn To Code

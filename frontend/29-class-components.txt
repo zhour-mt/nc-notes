@@ -1,0 +1,218 @@
+Class Components
+
+React components can be either functional or class-based. Before React version 16.8, certain functionalities, such as holding values in state or performing side effects through React lifecycle methods, could only be implemented using class-based components. With the introduction of Hooks, these features are now available in functional components as well.
+
+Modern React applications typically use functional components, but class-based components are still common, especially in legacy projects. These projects often mix class-based components where necessary with functional components for simpler, presentational tasks.
+
+For more information on class syntax, see the React docs. Note that the documentation recommends using functions instead of classes.
+
+For a refresher on classes in JavaScript, see the Fundamentals notes on constructors and classes.
+Creating a component
+
+React provides a Component class that can be used to create custom components.
+
+To create a class-based component, a JavaScript class that inherits from Component is created using the extends keyword:
+
+mport React from "react";
+
+class Greeting extends React.Component {
+  constructor(props) {
+    super(props); // this.props = props
+  }
+};
+
+When writing the constructor for an inherited class, the first step is to call the parent class constructor using the super keyword. This calls the React.Component constructor, allowing inheritance of all its functionality.
+
+The constructor is invoked with the props of the component, and one of the things super(props) does is attach the props to the instance of the class on this.props.
+
+Note: The constructor is invoked by React, so there is no need to instantiate the class manually; the new keyword is handled by React.
+Render
+
+In functional components, JSX is returned directly for rendering. In a class-based component, a method called render must be defined to achieve the same purpose.
+
+The render method returns the JSX for the component's UI. To access the props,this is used to reference the instance properties.
+
+import React from "react";
+
+class Greeting extends React.Component {
+  constructor(props) {
+    super(props); // this.props = props
+  }
+  render() {
+    return (
+      <section>
+        <p>Hello, nice to meet you {this.props.name}</p>
+      </section>
+    );
+  }
+}
+
+State
+
+Class-based components can hold values in state. State values are stored in a state property and updated using an inherited method called setState:
+
+import React, { useState } from "react";
+
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    // set initial state
+    this.state = {
+      count: 0,
+    };
+  }
+  render() {
+    return (
+      <div>
+        <h1>Count: {this.state.count}</h1>
+        <button
+          onClick={() =>
+            this.setState((currState) => {
+              return { count: currState.count + 1 };
+            })
+          }
+        >
+          Add one
+        </button>
+      </div>
+    );
+  }
+}
+
+this.state
+
+In the constructor, the initial value of the component's state can be set. Since the state is a single object, it can hold multiple properties.
+this.setState
+
+When extending from the React.Component class, the setState method is inherited. This method is used to update the component's state, following the same rules as the functions returned by useState. A new state object can be passed, or a function that is invoked with the current state.
+
+If a new state object is passed to setState, it will be merged with the current state instead of replacing the existing state entirely. This allows individual state values to be updated without copying all existing values each time. For more on this behaviour, see the setState documentation.
+setState Helper Methods
+
+As classes are written, methods can be defined on the class to extract logic. It is a common pattern to extract setState logic into its own method to keep the render method clean.
+
+In the counter example, the logic for incrementing the counter can be extracted into a method, which can then be passed as the onClick handler.
+
+When using this.setState, ensure that the value of this still points to the instance of the component. When writing an inline event handler, an arrow function is used so the value of this is bound to the scope in which the arrow function was defined.
+
+If the function is extracted, however, this will be bound at the point of invocation and not refer to the component. To handle this, the function's this value must be bound in the constructor so that it always refers to the instance of the component:
+
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+    // bind incrementCounts value of this to the correct instance of Counter
+    this.incrementCount = this.incrementCount.bind(this);
+  }
+  // define a custom method
+  incrementCount() {
+    this.setState((currState) => {
+      return {
+        count: currState.count + 1,
+      };
+    });
+  }
+  render() {
+    return (
+      <div>
+        <h1>Count: {this.state.count}</h1>
+        <button onClick={this.incrementCount}>Add one</button>
+      </div>
+    );
+  }
+}
+
+Lifecycle methods
+
+To perform side-effects in class-based components, such as API calls, several lifecycle methods can be used. Notable ones include:
+
+    componentDidMount - Invoked immediately after the component is first rendered.
+    componentDidUpdate - Invoked whenever props change, setState or forceUpdate are called.
+    componentWillUnmount - Invoked immediately before a component is removed from the page.
+
+Here is a handy visualization of when lifecycle methods run.
+componentDidMount
+
+Similar to useEffect in function components, componentDidMount can be used to fetch data upon the initial render of the component:
+
+import React from "react";
+
+class Planets extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      planets: [],
+    };
+  }
+  componentDidMount() {
+    fetch("https://space-facts.herokuapp.com/api/planets")
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ planets: data.planets });
+      });
+  }
+  render() {
+    return (
+      <section>
+        <h2>Planets</h2>
+        <ul>
+          {this.state.planets.map((planet) => (
+            <li key={planet.id}>{planet.name}</li>
+          ))}
+        </ul>
+      </section>
+    );
+  }
+}
+
+componentDidUpdate
+
+When fetching data with useEffect, dependencies are often included to determine when the effect should be re-run. By adding a variable to the dependency array, React will compare the current value against the value from the previous render to see if they differ.
+
+To achieve a similar effect in a class-based component, use the componentDidUpdate lifecycle method. This method is invoked with arguments to make the comparison between renders:
+
+    The previous render's props
+    The previous render's state
+
+The two can then be compared to see if the planetId has changed and re-fetch the data if it has.
+
+Note: Just as with useEffect dependencies, be careful how this comparison is made to avoid infinite loops. Notably, prevProps and prevState are objects, and prevProps !== this.props will always be true, as they are both objects and have different references.
+
+class SinglePlanet extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      planet: {},
+    };
+    this.fetchPlanet = this.fetchPlanet.bind(this);
+  }
+  componentDidMount() {
+    this.fetchPlanet();
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.planetId !== this.props.planetId) {
+      this.fetchPlanet();
+    }
+  }
+  fetchPlanet() {
+    fetch(
+      `https://space-facts.herokuapp.com/api/planets/${this.props.planetId}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ planet: data.planet });
+      });
+  }
+  render() {
+    return (
+      <section>
+        <h2>{this.state.planet.name}</h2>
+        {/* render the rest of the planet info */}
+      </section>
+    );
+  }
+}
+
+Learn To Code

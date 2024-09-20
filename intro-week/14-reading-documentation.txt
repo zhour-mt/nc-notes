@@ -1,0 +1,44 @@
+Reading Documentation
+Technical Documentation
+
+Understanding documentation is crucial for developers. Documentation is present with most technologies and can usually be found on websites, in text files (like READMEs), or built into the tech itself (like --help commands on a CLI).
+
+Using these documents well is vital for learning new tech, designing systems, and fixing existing code. There are many methods, functions and details involved, so it's impossible to remember everything. Referencing the docs while coding is essential.
+JavaScript Documentation
+
+MDN is a helpful resource for becoming a successful JS developer. It's structured like other technical docs, usually with two main sections:
+
+    Guide: Overview of the tech's purpose and common uses.
+    Reference: Details on how to do specific tasks, like function parameters, return values, and more.
+
+MDN also covers documentation for HTML, CSS, and more.
+
+Other useful documentation includes:
+
+    W3Schools
+    DevDocs
+    Javascript.info
+    Node.js Docs
+
+Interpreting Documentation
+
+Documentation contains essential information but doesn't offer complete solutions tailored to specific use cases.
+
+Consider the MDN page for the .filter method. The documentation provides the following information:
+
+    An interactive example highlighting the functionality of the method
+    A syntax section showing how to write the method invocation
+    A list of parameters and return values for the method
+    A high-level description
+    Some example use cases
+
+Although MDN features the above information, the style and quality of other documentation sources will vary.
+
+To get the most out of documentation, follow the four steps below:
+
+    Gain a high-level understanding: Understand what the documented code does and what the use cases for it can be.
+    Apply that understanding to an example: Look at an example implementation and understand how it is working. If the documentation does not provide an example, create one locally to test it out.
+    Use the reference for additional details: Look into any optional parameters or secondary behaviours that the function or method may have.
+    Apply it to your use case: Use what you have learned from the documentation and adapt the code as needed to suit your own requirements.
+
+Learn To Code

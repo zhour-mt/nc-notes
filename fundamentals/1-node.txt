@@ -1,0 +1,35 @@
+Node
+
+Node.js is a runtime environment for JavaScript. JavaScript was designed to give interactivity to webpages and so was built to run in web browsers. In 2009, Ryan Dahl created Node.js which allowed developers to run JavaScript away from the web browser. As a result, JavaScript is now considered a full-stack language, meaning it can build server-side as well as client-side applications.
+
+Node.js is built on top of Google's V8 JavaScript engine, which is the same engine that the Chrome web browser uses and is generally considered the most optimised (different browsers have different implementations of a JavaScript engine).
+
+Node.js has a set of built-in modules which can be used without installation. For example, the fs module creates an interface to interact with the file system programmatically. A full list of built-in modules and how to use them can be found in the node.js documentation.
+The global object
+
+When an instance of Node.js starts running, the global object is established as a context for everything in the program. All variable declarations on the top level are property assignments to the global object. In Node.js, the global object comes with predefined functions and variables like console, process, __dirname, module or require. In contrast, browser-run JavaScript runs in a similarly global object called window, which shares some functions and variables but also offers some web-specific tools.
+Running JavaScript with Node
+
+Node.js come with a CLI tool to execute code. The node command will open up the Node.js REPL.
+
+REPL stands for Read-Evaluate-Print-Loop. It's a shell that waits for the user's input (a line of code), reads it, evaluates it and prints the result. After evaluating each line, it will wait for another, hence the loop. It's also available on browser consoles.
+
+$ node
+Welcome to Node.js v20.5.1.
+Type ".help" for more information.
+> 3 + 3
+6 // The code is read, evaluated and the result is printed
+> const name = "Pete";
+undefined
+> "Hello, " + name
+"Hello, Pete"
+
+Further information on interacting with the REPL can be found in the CLI documentation.
+
+Another way of running JavaScript code is to save code into a file with a .js extension and run it like so:
+
+$ node path/to/file/main.js
+
+This command will evaluate the code in the file, run it, and stop. Unlike the REPL, running a .js file with node will not print everything. The code would need to include a console.log to produce a console output.
+
+Learn To Code

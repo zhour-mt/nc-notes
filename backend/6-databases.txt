@@ -1,0 +1,38 @@
+Databases
+
+A database is a digital collection of information stored on a server that can be read, updated and deleted through a database management system (DBMS). Together, the data and the DBMS, along with any associated applications, are referred to as a database system, often shortened to just database.
+Relational databases
+
+A relational database is one where data is organised into tables (called "relations") with columns and rows. Each row represents a data entry, or record. Records from one table can be linked to records from another table to form relationships between the data.
+
+    Built from a set of tables (also called relations)
+    Data is stored in columns and rows (very structured)
+    Tables should contain data about just one type of resource
+    Tables must have a primary key column, where each row in a table has its own unique primary key value
+    When a primary key is referenced by another table, it is called a foreign key. This connection creates the relationship between the records from multiple tables
+
+Pros of relational databases
+
+    Data is organised and structured. Great for when the "shape" of data is determined and its integrity is important, e.g. finance, retail, or transaction systems.
+    Doesn't allow for duplicate data
+    Widely used and has a lot of support
+    Able to execute complex queries quickly
+    Is very secure
+
+Non-relational databases
+
+A non-relational database can be any type of database that doesn't use tables to organise data. e.g. document store and key-value stores (similar to JavaScript objects).
+
+    Less structured data which can be more flexible
+    Data can be stored in documents or key-value stores
+    Data usually structured like JSON and can even be nested
+    Data can typically be queried by a document's unique id or another key-value pair
+
+Pros of non-relational databases
+
+    Better for fluid data, where the requirements for data storage are likely to change
+    Can be easier to store and retrieve complex data
+    Can scale better than relational databases
+    Good for fast application development
+
+Learn To Code

@@ -1,0 +1,73 @@
+Hosting
+
+There are numerous ways to deploy a React app, and the Vite documentation outlines some of the most common.
+
+These notes will focus on the process of using Netlify due to its convenience and the availability of a free-tier plan.
+1. Setup redirects
+
+Add a file named _redirects (without any file extension) to the public directory. This file should contain the following redirect rule:
+
+/* /index.html 200
+
+This rule instructs Netlify to serve the index.html page with a 200 status for any request to the base URL. Place this file in the public directory to ensure it is included in the production build of the app by Webpack.
+2. Create a production version of the app
+
+Run the following command to compile the code into static files readable by modern browsers:
+
+npm run build
+
+3. Create a Netlify account
+
+Sign up to Netlify. This can be done easily by signing up with GitHub.
+4. Install Netfify's CLI
+
+Netlify provides a command line interface (CLI) for performing common operations on their service, such as deploying a site.
+
+To get started, install the CLI with npm:
+
+npm install netlify-cli -g
+
+5. Deploy to a draft URL
+
+Run the following command to deploy a draft version of the site:
+
+netlify deploy
+
+    Authorise Netlify with GitHub, following the prompts in the browser.
+    Select the option to Create & configure a new site.
+    Provide a site name.
+    Select your personal account.
+    Provide a deploy path. This needs to point to the build directory and should be ./dist.
+
+The draft version should now be deployed at a URL similar to https://5c13ab16055b9be1725868e6--your-site-name.netlify.com. Verify that it works as expected.
+6. Deploy to a production URL
+
+Run the following command to deploy the site to the production URL:
+
+netlify deploy --prod
+
+Specify the build path again. The site will be deployed to the URL: https://your-site-name.netlify.com.
+Redeployment
+
+When redploying an app, first create an updated build version of the code:
+
+npm run build
+
+Deploy to a draft URL:
+
+netlify deploy
+
+Deploy to the production URL:
+
+netlify deploy --prod
+
+Other hosting platforms
+
+There are several other platforms that can be used to deploy a React app, including:
+
+    Vercel
+    GitHub Pages
+    Firebase Hosting
+    Render
+
+Learn To Code

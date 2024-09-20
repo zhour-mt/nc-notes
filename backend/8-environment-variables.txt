@@ -1,0 +1,90 @@
+Environment Variables
+
+An environment variable is a variable whose value is set outside of the rest of a programme, and can be used to determine the environmental factors of how the programme is to be run (for example, which database it should utilise).
+
+A programme may contain any number of environment variables, each of which will function as a key value pair, for example: PGDATABASE=database_name.
+Setting environment variables
+
+When using node-postgres to query databases, it is necessary to specify which database should be connected to. This can be achieved by setting an environment variable called PGDATABASE. One way to achieve this would be to set the environment variable manually in the package.json scripts like so:
+
+PGDATABASE=name-of-database-here node filename.js
+
+However, a more secure way to achieve this is to use an npm package called dotenv. This allows environmment variables to be set in a separate file named .env.
+
+This is advantageous because it removes the need to specify any environment variables in the package.json scripts. By also listing these .env files in a .gitignore file, no sensitive information such as the database name and/or Postgres passwords will be pushed up to GitHub.
+Setting up dotenv
+
+    Install the dotenv package.
+    Create a .env file in the root of the project directory. Populate it by setting the PGDATABASE environment variable to the name of the desired database, e.g. PGDATABASE=database-name.
+    Alter the Postgres connection file to require dotenv and invoke its config method as shown below, to set all of the environment variables from the .env file to the process.env global variable.
+
+// in the db file where the connection to the database is set up.
+require("dotenv").config();
+const { Pool } = require("pg");
+module.exports = new Pool();
+
+Note: node-postgres will set the PGDATABASE environment variable to the default database if the .env file has not been correctly set up. To avoid this, add some error handling to check that the process.env.PGDATABASE variable exists and throw an error if it's missing:
+
+if (!process.env.PGDATABASE) {
+ throw new Error("No PGDATABASE configured");
+}
+
+Separate test and development databases
+
+It is good practice when developing a project's back end to set up multiple databases. A test database and a development database are usually included at this stage. The reason for this is to ensure that edits and re-seeds made to the database during testing do not interfere with the real data interacted with by users.
+
+This also means that test data can be a smaller subset of the development data which can be re-seeded more quickly and is easier to update and write tests for.
+
+However, this use of multiple databases means that the PGDATABASE environment variable will need to dynamically change based on whether or not a test is being run.
+
+This can be achieved by creating two .env files in the root of the project directory. One called .env.test and one called .env.development. Populate each with the PGDATABASE environment variable set to the name of the respective database. For example:
+
+# in the .env.test file 
+PGDATABASE=test_database_name
+
+# in the .env.development file
+PGDATABASE=development_database_name
+
+Editing the connection file
+
+In the db/index.js (or connection) file itself, dotenv should be configured so that it can find the correct .env file.
+
+First, the file needs to know if a test is being run or not. This can be done by checking the process.env.NODE_ENV variable, a global variable that is set to "test" when running tests with Jest.
+
+Set a variable called ENV to process.env.NODE_ENV. If it is running with Jest, this variable will resolve to "test". Otherwise, if is not running a test, process.env.NODE_ENV will be undefined - meaning that the ENV variable can be set to development as shown below:
+
+const ENV = process.env.NODE_ENV || "development";
+
+Once this is done, configure dotenv to use the correct .env file based on the ENV variable:
+
+const pathToCorrectEnvFile = `${__dirname}/../.env.${ENV}`;
+
+Note: __dirname is a special variable in Node.js that provides the absolute path of the directory in which it is used. This ensures an accurate path to the .env file, even if we’re running scripts from different locations in the project.
+
+After determining the correct path, it is passed to the config method of dotenv:
+
+require("dotenv").config({
+  path: pathToCorrectEnvFile,
+});
+
+Example
+
+The complete connection file should looks like this:
+
+const { Pool } = require("pg");
+const ENV = process.env.NODE_ENV || "development";
+const pathToCorrectEnvFile = `${__dirname}/../.env.${ENV}`;
+
+require("dotenv").config({
+  path: pathToCorrectEnvFile,
+});
+
+if (!process.env.PGDATABASE) {
+  throw new Error("No PGDATABASE configured");
+}
+
+module.exports = new Pool();
+
+Now, when the tests are run, process.env.PGDATABASE will be set to the test database name, and when the development server is run, it will be set to the development database name.
+
+Learn To Code

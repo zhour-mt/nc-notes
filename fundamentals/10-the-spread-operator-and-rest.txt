@@ -1,0 +1,69 @@
+The Spread Operator and Rest
+
+The spread operator and rest are powerful features in JavaScript, providing concise and flexible ways to work with collections. Syntactically, they both use ....
+Spread Operator
+
+The spread operator expands iterable objects into individual elements. Consider the following example:
+
+const smallerNums = [1, 2, 3];
+const largerNums = [2, 3, 4];
+
+const totalNums = [...smallerNums, ...largerNums]; // [ 1, 2, 3, 4, 5, 6 ]
+
+n this code example, a new array named totalNums is created by combining all the elements from smallerNums and largerNums. The elements are extracted from their respective arrays and spread into the new array one by one.
+
+Object properties can also be spread:
+
+const tutor = { name: 'Jim', age: 36, eyeColour: 'brown' };
+
+const olderTutor = { ...tutor, age: 37 }; // spread in all the values of tutor and then reassign the age property
+
+// { name: "Jim", age: 37, eyeColour: "brown" }
+
+The spread operator can also be used to spread values into a function. Many functions such as console.log can take multiple arguments. Imagine wanting to pass in each element of an array to be logged. The spread operator can be used to spread each value as if they were passed in one by one.
+
+const myFavouriteThings = [
+  'raindrops on roses',
+  'whiskers on kittens',
+  'bright copper kettles',
+  'warm woollen mittens'
+];
+
+console.log(...myFavouriteThings);
+
+// equivalent of:
+// console.log(myFavouriteThings[0], myFavouriteThings[1], myFavouriteThings[2], myFavouriteThings[3])
+
+Rest
+
+The rest is a tool which is used to collect the rest of the values in a collection. The variable can be named anything but is most commonly called rest in documentation. This is commonly seen alongside destructuring:
+
+const jim = { name: 'Jim', age: 36, eyeColour: 'brown' };
+
+const { name, ...rest } = jim;
+
+console.log(rest); // { age: 36, eyeColour: "brown" }
+
+In this scenario it is called the rest property. It's a variable which represents the rest of the properties in the data structure.
+
+Rest is also used in parameters. When designing a function which takes limitless arguments, the rest parameter can be utilised to collate them into a single variable.
+
+function collectItems(...items) {
+  // rest parameter
+  console.log(items);
+}
+
+collectItems('sausages', 'squirrel', 'hand cream'); // [ "sausages", "squirrel", "hand cream" ]
+collectItems(true, 1, 'Jim'); // [ true, 1, "Jim" ]
+collectItems(2, 4, 8, 16, 32, 64); // [ 2, 4, 8, 16, 32, 64 ]
+
+The rest parameter, items, collects all the arguments passed into the function. Rest parameters store all arguments in an array.
+
+Rest parameters can also be used alongside named parameters, but must always be at the end of the parameter list. For example:
+
+function doSomething(firstArg, secondArg, ...rest) {
+  // rest parameter must always be the last in the parameter list
+  // do something exciting
+}
+
+Learn To Code

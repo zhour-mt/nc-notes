@@ -1,0 +1,77 @@
+Functional Programming
+
+Functional programming is a paradigm that emphasises the use of expressions and deterministic functions without altering data. Key concepts include immutability, higher-order functions, and recursion.
+Pure functions
+
+Pure functions are deterministic - they always produce the same output when given the same input, regardless of the context.
+
+Pure functions don't have side effects, meaning they do not modify variables outside their scope.
+
+Take this function for example:
+
+const names = ['Tim', 'Suzanna'];
+
+function addKatherine(list) {
+  list.push('Katherine');
+  return list;
+}
+
+addTheNameKatherine(names); // [ "Tim", "Suzanna", "Katherine" ]
+console.log(names); // [ "Tim", "Suzanna", "Katherine" ]
+
+addKatherine mutates the names array. This function is not pure.
+
+const names = ['Tim', 'Suzanna'];
+
+function addKatherine(list) {
+  return [...names, 'Katherine'];
+}
+
+addKatherine(names); // [ "Tim", "Suzanna", "Katherine" ]
+console.log(names); // [ "Tim", "Suzanna" ]
+
+addKatherine no longer mutates the array.
+
+A deeper dive into mutation and how to check against can be found in the value vs reference notes.
+Higher-order functions
+
+Functional programming involves the use of higher-order functions, which are functions that either take or return other functions. Higher-order functions provide flexibility to developers.
+
+function doActionForEach(array, action) {
+  for (let i = 0; i < array.length; i++) {
+    action(array[i]);
+  }
+}
+
+doActionForEach([1, 2, 3], console.log);
+// 1
+// 2
+// 3
+
+The above example allows the user to pass an array and function to the doActionForEach. The higher-order function isn't opinionated about the functionality of the function. It will simply invoke it for each element of the passed array.
+
+More information can be found in the higher-order functions notes.
+Recursion
+
+In functional programming, control flow mechanisms like for-loops are not technically considered as part of the paradigm. Instead, repeating functionality can be accomplished through recursion, where a function definition calls itself. However, it is important to note that recursive functions should always have a base case, to prevent getting stuck in an infinite loop, which can cause a stack overflow.
+
+function countDown(num) {
+  if (num === 0) {
+    console.log('lift off!');
+    return;
+  }
+  console.log(num);
+  countDown(num - 1);
+}
+
+countDown(5);
+// 5
+// 4
+// 3
+// 2
+// 1
+// lift off!
+
+Further details on recursion can be found in the recursion notes.
+
+Learn To Code

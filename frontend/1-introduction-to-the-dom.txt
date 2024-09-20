@@ -1,0 +1,53 @@
+Introduction to the DOM
+
+The Document Object Model (DOM) is an interface for HTML and XML documents, representing the page in a tree-like data structure.
+The DOM as a Tree
+
+The DOM is a hierarchical tree-like structure composed of objects called
+nodes
+. Consider the following HTML:
+
+<html>
+  <p>I am a text node child of the p-tag</p>
+  <div><p>this p-tag is a child of a div</p></div>
+</html>
+
+The tree starts with a root node, which here is the HTML tag. This can be accessed by calling document.documentElement. The HTML tag then has children that branch out into the DOM tree. Anything inside of an opening and closing tag is a child of that element.
+
+Tree structures are often visualised in the same way as a folder structure:
+
+html - tag (root of tree)
+├── p - tag  (child of html)
+│   └── text node: "I am a text node child of the p-tag" (child of p)
+└── div - tag (child of html)
+    └── p - tag  (child of div)
+        └── text node: "this p-tag is a child of a div" (child of div)
+
+Traversing the DOM
+
+The DOM provides methods that can traverse an element's children with a loop, or properties to access the first or last child nodes directly:
+
+document.documentElement.firstElementChild;
+document.documentElement.lastElementChild;
+
+Nodes can also be referred to by their siblings, for example:
+
+document.body.previousElementSibling;
+document.body.nextElementSibling;
+
+More methods for interacting with the DOM using JavaScript are covered in the HTML Elements notes.
+Browsers
+
+Browsers work by making a HTTP request to a server which responds with an HTTP response, including an HTML body. The browser then passes the HTML body to its
+rendering engine
+. In Chrome this is Blink. (Edge also uses Blink, Firefox uses Gecko, Safari and iOS browsers use Webkit, Internet Explorer uses Trident.)
+
+The engine will parse the HTML and start building the elements one by one into the hierarchical DOM structure. It first parses the head, then the body, and then the script tag, which is passed to the browser's
+JavaScript engine
+.
+
+A process called
+tokenising
+is also run where each HTML element is broken down into smaller units called tokens, such as tags, attributes and text. Finally, the page can be rendered.
+
+Learn To Code

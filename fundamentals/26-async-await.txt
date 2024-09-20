@@ -1,0 +1,88 @@
+Async/Await
+
+The async/await pattern is an alterantive syntax for promise-based asynchronicity without the need for promise chains, .then or .catch blocks.
+Async Functions
+
+Declare async functions using the async keyword:
+
+// async function declaration
+async function myFunc() {}
+
+// async arrow function
+const myOtherFunc = async () => {};
+
+// async method in an object
+const myObj = {
+  method: async function () {},
+};
+
+// async method on a class
+class MyClass {
+  async method() {}
+}
+
+Async functions always return a promise. If the return value of an async function is not explicitly a promise, JavaScript implicitly wraps it in a promise.
+
+For example, the following functions are equivalent:
+
+  async function returnOne() {
+    return 1;
+  }
+
+  function returnOne() {
+    return Promise.resolve(1);
+  }
+
+The Await Operator
+
+The await operator unwraps pending promises. It will pause the execution of the code in the async function at the point await is used, until the promise fulfils or rejects. The await expression evaluates to the value of the fulfilled promise, or throws the rejected value.
+
+async function greet() {
+  const greeting = await getGreetingFromATextFile("file.txt");
+
+  console.log(greeting); // logs once the greeting is fulfilled
+}
+
+greet()
+
+Try/Catch Blocks
+
+Invoking the await expression(s) inside a try...catch statement catches any rejected/thrown values in the catch block.
+
+try {
+  const result = await doSomethingAsync();
+  // this line will not be read if doSomethingAsync rejects
+  console.log(result);
+} catch (err) {
+  // handle error if doSomethingAsync throws or rejects
+}
+
+Benefits of Async Await
+
+Async await has numerous benefits compared to promise chains and callbacks.
+Readability
+
+Async/await makes asynchronous code look more like synchronous code, improving code readability. It eliminates the need for nested callbacks, making the code easier to understand. However, due to the synchronous look, it can make it easier to forget the asynchronous nature of the code.
+Sequential Code
+
+Async/await allows code to be written in a more sequential manner. This makes it easier to follow the flow of execution, as the code is written in the order it should be executed.
+Simplified Error Handling
+
+Error handling is more straightforward with async/await compared to using callbacks or promises. Try/catch blocks handle errors in a synchronous style, making it easier to manage and debug. Async/await also provides better error stack traces compared to traditional callback-based code. This makes it easier to identify the source of errors and understand the context in which they occurred.
+Scope
+
+Async/await simplifies the passing down and utilisation of variables in other async functions, owing to reduced block scoping.
+Await Blocking the Call Stack
+
+Using ES Modules, the await operator can be employed at the top level of a file (outside of an async function). This proves beneficial when requiring an async process to execute at the beginning of a file.
+
+// esModule.js
+import someAsyncFunction from './someModule';
+
+const result = await someAsyncFunction();
+
+console.log("This will only execute after the await is resolved.");
+
+In the example above, the code first executes someAsyncFunction, awaiting its result. The execution of the remaining code in the file is then blocked until the function has completed.
+
+Learn To Code

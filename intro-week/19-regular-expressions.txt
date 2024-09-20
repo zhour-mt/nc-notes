@@ -1,0 +1,85 @@
+Regular Expressions
+
+A regular expression, or regex, is a pattern which is designed to find matches within a body of text. They are frequently used in search engines, word processors and online forms.
+
+In JavaScript, a regex object is denoted with an opening and closing forward slash, e.g. /regex/.
+Literal Characters
+
+To match a simple pattern, use literal characters to detect a direct match. For example, the pattern /xyz/ matches character combinations in a string when the exact sequence "xyz" occurs. That means the characters have to be in that casing, order and not broken by any other characters.
+Meta-characters
+
+Meta-characters are not interpreted literally. They are used for more complex patterns.
+
+Square brackets wrap a list of character options. /[xyz]/ will match any single character found within the [].
+
+Other matchers include:
+
+\d - matches any numerical character.
+
+\w - matches any alphanumerical character or underscores.
+
+\s - matches whitespace characters.
+
+\D - matches any non-digits.
+
+\W - matches any non-alphanumerical characters or underscores.
+
+\S - matches any non-whitespace characters.
+
+^ - an anchor that matches the beginning of the text.
+
+\$ - an anchor that matches the end of the text.
+
+To use a meta-character as a literal matcher, prepend it with a \, e.g. \$
+Quantifiers
+
+To be specific about the number of characters to match, use a quantifier.
+
+[abc]{3} - matches exactly three consecutive characters from within the character set, e.g. aab, bbb, or abc.
+
+[abc]{3,6} - matches the same characters but the length can be between 3-6 characters long. Regex will match the largest pattern it can by default.
+
++ - matches one or more in the text.
+
+\* - matches zero or more in the text.
+Flags
+
+Flags alter the behaviour of how a regex works across the text. They can be chained together. Some flags override the behaviours of others.
+
+Here is a list of some commonly used ones:
+
+g - global flag. Tells the regex to check the whole passage of text for matches. Without this flag, the regex would only pick up the first match it comes across.
+
+i - case insensitive flag. With this flag activated, the regex will not differentiate between upper and lower-case characters.
+
+m - multiline flag. This changes the behaviour of the start, ^ and end $ anchors. By default, they match the beginning and end of the entire body of text. With the multiline flag set to true, the regex will consider each line to have a start and end.
+Regular Expression in JavaScript
+Declaration
+
+There are two ways to create a regular expression in JavaScript, either using a regular expression literal or the RegExp constructor:
+
+const literalRegEx = /[abc]+!*/;
+const constructorRegex = new RegExp('[abc]+!*');
+
+Using Regular Expressions
+
+Regular expressions are most commonly used with the RegExp methods test and exec, and with the string methods match, replace, search, and split.
+
+The test method is available on any regular expression object and invoked with the string to test. It will return true or false based on whether the string has a pattern match.
+
+const str = 'table football';
+const regex = /foo/;
+const result = regex.test(str); // true
+
+The match method is a string method and is invoked with the regular expression to match. It will return matching results in an array. The g flag will determine whether all matching results are included, or only the first result.
+
+const paragraph = 'The quick brown fox jumps over the lazy dog. It barked.';
+const regex = /[A-Z]/g;
+
+paragraph.match(regex); // ["T", "I"]
+
+Further documentation and references guides can be found in the MDN docs.
+
+RegExr is a useful online tool to practise and test regular expressions.
+
+Learn To Code

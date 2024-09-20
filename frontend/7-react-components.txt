@@ -1,0 +1,127 @@
+React Components
+
+Components allow the splitting of apps into independent and reusable units. A major benefit of separating code into separate components is that they can be updated and maintained in isolation.
+
+React components can be one of two types - either a function or a class.
+
+These notes will primarily deal with function components as these are recommended by the React documentation. Before the introduction of React Hooks, class-based components were the only way to manage state within React. However, this is no longer the case and function components can be simpler and more succinct.
+
+More information about class-based components can be found in the notes on class components.
+Naming conventions
+
+All components must start with a capital letter. This is to differentiate them from HTML tags, as they use the same syntax when rendered.
+
+By convention, the first component will be called App. This is the component that will be rendered by main.jsx and all other components will be children of this component.
+Defining components
+
+Function components are created like a regular function and return markup using the JSX syntax. A component that would render a title could be written like so:
+
+const Heading = () => {
+  return <h1>This is a heading</h1>;
+}
+
+Function components can also be declared with the function keyword:
+
+function Heading() {
+  return <h1>This is a heading</h1>;
+}
+
+Fragments
+
+React components can only return a single parent element, but this element can contain multiple nested children.
+
+If a component does not have an appropriate parent element, a fragment (<> </>) can be used to wrap all of the children:
+
+const StaffNames = () => {
+  return (
+    <>
+      <p>Tanya Rake</p>
+      <p>Nu Wilson</p>
+      <p>Lucine Jeppesen</p>
+    </>
+  )
+}
+
+This fragment has no effect on the DOM and will not be rendered as an actual element. This can be useful to remove any layout or styling side-effects that may occur from wrapping elements in a DOM element like a <div>.
+Rendering components
+
+Components are rendered using <> brackets in the same way as HTML elements. For example:
+
+import ReactDOM from "react-dom/client";
+
+const App = () => {
+  return (
+    <div>
+      <h1>My First React App</h1>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+Note the self-closing tags here. This is a common React convention, but using a second tag is possible:
+
+<App /> // renders App
+<App></App> // also renders App
+
+These components form a parent child relationship. Each component can render child components, just as they would render child HTML elements.
+Example structure
+
+An example App structure could look something like below:
+
+App
+├── Header
+├── Nav
+├── Content
+    ├── WelcomePage
+    ├── Sidebar
+
+In code, the components could look similar to the following:
+
+const App = () => {
+  return (
+    <div>
+      <Header />
+      <Nav />
+      <Content />
+    </div>
+  );
+};
+
+const Header = () => {
+  return <h1>App Title</h1>;
+};
+
+const Nav = () => {
+  return <nav></nav>;
+};
+
+const Content = () => {
+  return (
+    <section>
+      <WelcomePage />
+      <Sidebar />
+    </section>
+  );
+};
+
+const WelcomePage = () => {
+  return (
+    <main>
+      <h2>Welcome to the App</h2>
+    </main>
+  );
+};
+
+const Sidebar = () => {
+  return (
+    <section>
+      <p>Some Side Content</p>
+    </section>
+  );
+};
+
+As the complexity of an app increases, the app can be broken down into isolated components with one piece of functionality, which can be dealt with one at a time.
+
+Learn To Code

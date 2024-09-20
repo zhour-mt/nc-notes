@@ -1,0 +1,75 @@
+Testing with SuperTest
+
+SuperTest is a useful npm package for integration testing. It can be used to make test requests to a server and check that the response matches what is expected.
+SuperTest setup
+
+SuperTest should be installed as a dev dependency using npm i -D supertest. As it is only used for testing, it will not be required for production code.
+
+It should then be required or imported at the top of the relevant .test.js file as request, along with the Express app that is being tested.
+
+const request = require("supertest");
+const app = require("../app.js");
+
+Making a request
+
+To make a test request to the app, the request variable is passed the app as an argument within the Jest test block. If the server is not already listening for connections, then it is bound to a temporary port.
+
+The HTTP method is then chained on to request and invoked with the relevant path. Because the request is asynchronous, it should be returned out of the it block or the test will always pass.
+
+describe('GET /api/items', () => {
+  it('responds with object containing all items', () => {
+    return request(app).get('/api/items');
+  });
+});
+
+Sending a body
+
+Some requests will need to send a body, such as POST and PATCH requests. SuperTest allows this as another chainable method to the request.
+
+// POST request
+return request(app).post('/api/items').send(newItem);
+
+Asserting against the response
+
+SuperTest has some built in assertions than can be chained on to the request to check the response's HTTP status code, as well as any header fields and values. One of these chainable methods is called expect. This is different to the expect from Jest and is a built-in feature to SuperTest:
+
+return request(app)
+  .get('/api/items')
+  .expect(200)
+  .expect('Content-Type', 'application/json');
+
+To make assertions against aspects of the response, such as the data on the body property, it is important to remember that these methods return a promise.
+
+That means it is possible to chain a .then() to access the response from the server and make additional assertions inside of the callback function:
+
+return request(app)
+  .get('/api/items')
+  .expect(200)
+  .then((res) => {
+    expect(res.body.items.length).toBe(4);
+  });
+
+Seeding before tests run
+
+Each test that is run will be interacting with the test database and potentially changing the data that is stored. To reduce unreliability, the database should be reseeded before the test suite is run.
+
+One way to do this is to update the test script in the package.json. It can be specified that before jest is run, the .sql files responsible for dropping/recreating the database and inserting the data are run first.
+
+{
+  "scripts": {
+    "test": "psql -f setup-db.sql && jest"
+  }
+}
+
+The && in the script allows the chaining of commands and will run the second command (jest) if the first command succeeded.
+
+This helps to reduce problems between each run of the full test suite. However, it is important to note that between each test the same problems may occur.
+Ending connections
+
+Once all of the tests are run, the connection to the pool must be actively closed. This can be done within an afterAll block in the test suite. afterAll takes a function, within which the .end method can be invoked on the connection to the database required in at the top of the file.
+
+const connection = require('../db/connection.js');
+
+afterAll(() => connection.end());
+
+Learn To Code

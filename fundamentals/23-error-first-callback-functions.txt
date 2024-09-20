@@ -1,0 +1,32 @@
+Error-First Callback Functions
+
+By convention, all callback functions in Node are written to take an error object as the first parameter. This is known as an error-first callback function.
+Anatomy of error-first callback functions
+
+In an error-first callback function, the first parameter will be a placeholder for an error object:
+
+(err, param2) => {
+  if (err) {
+    console.log(err);
+  } else {
+    // function body logic
+  }
+};
+
+Logic should exist to handle the error, such as producing a log to the console. Additional parameters are handled when no error object is passed to the callback function. In this event, the callback function is usually passed null as the first argument.
+Example
+
+The following code illustrates the use of an error-first callback function being used to handle the result of trying to read a file with fs:
+
+const { readFile } = require('fs');
+
+readFile('./file-doesnt-exist.md', 'utf-8', (err, fileContents) => {
+  if (err) console.log(err);
+  else console.log(fileContents);
+});
+
+In this example, an incorrect file path has been passed to readFile, and so an error object will be passed to the callback function. This error will be logged to the console.
+
+If a correct file path had been passed, readFile would pass null as the first argument to the callback function, indicating that no exception was raised, and the fileContents would be logged instead.
+
+Learn To Code

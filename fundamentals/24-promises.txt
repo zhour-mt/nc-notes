@@ -1,0 +1,142 @@
+Promises
+
+A promise is a placeholder for an asynchronous operation that hasn't completed yet, but is expected to in the future.
+
+Instead of immediately returning the final value, the asynchronous process returns a promise, which will supply the value at some point in the future. You cannot immediately access the value contained within a promise, as the process will not have finished. At this point, the promise is pending:
+
+const promise = returnsPromise();
+
+console.log(promise); // Promise { <pending> }
+
+Promises have 3 possible states:
+
+    pending: initial state, neither fulfilled nor rejected.
+    fulfilled: the operation completed successfully.
+    rejected: the operation failed.
+
+Once a promise is fulfilled or rejected, its state cannot change.
+.then
+
+Promises have a .then method that takes a callback function as its argument. This callback function is invoked on fulfilment of the promise, allowing access to the resolved value.
+
+promise.then((response) => {
+  // handle success
+  console.log(response);
+});
+
+.catch
+
+Promises also have .catch method tgat takes a callback function as its argument. This callback function is invoked if the promise is rejected, allowing error handling for unsuccessful processes.
+
+promise.catch((error) => {
+  // handle error
+  console.log(error);
+});
+
+Promise chain
+
+To handle both possible outcomes, create a promise chain by chaining together .then (for if the promise is fulfilled) and .catch (for if the promise is rejected).
+
+promise
+  .then((response) => {
+    // handle success
+    console.log(response);
+  })
+  .catch((error) => {
+    // handle error
+    console.log(error);
+  });
+
+Benefits of using promises
+
+Promises can help to improve the readability of code, replacing nested callbacks. Compare the examples below, where fs is being used to create a new directory and a file:
+
+// using callbacks
+const fs = require('fs');
+
+fs.mkdir('./new-folder', (err) => {
+  if (err) console.log(err);
+  else {
+    fs.writeFile('./new-folder/new-file.txt', 'Hello world!', 'utf8', (err) => {
+      if (err) console.log(err);
+      else console.log('File created!');
+    });
+  }
+});
+
+Now consider the below example that uses promises:
+
+// using promises
+const fs = require('fs/promises');
+
+fs.mkdir('./new-folder')
+  .then(() => {
+    return fs.writeFile('./new-folder/new-file.txt', 'Hello world!', 'utf8');
+  })
+  .then(() => {
+    console.log('File created!');
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+The above promise-based example has a linear chain and only requires errors to be handled with a single .catch method. Additionally, the .then resolver functions will not be called if any promise earlier in the chain is rejected.
+
+Promises can be chained together by returning each subsequent promise from the .then resolver function.
+Promise static methods
+
+There are several static methods available on the Promise object.
+Promise.all()
+
+The Promise.all method allows the handling of multiple asynchronous processes.
+
+The Promise.all method is passed an iterable (typically an array) as the only argument. Once all of the promises in the iterable have resolved, or when the iterable contains no promises, Promise.all will return a single promise that resolves with an array of values. The returned values will be in the order of the promises passed, regardless of completion order.
+
+Promise.all([promise1, promise2, promise3]).then((resolvedArray) => {
+  console.log(resolvedArray); // [promise1Result, promise2Result, promise3Result]
+});
+
+A neat pattern for accessing the resolved values of a Promise.all is to use array destructuring on the .then handler function's parameter:
+
+Promise.all([promise1, promise2]).then(([promise1Result, promise2Result]) => {
+  // use results from promises
+});
+
+As Promise.all will return a single Promise, the .catch method is used in the same way to handle any promise rejections. Promise.all will reject immediately as soon as one of the promises is rejected.
+
+Promise.all([promise1, promise2])
+  .then(([promise1Result, promise2Result]) => {
+    // use results from promises when all are fulfilled
+  })
+  .catch((err) => {
+    // handle error from first rejected promise
+  });
+
+Promise.reject()
+
+Promise.reject() provides a direct way to create a rejected Promise with a given reason, without the need for a new Promise() constructor. It is very useful when you wish to create custom errors.
+
+Consider the example below:
+
+// example.js
+const fs = require("fs/promises");
+
+fs.readFile("./file-to-read.txt")
+  .then((data) => {
+    const readableData = data.toString();
+    if (readableData.length < 15) {
+      return Promise.reject("ERROR - this document is too short");
+    } else {
+      return anotherPromise(readableData);
+    }
+  })
+  .then(() => {
+    // not called if Promise.reject() is invoked in previous then block
+  })
+  .catch((err) => {
+    console.log(err); // "ERROR - this document is too short";
+  });
+
+As the contents of "file-to-read.txt" is less than 15 characters, an invocation of Promise.reject is returned, with a custom error message passed as an argument. The custom error message is then passed as an argument to the callback within the .catch method, where it can be handled by additional logic.
+
+Learn To Code

@@ -1,0 +1,44 @@
+Algorithms and Problem Solving
+Algorithms
+
+An algorithm is a series of instructions usually used to perform an operation or solve a problem. In JavaScript, these are typically written as functions.
+
+A key skill when writing these functions is being able to take a problem that we understand from a high level and translate that high-level understanding into code that can be executed. This requires breaking a problem down into steps that can be addressed with code. In order to visualise these steps, pseudocode is very useful.
+Pseudocode
+
+Pseudocode is a plain language description of the steps in an algorithm that is understandable by humans. Consider this function which returns a string based on whether a number is less than 10.
+
+function isLessThan10(num) {
+  if (num < 10) {
+    return 'less than 10';
+  }
+  return '10 or more';
+}
+
+A pseudocode example of this function could be written as:
+
+    Take a number as an parameter
+    Check if the number is less than 10
+    If it is, return the string "less than 10"
+    Otherwise return the string "10 or more"
+
+Each step in the pseudocode is an operation that can be translated into JavaScript code. This allows developers to consider the abstract steps, without needing to know the exact syntax required. These are details that can be worked out as a solution is actually coded.
+Advantages
+
+Thinking about how to break down a problem using pseudocode:
+
+    Encourages breaking down complex problems into smaller issues
+    Makes it easier to focus on the problem without getting stuck on implementation
+    Provides an outline for addressing the problem and building up code complexity
+    Can be simpler to edit or adapt should your approach change before you begin coding
+
+Considerations
+
+When writing a step of pseudocode, useful things to consider are:
+
+    Is there enough information available to work out what needs to be done?
+    Are you able to access the data you need, e.g. the correct array index or object property?
+    What variables could be needed to keep track of conditions?
+    What inbuilt methods does JavaScript have that may reduce the number of steps needed?
+
+Learn To Code

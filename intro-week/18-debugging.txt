@@ -1,0 +1,54 @@
+Debugging
+
+Your code will inevitably contain errors at some point, some of which can be difficult to solve and sometimes even harder to diagnose. This is particularly the case when there are no error messages to read, or the error messages available are inconclusive. There are a few tools to help make debugging errors easier.
+Clarifying What Happened
+
+Before you even start debugging your code, it can be extremely helpful to answer two questions:
+
+    What did you want your code to do?
+    What did your code do instead?
+
+This helps to identify the problem you are trying to solve and can give you an idea of what has maybe gone wrong.
+Reading Error Messages
+
+If your code fails, there is a high chance that you will be shown an error message that explains why your code is failing.
+
+console.log(message)
+
+const message = "I <3 Northcoders!"
+
+----------------------
+console.log(message)
+            ^
+
+ReferenceError: Cannot access 'message' before initialization
+    at Object.<anonymous> (/workspace/index.js:1:13)
+
+In this example, you can see that the error message tells you what exactly the problem is and where you can find it.
+
+Big error messages can be incredibly daunting to many programmers, and because of this, they often don't get read.
+
+Error messages are there to help though and should be your first stop to get an idea of where your problem might be.
+Google Is Your Best Friend
+
+Error messages aren't always as clear cut as the one above. Oftentimes, the error messages you are getting might be confusing or you don't understand what they're getting at. In this case, the first step you should take is to search online for information.
+
+The coding community is incredibly vast, which means that there are dozens of people that have already encountered whatever problem you might have and may have solved it and posted about it online.
+
+Whenever you try to search online for a problem you are facing, try to be as detailed as possible. It's also helpful to reference whatever programming language you are using.
+Examining Logic
+
+Sometimes your code will run without any problems and still not produce the result you were looking for.
+
+In that case, you should examine your code to track down any bugs.
+console.log
+
+Using console.log is one of the easiest tools in your repertoire for debugging your code. Once you have an idea of where your bug might be coming from, you can console log various results and variables to determine what exactly is going on.
+Comment Out Your Code
+
+Another great way to better understand what is happening in your code is to comment out sections. This means that you turn some of your code into comments to see whether the error still happens. You can then add back your code line-by-line to get a good idea of where your error is occuring.
+Take a Break
+
+Coding is very mentally taxing because it can be very abstract. When encountering more difficult bugs, it can take you many hours or even days until you find a solution. In these cases, it can be extremely useful for you to take a break. Even just a 10 minute break can refresh your mind and allow you to have a more focused approach to your debugging.
+
+Learn To Code

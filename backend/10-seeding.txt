@@ -1,0 +1,148 @@
+Seeding
+
+In order to insert complex and often larger quantities of data into databases, it makes more sense to do this programmatically rather than with manual data entry. This is even more necessary if the data being entered is already stored on a computer in the form of a .csv, .json or some other standard file type.
+Creating and dropping tables
+
+The order in which tables are created and dropped in SQL is important when it comes to foreign keys. For a table to reference another table, that table must already exist, which means the tables must be created in the right order.
+
+Consider the relation between the following 3 tables:
+
+    table_1 - no references
+    table_2 - references table_1
+    table_3 - references table_2
+
+These tables must be created in the same order, e.g.
+
+CREATE TABLE table_1 (...);
+CREATE TABLE table_2 (...);
+CREATE TABLE table_3 (...);
+
+The reverse applies when dropping tables. As table_1 is referenced by table_2, table_2 must be dropped before dropping table_1:
+
+DROP TABLE IF EXISTS table_3;
+DROP TABLE IF EXISTS table_2;
+DROP TABLE IF EXISTS table_1;
+
+Using node-postgres to insert JSON data
+
+One option is to use raw SQL scripts to initially populate databases. However, there will often be data that needs to be inserted into the database that would be time-consuming to manually add to an SQL script. Similar to how databases can be created programmatically using node-postgres, data can also be inserted using the query method.
+
+Normally, when inserting data into a table using postgres, it looks like so:
+
+db.query("INSERT INTO items (item_name, quantity) VALUES ('item-A', 3), ('item-B', 5), ('item-C', 7)");
+
+However, this becomes difficult when inserting a large and/or unknown amount of values. Instead, the pg-format package is recommended by the node-postgres documentation to safely create dynamic SQL queries in a similar way to the PostgreSQL format function.
+Using pg-format
+
+Install the pg-format package, import the package into the necessary file, and import the data to be inserted. This will likely be from a JSON file.
+
+pg-format takes a string template for an SQL query like this:
+
+"INSERT INTO items (item_name, quantity) VALUES %L"
+
+Note the use of %L as a placeholder for the values to be inserted.
+
+The second argument for pg-format is an array of arrays, where each inner array represents a row of data to be inserted. For example:
+
+const data = [
+  ['item-A', 3],
+  ['item-B', 5],
+  ['item-C', 7]
+];
+
+pg-format will then replace the %L placeholder with the data provided in the correct SQL VALUES format, e.g.
+
+const itemsInsertStr = format(
+  `INSERT INTO items
+    (item_name, quantity)
+  VALUES
+    %L;`, [
+    ['item-A', 3],
+    ['item-B', 5],
+    ['item-C', 7]]);
+
+Becomes...
+
+"INSERT INTO items
+    (item_name, quantity)
+  VALUES 
+    ('item-A', 3), 
+    ('item-B', 5), 
+    ('item-C', 7);"
+
+Now, it doesn't matter how many items are in the data array. The SQL query string will be generated dynamically and can be used to insert the data into the database using db.query:
+
+const format = require("pg-format");
+const db = require("./");
+
+const itemsInsertStr = format(
+  `INSERT INTO items
+    (item_name, quantity)
+  VALUES
+    %L
+  RETURNING *;`,
+  nestedArrOfValues // [['item-A', 3], ['item-B', 5], [...], ...]
+);
+
+db.query(itemsInsertStr).then((itemsInsertResult) => {
+  //
+});
+
+Handling data with relationships
+
+SQL databases are relational, so it's likely that data will need to be inserted into one table that references entries in another.
+
+Database records are normally referenced by their primary keys. Primary keys are usually generated when data is inserted, such as with the SERIAL type. It is important to consider the order that the data is inserted so that the values in the parent table can be generated before being referenced.
+
+In order for child data records to reference their parent data's primary keys, the child data may need to be manipulated to include these values. In the example below, for each book, the book_genre property would need to be swapped for a genre_id property before insertion:
+
+const genres = [
+  { genre: "thriller" },
+  { genre: "romance" },
+  { genre: "sci-fi" },
+];
+
+const books = [
+  { title: "bookA", book_genre: "thriller" },
+  { title: "bookB", book_genre: "thriller" },
+  { title: "bookC", book_genre: "romance" },
+];
+
+Remember: When manipulating the data ready for seeding, avoid mutating the original data.
+Extracting seeding logic
+
+Writing the logic for creating and dropping tables as well as the data formatting and insertions can often lead to large and hard-to-read functions. Seed functions can be made more readable and extensible by extracting some of the logic into seperate files.
+
+In the example below, the seed function drops and creates tables using functions written in a seperate manage-tables.js file:
+
+// db/manage-tables.js
+exports.dropTables = () => {
+  return db.query(`DROP TABLE IF EXISTS items;`);
+};
+
+exports.createTables = () => {
+  return db.query(
+    `CREATE TABLE items (
+      item_id SERIAL PRIMARY KEY,
+      item_name VARCHAR NOT NULL,
+      quantity INT NOT NULL
+    );`
+  );
+};
+
+// db/seed.js
+const { dropTables, createTables } = require("./manage-tables.js");
+
+const seed = ({ itemData }) => {
+  return dropTables()
+    .then(() => {
+      return createTables();
+    })
+    .then(() => {
+      // insert data
+    });
+};
+
+Note: Functions must return promises so that they can be chained together using .then blocks.
+
+Learn To Code

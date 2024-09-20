@@ -1,0 +1,156 @@
+Pagination
+
+Pagination is a web design method for providing and displaying large amounts of data by dividing it into smaller chunks.
+
+Pagination decisions may cover both back-end design, such as limiting the number of results returned by an API, and front-end design, such as displaying page numbers to divide a list of data. The method used for pagination on the back-end should not affect the user interface design.
+API strategies
+
+APIs often do not serve all the data for a particular resource type in a single request. For instance, requesting all books from the Google Books API in one go would result in a massive response.
+Page number queries
+
+A common method for breaking up data includes using a page query. The API may have a default number of items returned per page, and the client can request a specific range of items by providing a page number:
+
+    /items?p=1 would return the first 10 items.
+    /items?p=2 would return items 11 to 20.
+
+Limit or offset
+
+An API can also provide a limit query, which restricts the number of results returned to the specified limit:
+
+    /items?limit=10 would return the first 10 items.
+
+Alongside a limit, the API may also allow an offset query to specify the first item that should be returned:
+
+    /items?limit=10&start=11 would return items 11 to 20.
+
+Cursors
+
+Cursor-based pagination relies on a query that specifies a specific ID as the first item to be returned. The API may then have a default number of additional items that are returned, or it may offer additional queries such as limit or end:
+
+    /items?last_viewed_id=123 would return 10 items beginning from item 123.
+    items?last_viewed_id=123&limit=20 would return 20 items beginning from item 123.
+
+UI strategies
+
+Common UI patterns for displaying paginated data include:
+
+    A "load more" button
+    "Next" and "back" buttons
+    Page number buttons
+    Infinite scroll, where new data loads as the user scrolls down the page
+
+Next/back buttons
+
+To manage pagination, it is useful to keep track of the current page in state. Users should have the ability to navigate to different pages while ensuring they cannot request non-existent pages. Allowing a user to move forward or backward a page can be achieved with 'next' and 'back' buttons.
+Implementing next/back buttons
+
+When adding 'next' and 'back' buttons, they will need to be able to update the current page variable in state and be conditionally disabled based on the current page count (e.g. the user cannot move back from page 0):
+
+<button
+  onClick={() => setPage((currentPage) => currentPage - 1)}
+  disabled={page === 0}
+>
+  Previous Page
+</button>
+<button
+  onClick={() => setPage((currentPage) => currentPage + 1)}
+  disabled={PAGE_LENGTH * page >= totalCount}
+>
+  Next Page
+</button>
+
+The "back" button is disabled when the current page is 0.
+
+The total number of pages can be calculated using the total count of items and the number of items per page.
+Refetching data
+
+When the current page updates in state, it can trigger a new request for that specific page of data:
+
+useEffect(() => {
+  api.getItems({ page }).then(({ items, total_count }) => {
+    setItems(items);
+    setTotalCount(total_count);
+  });
+}, [page]);
+
+Infinite scroll
+
+Infinite scroll loads new data as a user approaches the bottom of the page, creating the illusion of a single page with endless items. This pattern is popular on social media sites and feeds.
+Implementing infinite scroll
+
+One approach to implementing infinite scroll involves setting up a scroll event listener. It is crucial to remove this listener when the component unmounts to avoid memory leaks. This can be done by returning a cleanup function from the useEffect:
+
+useEffect(() => {
+  function handleScroll() {
+    // Check if user is near the bottom of the page
+    // If so, fetch new data and add to state
+  }
+
+  window.addEventListener("scroll", handleScroll);
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, []);
+
+Note: Since a scroll event handler can be triggered multiple times as a user scrolls, it's essential to prevent multiple API requests from being sent simultaneously. Use conditional logic based on an isLoading boolean or debounce the function to control the frequency of requests.
+Cursor-based pagination
+
+Cursor-based pagination is an efficient method for paginating through large sets of data. Instead of specifying a page number or offset, the client uses a cursor, which is a reference to a specific point in the data set. This method is particularly useful when dealing with real-time data or ensuring the consistency of paginated data.
+Implementing Cursor-Based Pagination
+
+When using cursor-based pagination, the client sends a request with a cursor parameter indicating the position of the last item received. The server then responds with the next set of items and a new cursor for the subsequent request.
+
+// Initial request
+api.getItems({ limit: 10 }).then(({ items, nextCursor }) => {
+  setItems(items);
+  setCursor(nextCursor);
+});
+
+Benefits of Cursor-Based Pagination
+
+    Efficiency: Cursors can handle large data sets more efficiently than page numbers or offsets.
+    Consistency: Cursors help maintain the order and consistency of the data, especially in dynamic data environments where items may be added or removed frequently.
+    Scalability: This method scales well with larger data sets and real-time data updates.
+
+By incorporating cursor-based pagination, applications can manage large volumes of data more effectively, providing a smoother user experience.
+Load More Button
+
+The following example demonstrates how to implement cursor-based pagination with a "Load More" button in a React component:
+
+import React, { useState, useEffect } from "react";
+
+const MyComponent = () => {
+  const [items, setItems] = useState([]);
+  const [cursor, setCursor] = useState(null);
+
+  // Initial fetch
+  useEffect(() => {
+    api.getItems({ limit: 10 }).then(({ items, nextCursor }) => {
+      setItems(items);
+      setCursor(nextCursor);
+    });
+  }, []);
+
+  const loadMore = () => {
+    if (cursor !== null) {
+      api.getItems({ cursor, limit: 10 }).then(({ items, nextCursor }) => {
+        setItems((prevItems) => [...prevItems, ...items]);
+        setCursor(nextCursor);
+      });
+    }
+  };
+
+  return (
+    <div>
+      {items.map(item => (
+        <div key={item.id}>{item.name}</div>
+      ))}
+      {cursor !== null && <button onClick={loadMore}>Load More</button>}
+    </div>
+  );
+};
+
+export default MyComponent;
+
+Learn To Code

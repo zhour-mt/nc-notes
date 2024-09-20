@@ -1,0 +1,108 @@
+Axios
+
+Axios is a popular JavaScript library used to make HTTP requests from the browser or Node.js. It provides a promise-based API for performing CRUD (Create, Read, Update, Delete) operations, facilitating interaction with RESTful services and other HTTP-based endpoints.
+Making a GET request
+
+The Axios .get method is invoked with the URL to perform a GET request to a particular URL:
+
+import axios from "axios";
+
+axios.get("https://api.lyrics.ovh/v1/oasis/wonderwall")
+  .then((response) => {
+    // handle success
+    console.log(response.data);
+  })
+  .catch((error) => {
+    // handle error
+    console.error(error);
+  });
+
+The above code demonstrates a GET request using Axios. It logs the response data if the request is successful, or logs the error if the request fails.
+
+Axios automatically parses the JSON responses, so the data can be directly accessed from response.data.
+Making a POST request
+
+To perform a POST request with Axios, the .post method is used. This method takes 2 arguments: the URL and the data to be sent.
+
+import axios from "axios";
+
+const userData = {
+  firstName: "John",
+  lastName: "Doe"
+};
+
+axios.post("https://example.com/api/users", userData)
+  .then((response) => {
+    // handle success
+    console.log(response.data);
+  })
+  .catch((error) => {
+    // handle error
+    console.error(error);
+  });
+
+In this example, a POST request is made to https://example.com/api/users with user data. Axios automatically converts the JavaScript object userData to JSON format before sending it. The response data is logged if the request is successful, or the error is logged if the request fails.
+Axios params
+
+Axios provides a way to pass query parameters through the params option in the configuration object. This helps in building the query string for the request.
+
+import axios from "axios";
+
+axios.get("https://example.com/api/data", {
+  params: {
+    id: 12345,
+    all_data: true,
+  }
+})
+  .then((response) => {
+    // handle success
+  })
+  .catch((error) => {
+    // handle error
+  });
+
+In this example, a GET request is made to https://example.com/api/data with query parameters id=12345 and all_data=true. The resulting URL will be https://example.com/api/data?id=12345&all_data=true.
+Optional queries
+
+If a query parameter is undefined, it will be automatically omitted from the final query string by Axios. This feature is useful when dealing with optional queries, as it prevents the inclusion of unwanted parameters in the URL.
+
+const filterTerm = undefined;
+
+axios.get("https://example.com/api/data", {
+  params: {
+    id: 12345,
+    filterTerm,
+  }
+})
+  .then((response) => {
+    // handle success
+  })
+  .catch((error) => {
+    // handle error
+  });
+
+In this example, since filterTerm is undefined, it will be ignored, and the resulting URL will be https://example.com/api/data?id=12345.
+Creating an Axios instance
+
+Creating a custom Axios instance allows for setting default configurations for requests, such as the base URL, headers, or timeout settings. This is particularly useful when making multiple requests to the same API.
+
+import axios from "axios";
+
+// Creating a custom axios instance
+const apiClient = axios.create({
+  baseURL: "https://api.example.com",
+  timeout: 1000,
+});
+
+// Making requests using the custom instance
+apiClient.get("/users")
+  .then((response) => {
+    // handle success
+  })
+  .catch((error) => {
+    // handle error
+  });
+
+In this example, a custom Axios instance is created with a base URL and a timeout setting. Requests made using this instance will automatically include these configurations.
+
+Learn To Code

@@ -1,0 +1,19 @@
+Nodemon
+
+The nodemon package helps in the development of Node.js applications by automatically restarting the application when file changes in the directory are detected. This means that the listen process does not need to be killed and restarted after individual edits.
+Installing nodemon
+
+To install nodemon run the command: npm i -D nodemon.
+
+Note: -D means that the package will be saved as a developer dependency. This is a dependency that only the developer will need to use whilst building the application. Similar to Jest, an end user should never have any need to use nodemon.
+Adding a Script
+
+A script to use nodemon to run a listen.js file would look like this:
+
+"scripts": {
+  "dev": "nodemon listen.js"
+}
+
+This script can be executed with the following command: npm run dev.
+
+Learn To Code

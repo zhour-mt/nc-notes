@@ -1,0 +1,45 @@
+Prototypes
+
+Every object in JavaScript has a built-in property which references its prototype. The name of this property is not standard, but is most commonly referred to as __proto__.
+The prototypal chain
+
+A prototype will also be an object itself with its own prototype, building up to a prototypal chain. The end of this chain is when an object has its prototype as null.
+
+The properties and methods of a prototype are shared with objects further down the prototypal chain. This means that if a method does not exist on an object, prototypes further up the chain will be checked to see if the method exists on that object.
+Creating and assigning a prototype
+
+A prototypal object is created using the same syntax as any other object:
+
+const carPrototype = {
+  addSetting: function (setting) {
+    this.settings.push(setting);
+  },
+  turnOnLights: function () {
+    this.isLightsOn = true;
+  }
+};
+
+Object.create is then used to instantiate an object with the passed-in object as its prototype:
+
+// ...
+function createCar() {
+  const newCar = Object.create(carPrototype);
+
+  newCar.settings = [];
+  newCar.isLightsOn = false;
+
+  return newCar;
+  };
+
+The newly instantiated object will then have access to the methods from the prototype:
+
+myCar.addSetting("cruise control");
+myCar.turnOnLights();
+
+Getting a prototype
+
+The Object.getPrototypeOf method is used to view an object's prototype:
+
+Object.getPrototypeOf(myCar); // { addSetting: [Function], turnOnLights: [Function] }
+
+Learn To Code

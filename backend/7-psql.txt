@@ -1,0 +1,124 @@
+PSQL
+
+Although SQL does have a strict standard, there are different versions of the SQL language that all share similar syntax and commands.
+
+PostgreSQL is an open-source version of SQL. PSQL is a terminal-based front end to PostgreSQL that allows a user to enter queries interactively and view the query results in the terminal.
+Installing PSQL
+Mac OS
+
+    Install the Postgres App
+    Open the app and select initialise/start
+    Type psql into the terminal. The terminal should output something similar to:
+
+psql (9.6.5, server 9.6.6)
+Type "help" for help.
+
+username=#
+
+    If the above does not show and an error is returned, run the following commands in the terminal:
+        brew update
+        brew doctor
+        brew install postgresql
+    If the following error shows in the terminal, run the command createdb to initialise the database:
+
+psql: error: connection to server on socket "/tmp/.s.PGSQL.5432" failed: FATAL:  database "username" does not exist`
+
+Ubuntu / WSL
+
+    Run these commands in the Linux terminal:
+        sudo apt-get update
+        sudo apt-get install postgresql postgresql-contrib
+    Next, run the following commands to create a database user for Postgres:
+        sudo -u postgres createuser --superuser $USER
+        sudo -u postgres createdb $USER
+    The following errors may appear:
+        role "username-here" already exists - This means a Postgres user is already present and there is no need to create a new one.
+        Cannot connect to database/server (or similar) - The server may not be running. Run sudo service postgresql start before trying the above again.
+    Run psql in the terminal to enter PostgreSQL.
+
+Note: The following command may need running first to start the PostrgreSQL server in order for the psql command to work: sudo service postgresql start.
+
+    Then type ALTER USER username WITH PASSWORD 'mysecretword123';, replacing the username with the current psql user, and the password with a new, simple password (which must be wrapped in quotation marks). For security reasons, please do not use your system login password for this.
+    ALTER ROLE will be displayed in the terminal after the command has been run. If this isn't visible, double-check the ALTER USER command as listed above.
+    Once ALTER ROLE is displayed in the terminal, exit out of psql by typing \q.
+
+Storing a Postgres password on Ubuntu
+
+To set a default password to use when running psql in the terminal, create a file called .pgpass in the home directory. Navigate to the home directory from any terminal by running cd with no arguments.
+
+Create a file called .pgpass and open it with a text editor:
+
+touch .pgpass
+code .pgpass
+
+The file will be empty when first created. Add a single line with the following format:
+
+hostname:port:database:username:password
+
+Each field can be a literal value or a wildcard: *. Set a password in the file (replacing "mypassword" with the password that was created when the ALTER USER command was run):
+
+*:*:*:*:mypassword
+
+The permissions on .pgpass must disallow any access to anyone who is not the owner of the file. Run chmod 0600 .pgpass in the directory containing the .pgpass file to ensure that the file is adequately protected, and that sensitive information stored within it cannot be accessed by unauthorized users.
+
+When psql is run, this password is set as a default, so it doesn't have to be provided on every command.
+CLI commands
+
+Running the command psql connects to the postgres server, which runs on port 5432 by default.
+
+There are many useful commands for interacting with databases:
+
+    \l - show databases
+    \c my_database - connect to the database called "my_database"
+    \dt - display tables
+    \dt+ - display tables and additional info
+    \d table_name - display more information about a specific table in a database
+    \? - show other commands
+    \q - exit CLI
+    :q - Return to psql CLI from database/table/query view
+
+SQL statements can also be written in a file and then run with psql to make the code reusable:
+
+    psql -f example.sql to print output to the terminal
+    psql -f example.sql > filename.txt to print output to a txt file
+
+Note: This command cannot be run from within the psql CLI.
+PostgreSQL data types
+
+    Boolean (BOOL or BOOLEAN)
+    Characters
+        CHAR(n) is the fixed-length character type. If a string is inserted that is shorter than the length of the column (n), PostgreSQL pads the spaces. If a string is inserted that is longer than the length of the column, PostgreSQL will throw an error.
+        VARCHAR(n) is the variable-length character type. With VARCHAR(n), up to n characters can be stored. PostgreSQL does not pad spaces when the stored string is shorter than the length of the column.
+        TEXT is the variable-length character type. Theoretically, text data is a character string with unlimited length.
+    Integers
+        SMALLINT is a 2-byte signed integer that has a range from -32,768 to 32,767.
+        INT is a 4-byte integer that has a range from -2,147,483,648 to 2,147,483,647.
+        SERIAL is the same as integer except that PostgreSQL will automatically generate and populate values into the SERIAL column.
+    Floating-point numbers (FLOAT(n), REAL /FLOAT8 NUMERIC or NUMERIC(p,s))
+    Temporal
+        DATE stores the date values only.
+        TIME stores the time of day values.
+        TIMESTAMP stores both date and time values .
+        INTERVAL stores periods of time.
+
+See the PostgreSQL documentation on data types for more information.
+Syntax and Conventions
+
+Missing a semicolon from the end of a statement or query will result in it not being executed.
+
+There are some important conventions to consider when naming tables and columns:
+
+    Use lowercase identifiers. Identifiers should be written in lowercase, e.g. first_name, not "First_Name".
+        This includes database names, tables and column names
+        Mixed-case identifier names mean that every usage of the identifier would need to be quoted in double quotes.
+    Name Primary Keys using [singularOfTableName]_id format (e.g. customer_id).
+        If the Primary Key is id, it can later be more difficult to keep track of what the id relates to.
+    Use underscores to separate words for readability (especially given the usage of lowercase identifiers).
+    Use full words, not abbreviations.
+    Table names should be plural, e.g. nortcoders.
+    Column names should be singular, e.g. northcoder_id.
+    Avoid reserved/key words. Do not name columns with key words such as name, new, null etc.
+
+A full list of keywords can be found in the PostgresSQL documentation.
+
+Learn To Code

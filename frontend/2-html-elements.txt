@@ -1,0 +1,131 @@
+HTML Elements
+
+An element is an individual component of HTML representing everything from the start tag to the end tag. For example:
+
+<p>This is an element</p>
+
+Fetching elements
+
+Fetching elements refers to the process of selecting and retrieving HTML elements from the DOM using JavaScript. This allows for the manipulation of elements, such as changing their content, style, or attributes, and to add interactivity to web pages.
+Fetching a single element
+getElementById
+
+The getElementById method takes a string as an argument and returns the first single element that matches the specified id:
+
+const greetingElement = document.getElementById("greeting");
+
+console.log(greetingElement); // <p id="greeting" class="text-box">Hey</p>
+
+If no element matches, getElementById returns null.
+querySelector
+
+The querySelector method takes a valid CSS selector string containing one or more selectors, including class names, tag names, and ids. A full list of CSS selectors can be found in the MDN docs.
+
+The querySelector method returns the first element that matches the specified set of selectors. If no corresponding element is found in the DOM, null is returned.
+
+const greetingElement = document.querySelector(".text-box");
+
+console.log(greetingElement); // <p id="greeting" class="text-box">Hey</p>
+
+const missingElement = document.querySelector(".not-a-class");
+
+console.log(missingElement); // null
+
+Fetching multiple elements
+
+The following methods can be used to retrieve multiple selected elements. Some of these methods return a HTMLCollection, which is an array-like data structure where elements are accessed by an index, but array methods cannot be used. To use an array method, a HTMLCollection can be spread into an array:
+
+const paragraphsAsHtmlCollection = document.getElementsByTagName("p"); // HTMLCollection with no array methods
+
+const paragraphsAsArray = [...paragraphsAsHtmlCollection]; // Array of elements with available array methods
+
+Unlike arrays, however, a HTMLCollection is a live representation of the DOM. Any changes to the document will cause elements to be added or removed as appropriate from the collection without having to reinvoke a method.
+getElementsByTagName
+
+The getElementsByTagName accepts a string representing a HTML tag and returns a HTMLCollection of found elements matching the specified tag in the order they appear in the DOM tree:
+
+const paragraphs = document.getElementsByTagName("p");
+
+console.log(paragraphs); // HTMLCollection [p#greeting, greeting: p#greeting]
+
+querySelectorAll
+
+The querySelectorAll method accepts a string of CSS selectors and returns all matching elements as a NodeList. These are similar to a HTMLCollection, as they are array-like objects, but they also have a .forEach method, keys, values and entries:
+
+const greetings = document.querySelectorAll(".greeting");
+
+console.log(greetings); // NodeList(2) [p#greeting.greeting, p.greeting]
+
+getElementsByClassName
+
+The getElementsByClassName takes a string of class names and returns a HTMLCollection of all child elements that have all of the given class names:
+
+const elements = document.getElementsByClassName("red large-text");
+
+// This will only match elements that have both the "red" and "large-text" classes.
+
+getElementsByName
+
+The getElementsByName takes a string and returns a NodeList of all elements whose name attribute matches the given string:
+
+const elements = document.getElementsByName("first-name");
+
+console.log(elements); // NodeList [input]
+
+Manipulating the DOM
+Updating attributes
+
+An element's attributes can be manually changed, similar to editing an object's properties. For example, an image's src attribute can be updated like so:
+
+const imageElement = document.querySelector("img");
+
+imageElement.src = "new_image_src";
+
+Event handlers
+
+An event is some form of interaction with a HTML element, such as clicking on a button or hovering over an image. A full list of HTML DOM events can be found on W3Schools.
+
+Functions and interactivity can be added to nodes by attaching them to the relevant event handlers attributes:
+
+const handleClick = (e) => {
+  console.log("I was clicked!");
+};
+
+const emoji = document.getElementById("smiley");
+
+emoji.onclick = handleClick;
+
+addEventListener
+
+A better way to add functionality is to attach listeners with .addEventListener. Multiple listeners can be added to the same element without overwriting events and other handlers:
+
+const handleClick = (e) => {
+  console.log("I was clicked!");
+};
+
+const emoji = document.getElementById("smiley");
+
+emoji.addEventListener("click", handleClick);
+
+Adding nodes
+
+A new element can be created using the createElement method:
+
+const newParagraph = document.createElement("p");
+
+newParagraph.innerText = "I am a new node!";
+
+This node can then be added to the existing DOM tree using the appendChild method of an existing node:
+
+document.body.appendChild(newParagraph);
+
+Deleting nodes
+
+Nodes can be deleted from the DOM using the removeChild method, which also returns the node that has been removed.
+
+const parentNode = document.getElementById("parent");
+const childNode = document.getElementById("child");
+
+const removedNode = parentNode.removeChild(childNode);
+
+Learn To Code

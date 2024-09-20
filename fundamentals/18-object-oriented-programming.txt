@@ -1,0 +1,126 @@
+Object-Oriented Programming (OOP)
+
+Object-oriented programming (OOP) is a programming paradigm that organises data using objects rather than functions.
+
+OOP differs from functional programming in that:
+
+    Objects are the first class citizens rather than functions
+    Objects are the main way of passing information
+    Everything else lives on the object, even functions (methods)
+
+There are 4 pillars of OOP which provide a guide to writing efficient and clean object-oriented code: encapsulation, abstraction, inheritance and polymorphism.
+Encapsulation
+
+Encapsulation is the idea of grouping together related properties and methods within one object. The only way to access the properties on an object should be by calling the public methods on the object.
+
+There are two ways to encourage people not to directly access and mutate properties on an object. The first is to indicate that a variable should not be accessed or changed directly by preceding it with an underscore:
+
+class Mammal {
+  constructor(name, favouriteFood) {
+    this._name = name;
+    this.favouriteFood = favouriteFood;
+  }
+  eat() {
+    console.log(`${this._name} takes a big bite of ${this.favouriteFood}`);
+  }
+}
+
+const mammal = new Mammal("human", "Weetabix");
+
+This is entirely a matter of convention though, and doesn't actually stop a user from doing something like mammal._name = "dog".
+Private fields
+
+True encapsulation can be achieved by creating private fields that cannot be accessed outside of the class declaration. This is done using the # name syntax introduced in ECMAScript 2022.
+
+In order to assign a value to a private field within the constructor method, it must first be declared within the class.
+
+class Mammal {
+  #favouriteFood;
+
+  constructor(name, favouriteFood) {
+    this.name = name;
+    this.#favouriteFood = favouriteFood;
+  }
+  eat() {
+   console.log(`${this.name} takes a big bite of ${this.#favouriteFood}`);
+  }
+}
+
+const mammal = new Mammal("human", "Weetabix");
+mammal.name; // "human" - public field
+mammal.favouriteFood; // undefined - private field
+mammal.eat(); // "human takes a big bite of Weetabix"
+
+Abstraction
+
+Abstraction is about hiding away unnecessary details from the user that they do not need to understand in order to be able to make use of the code. For example:
+
+class Circle {
+  constructor(diameter) {
+    this.diameter = diameter;
+  }
+
+  calcArea() {
+    const radius = this.diameter / 2;
+    const area = Math.PI * Math.pow(radius, 2);
+    return area;
+  }
+}
+
+const circle = new Circle(5);
+circle.calcArea(); // 19.634954084936208
+
+In this example, a user is not concerned with how the area of a circle is calculated. The details of this has been abstracted away and is easily reusable.
+Inheritance
+
+By extending one class from another, the extended class contains the same properties and methods as the parent class. This process is called inheritance and increases the resusability of logic and maintains a hierachical structure within the code.
+
+class Dog extends Mammal {
+  constructor(name, favouriteFood) {
+    super(name, favouriteFood);
+  }
+
+	bark() {
+		console.log(`${this.name} woofs!`);
+	}
+}
+
+const otis = new Dog("Otis", "doggy treats");
+otis.bark(); // "Otis woofs"
+
+In the example above, Dog extends Mammal. When Dog is instantiated, the constructor of Mammal is called with the same arguments, providing Dog with the same properties and methods as its parent class.
+Polymorphism
+
+Polymorphism is when something can have many different forms. In Javascript, extended classes can share and override the behaviours of their parent classes:
+
+class Dog extends Mammal {
+  constructor(_name, favouriteFood) {
+    super(_name, favouriteFood);
+  }
+
+  eat() {
+    console.log(`${this._name} devours their ${this.favouriteFood}`);
+  }
+}
+
+class Cat extends Mammal {
+  constructor(_name, favouriteFood) {
+    super(_name, favouriteFood);
+  }
+
+  eat() {
+    console.log(`${this._name} gobbles their ${this.favouriteFood}`);
+  }
+}
+
+const mammal = new Mammal("human", "Weetabix");
+const dog = new Dog("Otis", "doggy treats");
+const cat = new Cat("Percy", "fruits");
+
+mammal.eat(); // human takes a big bite of Weetabix
+dog.eat(); // Otis devours their doggy treats
+cat.eat(); // Percy gobbles their fruits
+
+In this scenario, Dog and Cat both have an eat method, but the implementation on each class overrides the logic of the parent Mammal class.
+
+Learn To Code

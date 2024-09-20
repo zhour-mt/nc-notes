@@ -1,0 +1,90 @@
+Destructuring
+
+The destructuring assignment syntax in JavaScript allows for the unpacking of values from arrays or object properties into individual variables.
+Object destructuring
+
+Consider the following object representing characteristics of a tutor:
+
+const tutor = { name: 'David', age: 31 };
+
+Instead of using dot notation to access object properties, destructuring can be used to unpack them from the object's context.
+
+// ...
+const { name, age } = tutor;
+
+// name - "David"
+// age - 31
+
+In JavaScript, object destructuring assigns variable names to the keys they are stored on. If necessary, the variable name can be changed for the sake of clarity or to avoid naming conflicts.
+
+// ...
+const { name: tutorName } = tutor;
+
+// tutorName - "David"
+
+When attempting to destructure a property that does not exist on an object, the new variable will be assigned the value undefined. It is possible to provide a default value that will be used if the unpacked value is undefined. If the value is defined, then the default value will not be used.
+
+// ...
+const { name, pets = [] } = tutor;
+
+// name - "David"
+// pets - []
+
+pets is not defined on tutor, so it is assigned the default value of [].
+Nested destructuring
+
+Destructuring can also be used to extract a value that's deeply nested inside an object.
+
+const tutor = {
+  name: 'David',
+  age: 30,
+  lunchbox: { sandwich: 1, marsBars: 3, apple: 0 }
+};
+
+// To access the number of Mars bars David has packed for lunch today
+const {
+  lunchbox: { marsBars: marsBarCount }
+} = tutor;
+
+// marsBarCount - 3
+
+Destructuring from a very deeply nested object risks losing readability, so it's important to know when it starts losing its value.
+
+Note that in the example given, only one new variable has been created, marsBarCount. A new variable has not been created for lunchBox. Attempting to access the lunchBox variable here would result in a ReferenceError because this variable still only exists as a key within the tutor object.
+Within function parameters
+
+Destructuring is useful when only certain properties of an object are needed in a function that takes the object as an argument.
+
+const greetTutor = ({ name }) => {
+  return `Hello ${name}`;
+};
+
+greetTutor(tutor); // "Hello David"
+
+Array destructuring
+
+Arrays can be destructured by unpacking them in the order of their elements.
+
+const tutors = ['David', 'Jim', 'Hev'];
+
+const [firstTutor, secondTutor, thirdTutor] = tutors;
+
+// firstTutor - "David"
+// secondTutor - "Jim"
+// thirdTutor - "Hev"
+
+Nested array destructuring
+
+To access a value a few levels deep in a nested array, nested destructuring can be used with arrays too:
+
+const arrayOfArrays = [
+  [1, 2, 3],
+  ['a', 'b', 'c']
+];
+
+const [[nestedElement]] = arrayOfArrays;
+// nestedElement - 1
+
+Both object and array destructuring are helpful tools for making code more readable when working with complex data structures.
+
+Learn To Code

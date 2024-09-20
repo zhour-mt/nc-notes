@@ -1,0 +1,133 @@
+Loading Patterns
+
+When dealing with asynchronous processes in a React app, such as fetching data from an external API, users may have to wait before a page is ready to display. Depending on the speed of the user's connection and the amount of traffic going through the servers, these requests may take a noticeable amount of time to complete.
+
+A good user experience will provide an indication that the page is loading while waiting for these requests to complete, such as through a message or loading spinner. In React, these can be handled through loading state.
+Loading state
+
+When a component that relies on data being fetched externally first mounts, there is typically no data to display. This means that the page is often blank until the request has finished and local state has been updated.
+Successful requests
+
+To provide a way of checking whether the request has been completed, loading state can be added to the component. This state will be a boolean value, initialised to true to reflect that the data has not been fetched yet when the component first mounts:
+
+import { useEffect } from "react";
+
+const Users = () => {
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+useEffect(() => {
+    fetchUsers()
+    .then((usersFromApi) => {
+      setUsers(usersFromApi);
+      setIsLoading(false)
+    });
+  }, []);
+
+  return (
+    <ul>
+      {users.map((user) => {
+        //  render each user
+      })}
+    </ul>
+  );
+};
+
+Inside of the .then block, the isLoading state is updated to reflect that the process has completed and the UI can now be updated.
+Failed requests
+
+If a request fails, the isLoading state should also be updated to reflect that the data is no longer loading. This can be handled in a .catch block, alongside any additional error handling:
+
+import { useEffect } from 'react';
+
+const Users = () => {
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+useEffect(() => {
+    fetchUsers()
+    .then((usersFromApi) => {
+      setUsers(usersFromApi);
+      setIsLoading(false)
+    })
+    .catch((error)=>{
+      setIsLoading(false)
+      //  handle the error from the API
+    })
+  }, []);
+
+  return (
+    <ul>
+      {users.map((user) => {
+        //  render each user
+      })}
+    </ul>
+  );
+};
+
+.finally
+
+Rather than updating the loading state separately in both the .then and the .catch blocks, a .finally block can be added to handle updating the loading state regardless of whether the request was successful or not:
+
+import { useEffect } from 'react';
+
+const Users = () => {
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+useEffect(() => {
+    fetchUsers()
+    .then((usersFromApi) => {
+      setUsers(usersFromApi);
+    })
+    .catch((error)=>{
+      //  handle the error from the API
+    })
+    .finally(() => {
+      setIsLoading(false);
+    })
+  }, []);
+
+  return (
+    <ul>
+      {users.map((user) => {
+        //  render each user
+      })}
+    </ul>
+  );
+};
+
+Loading messages
+
+Depending on the value of the isLoading state, a component can render a different UI using a conditional statement. This could be a dedicated Loading component that shows an animated loading spinner or just a simple <p> tag with a loading message:
+
+import { useEffect } from 'react';
+
+const Users = () => {
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+useEffect(() => {
+    fetchUsers()
+    .then((usersFromApi) => {
+      setUsers(usersFromApi);
+      setIsLoading(false)
+    });
+  }, []);
+
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
+
+  return (
+    <ul>
+      {users.map((user) => {
+        //  render each user
+      })}
+    </ul>
+  );
+};
+
+This technique of rendering different JSX depending on another value is called conditional rendering. More information and examples can be found in the React documentation.
+
+Learn To Code

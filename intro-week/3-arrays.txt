@@ -1,0 +1,65 @@
+Arrays
+What is an Array?
+
+Arrays are ordered collections that can store elements of any data type.
+Declaring Arrays
+
+Arrays can be declared using square brackets. Individual elements are separated with commas.
+
+const biggestMountains = ["Mount Everest", "K2", "Kangchenjunga"];
+
+The naming convention for a variable containing an array is that it should describe the link between the data stored and is often pluralised, e.g. cats or students.
+Length
+
+Arrays have a length property that represents the number of elements in any given array. You can access it using dot notation.
+
+const drinksOnMyDesk = ["Tea", "Water", "Lemonade", "Iced Coffee"];
+
+drinksOnMyDesk.length // 4
+
+Accessing Elements Inside of Arrays
+
+Array elements are ordered by their index, starting at 0. That means index 0 represents the first element, index 1, the second element, index 2, the third, and so on.
+
+You can access individual elements inside an array by using the array name and the index of the element you want to access, enclosed by square brackets. This is known as square bracket notation. Accessing an index position which does not exist will evaluate to undefined.
+
+const numbers = [1, 2, 3];
+
+console.log(numbers[0]); // 1
+
+console.log(numbers[3]); // undefined
+
+Accessing Nested Arrays
+
+Arrays can store elements of any data type. This includes other arrays. Arrays inside of arrays are referred to as nested arrays. To access nested elements, chain square bracket notation for each index within the nested structure.
+
+const numbers = [
+[1, 10, 100],
+[2, 20, 200],
+[3, 30, 300],
+];
+
+console.log(numbers[0][1]); // 10
+
+console.log(numbers[1][2]); // 200
+
+Adding and Removing From an Array
+
+.push and .pop are array methods that interact with the end of the array. pop removes the last element of the array and returns it, while push adds an element to the end of the array.
+
+Making changes to an array is called mutation.
+
+const vegetables = ["Carrot", "Turnip"];
+
+vegetables.push("Broccoli");
+vegetables.push("Kale");
+
+console.log(vegetables); // ["Carrot", "Turnip", "Broccoli", "Kale"] 
+
+vegetables.pop();
+
+console.log(vegetables); // ["Carrot", "Turnip", "Broccoli"] 
+
+Further examples and reference guides can be found in the MDN docs.
+
+Learn To Code

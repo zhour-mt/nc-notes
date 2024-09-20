@@ -1,0 +1,101 @@
+Iteration
+
+Iteration refers to the process of repeatedly executing a block of code to perform a specific task. It allows developers to handle repetitive tasks efficiently by using loops or higher-order functions.
+Loops
+
+JavaScript offers a few different kinds of loops:
+
+    for - executes a code block a number of times.
+    for...of - executes a code block for each value on an iterable object.
+    for...in - executes a code block for each property of an object.
+    while - executes a code block continuously while a specified condition is true.
+    do...while - also executes a code block continuously while a specified condition is true.
+
+For Loops
+
+A for loop repeats a block of code until a specified condition evaluates to false.
+
+for (initialisation; condition; increment){
+ // code block
+}
+
+When a for loop executes, the following occurs:
+
+    initialisation - the initialisation is executed. This expression usually initialises a loop counter.
+    condition - the condition expression is evaluated. If the value evaluates to true, the loop statement continues. Otherwise, the loop terminates.
+    code block - the code to be executed the given number of times.
+    increment expression - the increment expression is executed after each iteration of the loop. It is usually used to step a loop counter closer to the condition.
+
+for (let i = 0; i < 3; i++){
+  console.log(i);
+}; 
+
+// console output:
+// 0 
+// 1 
+// 2
+
+Let's break this down:
+
+    let i = 0; - this is the initialiser starting at index 0 of the array.
+    i < 3; - this is the condition. The loop will run until the value of i reaches the length of the array.
+    The code block within the curly braces will be executed.
+    i++ - this is the increment expression. The example adds 1 to the value of i after the code statement has been run.
+
+For...of Loops
+
+for of loops iterate through each value of an iterable object. Examples include strings and arrays.
+
+const tutors = ["Niamh", "Poonam", "Harrison"];
+for (const tutor of tutors) {
+  console.log(tutor);
+};
+
+// console output:
+// "Niamh"
+// "Poonam"
+// "Harrison"
+
+tutor represents each element within the array tutors.
+For...in Loops
+
+for...in loops iterate through the property name key or index of an object.
+
+const antique = {item: "vintage watch", price: "£445", dateMade: 1960};
+
+for (const key in antique){
+  console.log(key);
+};
+
+// console output:
+// "item"
+// "price"
+// "dateMade"
+
+This loop will log all of the keys from the antique object. Object keys are ordered in ascending chronological order of property creation and so it is hard to predict (or remember!) the order. As a result, objects are often considered to be unordered.
+
+See the MDN docs for further detail and information on some of the less frequently used loops.
+Break and Continue Statements
+
+A break statement will terminate the loop completely. This will only break the innermost loop if loops have been nested.
+
+A continue statement will terminate the code block, but move on to the next iteration of the loop.
+
+const countdown = [5, 4, 3, "*cough*", "*cough*", 2, 1, "Blast off!",];
+
+for(const line of countdown){
+  if (line === "*cough*") {
+    continue;
+  }
+  console.log(line)
+}
+
+// console output:
+// 5
+// 4
+// 3
+// 2
+// 1
+// "blast off!"
+
+Learn To Code

@@ -1,0 +1,105 @@
+Classes
+
+Classes are syntactic sugar for JavaScript's prototypal inheritance. Like constructor functions, class definitions should be capitalised.
+The constructor method
+
+A class definition requires a constructor. This is the method that is called when instantiating the class and behaves the same way as a constructor function used outside of a class.
+
+class Mammal {
+	constructor(name) {
+		this.name = name;
+		this.warmBlooded = true;
+	}
+}
+
+Instantiating classes
+
+To create a new instance of a class, use the new operator.
+
+The new keyword does the following things:
+
+    Creates a blank, plain JavaScript object.
+    Sets the constructor of this object to another object.
+    Binds the value of this in the constructor to the new object.
+    Returns the new object if the function or class doesn't return its own object.
+
+A class's constructor can accept parameters, just like a constructor function would:
+
+const rat = new Mammal("Squeaker"); // { name: "Squeaker", warmBlooded: true }
+
+const mouse = new Mammal(); // { name: undefined, warmBlooded: true }
+
+To put functions on the prototype of the class, add them outside of the constructor without the function keyword:
+
+class Mammal {
+	constructor(name, favouriteFood) {
+		this.name = name;
+		this.warmBlooded = true;
+		this.favouriteFood = favouriteFood;
+	}
+	eat() {
+		return `${this.name} takes a big bite of ${this.favouriteFood}`;
+	}
+}
+
+const rat = new Mammal("Squeaker", "cheese");
+rat.eat(); // "Squeaker takes a big bite of cheese"
+
+Extending classes
+
+Classes can be extended to make subclasses. A class which is made by extending another will have all the methods and properties from the parent class.
+
+Create a new class, which is an extension of another, by using the extends keyword.
+
+class Dog extends Mammal {
+	bark() {
+		console.log(`${this.name} woofs!`);
+	}
+}
+
+const otis = new Dog("Otis", "doggy treats");
+otis.bark(); // "Otis woofs"
+
+In the example above, Dog extends Mammal. When Dog is instantiated, the constructor of Mammal is called with the same arguments. This means that Dog has both name and the favourite food available, and because it is prototypically linked to Mammal, it will also have the methods from Mammal available on it.
+Passing arguments to parent classes
+
+In order to pass arguments to the parent class constructor, use the super keyword. super must be invoked before any reference to this in the child constructor.
+
+class Dog extends Mammal {
+	constructor(name, owner) {
+		super(name, "doggy treats");
+		this.owner = owner;
+	}
+	bark() {
+		return `${this.name} woofs!`;
+	}
+	whine() {
+		return `${this.name} misses ${this.owner} desperately`;
+	}
+}
+
+const otis = new Dog("Hamish", "Mitch");
+otis.bark(); // "Hamish woofs!"
+otis.whine(); // "Hamish misses Mitch desperately"
+
+Overriding methods
+
+It is possible to override the methods on the parent class by adding a method of the same name to a subclass.
+
+When a method is invoked, JavaScript will look up the prototype chain until it finds the corresponding method (or reaches the end of the chain).
+
+class BigDog extends Dog {
+	bark() {
+		return `${this.name} WOOFS!`;
+	}
+}
+const greatDane = new BigDog("Zorba", "Chris");
+greatDane.eat(); // "Zorba takes a big bite of doggy treats"
+greatDane.whine(); // "Zorba misses Chris desperately"
+greatDane.bark(); // "Zorba WOOFS!"
+
+As eat does not exist on BigDog, it goes up from BigDog to Dog and still doesn't find the a matching method. Then, it moves on from Dog to Mammal and finds the method there.
+
+Because BigDog has a bark method on its prototype, it just uses the closest method available on the prototype chain.
+
+Learn To Code

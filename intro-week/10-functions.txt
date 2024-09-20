@@ -1,0 +1,23 @@
+Functions
+
+Functions allow you to make code flexible and reusable. A function is essentially a block of code with a name you can call to reuse the code again and again. This has the benefit of not having to rewrite code and repeat yourself.
+
+A function is composed of a sequence of statements called the function body. Values can also be passed to a function, and the function can return a value.
+
+function add(a, b) {
+  return a + b;
+};
+
+add(2, 7);
+
+Let's break down the function above:
+
+    function - this is a keyword which indicates you are creating a new function.
+    add - this is the name of the function.
+    (a, b) - a and b are called parameters. These are variable names for whatever you pass into this function. In this case, a has the value of 2 and b has the value of 7.
+    {} - the curly braces represent the function body which contains the code that will be run when the function is called.
+    return - this a keyword which tells the function what the output will be.
+    a + b - this expression is the return value of the function.
+    add(2, 7) - to invoke a function, make reference to the function followed by a pair of brackets. Arguments are passed within the brackets.
+
+Learn To Code

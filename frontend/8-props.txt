@@ -1,0 +1,106 @@
+Props
+
+Frequently, information needs to pass between components. React provides a mechanism for this called props, which is short for properties.
+Passing props
+
+The syntax for passing props is similar to passing HTML attributes. Props are key-value pairs. The key of the prop is on the left, and the value is passed on the right of the = as shown below:
+
+const App = () => {
+  return (
+    <div>
+      <Sum num1={2} num2={3} />
+    </div>
+  );
+};
+
+const Sum = (props) => {
+  console.log(props); // { num1: 2, num2: 3 }
+  return (
+    <p>
+      {props.num1} + {props.num2} = {props.num1 + props.num2}
+    </p>
+  );
+};
+
+All components are passed a single argument - a props object. This object contains all of the key-value pairs that have been passed from the parent component.
+
+Any values can be passed from the parent to a child component. However, props cannot be passed directly from a child to its parent, nor from a component to its sibling.
+
+See the React documentation on passing props to a component for more info.
+Naming convetions
+
+When passing down variables, it is common to name the key of the prop according to the name of the variable. This makes it easier to follow what is being accessed in the child component:
+
+const App = () => {
+  const num1 = 3;
+  const num2 = 4;
+
+  return (
+    <div>
+      <Sum num1={num1} num2={num2} />
+    </div>
+  );
+};
+
+Destructuring props
+
+The props can be destructured directly within the parameter brackets when the component is declared. This means the properties can be directly accessed without needing to append them to the end of the props object:
+
+const App = () => {
+  const num1 = 1;
+  const num2 = 2;
+  
+  return (
+    <div>
+      <Sum num1={num1} num2={num2} />
+    </div>
+  );
+};
+
+const Sum = ({num1, num2}) => {
+  console.log(num1); // 1
+  console.log(num2); // 2
+
+  return (
+    <p>
+      {num1} + {num2} = {num1 + num2}
+    </p>
+  );
+};
+
+Prop drilling
+
+Prop drilling is when information is passed down through multiple layers of React components to reach nested component that needs it, even if the layers between do not. For example:
+
+const App = () => {
+  const user = "Barry"
+  
+  return (
+    <div>
+      <Header user={user} />
+    </div>
+  );
+};
+
+const Header = ({user}) => {
+  return (
+    <div>
+    <Nav />
+    <User user={user} />
+    </div>
+  );
+};
+
+const User = ({user}) => {
+  return (
+    <p>
+      You are now logged in as {user}
+    </p>
+  );
+};
+
+In this example, the user variable is passed to the Header component, even though it is not being used there, just so that it can be passed through to User.
+
+Prop drilling like this can have negative side effects such as making debugging code more diffcult, inadvertently causing props to mutate or preventing components, especially those that don't utilise the prop, from being reusable. Therefore, it is better to avoid prop drilling where possible.
+
+Learn To Code

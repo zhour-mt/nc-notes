@@ -1,0 +1,170 @@
+State in React
+
+Components often need to keep track of values that may change as a result of an interaction, such as the number of likes on a post or the value being entered into an input field. In React, this component-specific memory is referred to as state.
+useState
+
+React provides a Hook called useState that can be used to create and update a state variable. When this state variable changes, React will re-render the UI to display the relevant updates.
+Using useState
+
+The useState Hook:
+
+    takes 1 argument - the initial value for the state
+    returns an array with 2 elements:
+        The first being the current state value
+        The second being a function to update the state value
+
+A common convention, and the one used by the React documentation on Hooks, is to use array destructuring to declare the state value and setState function:
+
+import { useState } from 'react';
+
+const App = () => {
+  const [name, setName] = useState("Paul");
+
+  return (
+    <div>
+      <h1>Hello {name}</h1>
+    </div>
+  );
+};
+
+In the example above, name is set to its initial value of "Paul" and can be used just as any other variable would.
+
+The state value can be updated using the setState function returned from useState. When a new value is set, React will re-render the component.
+setState
+
+The setState functions can be invoked in 2 ways:
+
+    Passing the new value of the state directly
+    Passing a function that will return the new state. This function will be invoked with the current state value.
+
+Multiple calls to setState can be batched together to improve performance. When updating the state with a completely new value (such as the name example above), the new value can be passed directly.
+
+Sometimes, however, the new state value will be dependant on the current value. Consider the counter below:
+
+import { useState } from 'react';
+
+const App = () => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button 
+        onClick={() =>
+          setCount((currCount) => {
+            return currCount + 1;
+          })
+        }
+      >
+        Increase count by 1
+      </button>
+    </div>
+  );
+};
+
+When clicking the button, the count should increase by one. In this case setCount is invoked with a function, that takes the current count as a parameter.
+
+This function can use the current count to work out what the new state should be and return the new state value.
+Extracting functions
+
+Writing complicated state updates can make JSX difficult to read, so non-trivial updates can be extracted out into helper functions:
+
+const App = () => {
+  const [count, setCount] = useState(0);
+
+  const incrementCount = (increment) => {
+    setCount((currCount) => {
+      return currCount + increment;
+    });
+  };
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => incrementCount(1)}>Increase count</button>
+      <button onClick={() => incrementCount(-1)}>Decrease count</button>
+    </div>
+  );
+};
+
+Mutating state
+
+React state is designed to be replaced, not mutated. React will make comparisons between state values on re-renders internally and will replace old mutated state with the new values.
+
+As per the React documentation, state values should never be mutated, and only the setState functions should be used to replace old values.
+Updating non-primitive values
+
+When updating non-primitive values, the new state value should be a new reference.
+
+Consider the example below to update an array of tasks stored as state:
+
+const addTodo = () => {
+  setTodos((currTodos) => {
+    currTodos.push(`code on day ${currTodos.length}`);
+    return currTodos;
+  });
+};
+
+The currTodos array is being mutated within the setTodos, which violates the rule of not mutating state. Additionally, the array that is being returned has the same reference as the array in state. Although, the values inside of the array have updated, this will not cause a re-render as React will compare the old state value and the new state value by their reference.
+
+Instead, a new reference must be returned as per the code below:
+
+const App = () => {
+  const [todos, setTodos] = useState(['code on day 0', 'code on day 1']);
+
+  const addTodo = () => {
+    setTodos((currTodos) => {
+      return [...currTodos, `code on day ${currTodos.length}`];
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={() => addTodo()}>Add Todo</button>
+      <ul>
+        {todos.map((todo) => {
+          return <li key={todo}>{todo}</li>;
+        })}
+      </ul>
+    </div>
+  );
+};
+
+See the React documentation for more information about updating objects in state and updating arrays in state.
+Passing state
+
+Any value can be passed from a parent component to a child component via props, including state values and functions to update state variables.
+
+Consider the following example:
+
+import { useState } from 'react';
+
+const App = () => {
+  const [todos, setTodos] = useState(['code on day 0', 'code on day 1']);
+
+  const clearTodos = () => {
+    setTodos([]);
+  };
+
+  return (
+    <div>
+      <Header />
+      <button onClick={() => clearTodos()}>Clear All todos</button>
+      <TodoList todos={todos} />
+    </div>
+  );
+};
+
+const TodoList = (props) => {
+  return (
+    <ul>
+      {props.todos.map((todo) => {
+        return <li key={todo}>{todo}</li>;
+      })}
+    </ul>
+  );
+};
+
+Although todos and setTodos are declared inside of the parent App component, both can be passed down as needed to any child components.
+
+Learn To Code

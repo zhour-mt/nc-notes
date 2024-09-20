@@ -1,0 +1,200 @@
+Styling in React
+Mobile-first design
+
+When designing the style of a website, it's crucial to consider the various screen sizes on which it will be viewed. Users may access the site on a laptop, mobile, tablet, or other devices, each with a wide variety of screen sizes.
+
+A common approach is to design with a mobile-first mentality. This means designing the site for the smallest devices first, ensuring that every aspect of the site is functional and accessible on those devices. As the screen size increases, elements can be rearranged to take advantage of the increased area.
+
+Contrast this with the reverse approach, where a site is designed for desktop first. When viewed on smaller screens, fitting all elements created for the desktop view can be challenging. While possible, this approach is harder to implement and risks treating mobile sizes as an afterthought, despite their significant market presence.
+Media queries
+
+To apply different styles based on the screen size in CSS, use a media query. Media queries allow you to specify styles that apply only when certain conditions are met, such as a minimum or maximum screen width.
+
+Here is an example of using media queries to create a responsive layout:
+
+.App {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: min-content auto auto;
+  grid-template-areas:
+    "header"
+    "nav"
+    "content";
+}
+
+@media only screen and (min-width: 600px) {
+  .App {
+    grid-template-columns: 25% 75%;
+    grid-template-rows: min-content auto;
+    grid-template-areas:
+      "header header"
+      "nav content";
+  }
+}
+
+In this example:
+
+    On screens smaller than 600px, the .App class displays content in a single column and three rows.
+    On screens 600px or wider, the media query changes the layout to two columns (one 25% of the screen's width, the other 75%) and two rows. The nav area moves to the left column, and the content area to the right, while the header spans both columns.
+
+This example uses CSS Grid for layout, but you can use any CSS properties within media queries to achieve your desired design.
+
+For more information on grid properties, refer to this guide by CSS Tricks.
+BEM (Block__Element--Modifier)
+
+CSS files can be imported directly into React, and webpack will bundle them as part of the app. To manage large CSS files, it is common to give each component its own CSS file and import them into the relevant components.
+
+Example:
+
+// App.js
+import "./App.css";
+
+// Nav.js
+import "./Nav.css";
+
+Since CSS styles are global, any styles defined in one file are available in every other file. A good naming convention, such as BEM, can help prevent duplicating or conflicting styles.
+BEM Naming Convention
+
+BEM defines three distinct parts of each class name:
+
+    Block: A standalone entity that is meaningful on its own. In React, components are often considered blocks, e.g. header, nav, input, button.
+    Element: A part of a block that is semantically tied to its block, e.g. nav__link, header__username.
+    Modifier: A flag to change the appearance or behaviour of a block or element. e.g. button--disabled, nav__link--active, input--big.
+
+Example:
+
+<form className="form">
+  <input type="text" className="input form__input" />
+  <button
+    className={`button form__button ${
+      isFormValidated ? "form__button--active" : "form__button--inactive"
+    }`}
+  >
+    Place my order!
+  </button>
+</form>
+
+Using the BEM naming convention keeps classes organised and consistent, which is invaluable in larger teams or more complex projects. This approach also improves the readability and maintainability of your CSS.
+CSS Modules
+
+When CSS files are imported, their styles are available globally, not just in the importing component. CSS Modules solve this by scoping styles to the module, ensuring they are only applied to the component they are imported into.
+Using CSS Modules
+
+CSS Modules are supported by default in Vite. Instead of importing CSS files directly, extend the file name with .module and import the default export from that file.
+
+Example:
+
+/* Header.module.css */
+
+.header {
+  /* some lovely styles */
+}
+
+.companyLogo {
+  /* some lovely styles */
+}
+
+.companyName {
+  /* some lovely styles */
+}
+
+.contactButton {
+  /* some lovely styles */
+}
+
+import styles from "./Header.module.css"; // object with keys of header, companyLogo, etc.
+
+The imported styles object will have a key for each CSS class. These keys can be used as the className for elements in your component. Each class in the object will be suffixed with a unique string to ensure they are scoped locally to the component, avoiding naming conflicts.
+
+Example:
+
+import styles from "./Header.module.css";
+
+const Header = () => {
+  return (
+    <header className={styles.header}>
+      <h1 className={styles.companyName}>Not Fake Incorporated</h1>
+      <img src="https://example.com/logo.jpg" className={styles.companyLogo} alt="Company Logo" />
+    </header>
+  );
+};
+
+In this example:
+
+    styles.header applies the styles from the .header class in the CSS module.
+    styles.companyLogo and styles.companyName apply their respective styles from the module.
+
+This way, classes are guaranteed to be unique, and there’s no need to worry about class name conflicts in different CSS files.
+Dynamic classNames in React
+
+Styles can be dynamically applied based on state using the className prop. Since the className prop is a string, it can be generated using JavaScript, with string templates being very useful.
+Example
+
+Consider the following example where a list of Pokémon cards is displayed. The card for a highlighted Pokémon has a different background color.
+
+const PokeList = () => {
+  const [pokemon, setPokemon] = useState([
+    {
+      name: "bulbasaur",
+      sprite:
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+    },
+    // other Pokémon...
+  ]);
+  const [highlightedName, setHighlightedName] = useState("bulbasaur");
+
+  return (
+    <ul className="PokeList">
+      {pokemon.map(({ name, sprite }) => (
+        <li
+          key={name}
+          className={`PokeCard ${
+            name === highlightedName ? "PokeCard--highlight" : ""
+          }`}
+          onClick={() => setHighlightedName(name)}
+        >
+          <img src={sprite} alt={name} />
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+.PokeCard {
+  background-color: white;
+  margin: 1em;
+  padding: 1em;
+  cursor: pointer;
+}
+
+.PokeCard--highlight {
+  background-color: rgb(252, 242, 203);
+  transition: 200ms;
+}
+
+In this example:
+
+    When assigning the className, a ternary operator checks if each Pokémon's name matches the highlightedName. If they match, the className becomes PokeCard PokeCard--highlight; otherwise, it remains PokeCard.
+
+Dynamic classNames with CSS modules
+
+This principle applies when using CSS Modules as well:
+
+className={name === highlightedName ? styles.pokeCard : styles.pokeCardHighlight}
+
+In this example, the class names are conditionally applied using CSS Modules, ensuring unique class names and avoiding conflicts.
+
+Any condition can be used to determine the class name. If the logic for determining class names becomes complex, it can be extracted to a utility function and built with TDD (test-driven development).
+React UI libraries
+
+There are numerous CSS libraries that provide pre-defined styles. Many large libraries offer React-specific versions in the form of pre-built components with all the styles and functionality already included. These can be very beneficial for getting projects up and running quickly but abstract a lot of the functionality.
+
+Some popular libraries include:
+
+    MUI (formerly known as Material UI)
+    React Materialize
+    Grommet
+    React Bootstrap
+    Bulma
+
+Learn To Code

@@ -1,0 +1,94 @@
+Custom React Hooks
+
+In addition to the built-in React Hooks, React also supports the creation of custom Hooks to extract component logic into reusable functions. Custom Hooks function similarly to components, with the key distinction that they do not handle rendering data. While components typically return JSX (or possibly null), custom Hooks can return data in various forms.
+Hook conventions
+
+Custom Hooks follow the same conventions and restrictions as React's built-in Hooks:
+
+    The name of a custom Hook must start with "use", similar to useState or useEffect.
+    Custom hooks can be composed of multiple Hooks, including other custom Hooks.
+    Custom Hooks follow the same implementation rules as built-in Hooks, e.g. only being able to be called from the top level of a component.
+
+Example
+
+Consider a component that renders a user's profile from an API:
+
+import { useState, useEffect } from "react";
+import { fetchProfileById } from "../utils/api";
+
+const UserProfile = ({ userId }) => {
+  const [profile, setProfile] = useState({});
+
+  useEffect(() => {
+    fetchProfileById(userId).then((profileFromApi) => {
+      setProfile(profileFromApi);
+    });
+  }, [userId]);
+
+  return (
+    <div>
+      <h2>{profile.username}</h2>
+      {/* additional profile details */}
+    </div>
+  );
+};
+
+This logic can be extracted into a custom Hook:
+
+// src/hooks/useProfile.js
+import { useState, useEffect } from "react";
+import { fetchProfileById } from "../utils/api";
+
+export const useProfile = (userId) => {
+  const [profile, setProfile] = useState({});
+
+  useEffect(() => {
+    fetchProfileById(userId).then((profileFromApi) => {
+      setProfile(profileFromApi);
+    });
+  }, [userId]);
+
+  return profile;
+};
+
+The logic of maintaining the profile state and the side effect of fetching the data remain the same.
+
+Now, the UserProfile component can use the custom hook:
+
+import { useProfile } from "../hooks/useProfile";
+
+const UserProfile = ({ userId }) => {
+  const profile = useProfile(userId);
+
+  return (
+    <div>
+      <h2>{profile.username}</h2>
+      {/* additional profile details */}
+    </div>
+  );
+};
+
+Extending custom Hooks
+
+This logic can be extended to include other relevant states, such as loading state:
+
+export const useProfile = (userId) => {
+  const [profile, setProfile] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchProfileById(userId).then((profileFromApi) => {
+      setProfile(profileFromApi);
+      setIsLoading(false);
+    });
+  }, [userId]);
+
+  return { profile, isLoading };
+};
+
+This Hook is reusable by any component and can be called multiple times. Each invocation of the Hook will have its own state and effects.
+
+For further reading, the React documentation offers an excellent guide on writing custom Hooks.
+
+Learn To Code

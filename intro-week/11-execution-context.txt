@@ -1,0 +1,23 @@
+Execution Context
+The Variable Environment
+
+When a JavaScript file is run, variables are placed in memory. This is true for functions, but the content of functions is not examined or compiled until the function is invoked. These variables are available in the global variable environment and the value that was stored can be accessed when the variable name is referenced in the code.
+
+In the following example, the variables me and you are stored in memory first as the interpreter reads the code line-by-line. The variable us is then created, but its value is evaluated by accessing the two other previously stored variables:
+
+const me = "Jonny";
+const you = "Sam";
+const us = me + " " + you;
+
+The Call Stack
+
+Running a JavaScript file creates a global execution context. This includes creating the global object that we have access to when we use things that are globally available like console.log.
+The Thread
+
+Within this global execution context, an execution thread begins running. This evaluates each line in turn, or synchronously. JavaScript is a 'single-threaded' language - it can only have one execution thread operating at a time.
+
+In JavaScript, the call stack is used to keep track of which execution thread is happening. A JavaScript process begins with the global thread being added to the call stack. However, if we execute a function, we will enter a local execution context.
+
+This will be added to the call stack to indicate that this context needs resolving before moving back to the global. This will ensure JavaScript executes the lines of code in the desired order.
+
+Learn To Code

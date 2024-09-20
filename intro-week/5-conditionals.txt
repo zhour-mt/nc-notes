@@ -1,0 +1,86 @@
+Conditionals
+
+Conditional statements allow code to make decisions based on a given input. We can assign code blocks to execute if a particular statement is true.
+If Statement
+
+An if statement accepts an expression enclosed with a set of parentheses. If the expression evaluates to a truthy value, then the code within the code block will be executed.
+
+If the expression evaluates to a falsy value, however, the code body will not be executed.
+
+const isHungry = true;
+const foodToEat = [];
+
+if (isHungry) {
+  foodToEat.push("Cheese Toast")
+}
+
+Else Statement
+
+If the if condition doesn't evaluate to a truthy value, the code enclosed in the code body of the else block will run instead.
+
+const isHungry = false;
+const foodToEat = [];
+
+if (isHungry) {
+  foodToEat.push("Cheese Toast");
+} else {
+  console.log("I am not hungry!");
+}
+
+// "I am not hungry!"
+
+Else If Statement
+
+You can chain on even more outcomes by using else if.
+
+const restaurantOrder = "Cheeseburger";
+
+if (restaurantOrder === "Hotdog") {
+  console.log("I would like a Hotdog!");
+} else if (restaurantOrder === "Chicken Tikka") {
+  console.log("I would like Chicken Tikka!");
+} else if (restaurantOrder === "Cheeseburger") {
+  console.log("I would like a Cheeseburger with extra cheese!");
+}
+
+// "I would like a Cheeseburger with extra cheese!"
+
+Switch Statement
+
+The switch statement allows you to check an expression against multiple case clauses. If a case matches, the code inside of that clause will be executed. Your case clause should finish with a break keyword.
+
+Your switch statement can also include a default clause, which allows you to run code when no case matches the expression given.
+
+Switch statements are especially useful if you have a large number of choices you want to check an expression against.
+
+const weatherToday = "Rainy";
+
+switch (weatherToday) {
+  case "Sunny":
+    console.log("Don't forget to put suncream on!");
+    break;
+  case "Rainy":
+    console.log("Make sure to bring your umbrella!");
+    break;
+  case "Snowy":
+    console.log("It seems like snow boots are a good choice today!");
+    break;
+  default:
+    console.log("The sky is grey, but at least there is no rain.");
+}
+
+Ternary Operator
+
+The ternary operator is a concise way of writing an if...else statement. To use it, you need to write out a condition followed by the ? operator, and two different expressions that are separated by a :.
+
+If the condition evaluates to truthy, the first expression is executed, and if it evaluates to falsy, the second expression is executed. As the ternary operator is an expression, its most appropriate use case is to make use of this evaluation.
+
+const marks = 23;
+
+const examResult = marks >= 18 ? "pass" : "fail";
+
+console.log(examResult) // "pass"
+
+Ternaries can be nested like if statements. However, they can lead to less readable code in more complex cases.
+
+Learn To Code

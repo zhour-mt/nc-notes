@@ -1,0 +1,68 @@
+Objects
+
+An object is a data type that represents a collection of key-value pairs called properties. Objects are good data structures for representing a thing. Characteristics of the thing, which have no meaningful order, are stored and accessed as properties. They can be declared using curly brackets.
+
+ const tutor = {
+    name: "Heather", 
+    age: 29, 
+    interests: ["coding", "dancing", "watching Real Housewives"],
+    isCool: true
+ };
+
+A key must be a string whereas values can be any data type, including other objects. Keys must be unique.
+Accessing Properties
+Dot Notation
+
+Accessing properties refers to the process of "looking up" or accessing property values using a property key.
+
+const pet = { name: "Lily", age: 10};
+
+pet.name; // "Lily"
+
+pet.starsign; // undefined
+
+You can access a property's value from an object by using the object name and the key of the property you want to access. This is most commonly achieved using dot notation. Accessing a property using a key which does not exist will evaluate to undefined.
+Dynamic Access
+
+Alternatively, you can use a variable and square bracket notation to access a property.
+
+const phoneBook = {
+  david: "07986538201",
+  linda: "07891867541",
+  heather: "0789573421",
+};
+
+const name = "linda";
+
+phoneBook.name; // undefined
+phoneBook[name]; // "07891867541"
+
+phoneBook["DAVID".toLowerCase()]; // "07986538201"
+
+The variable or expression inside the square brackets is evaluated and then used as the key to access the associated property value.
+Adding and Deleting Properties
+
+To add a property to an existing object, you can assign the value using dot notation. As keys must be unique, assigning a value to a property which already exists will update the property's value rather than create a new property.
+
+phoneBook.jim = "07586548207";
+
+// {
+//   david: "07986538201",
+//   linda: "07891867541",
+//   heather: "0789573421",
+//   jim: "07586548207"
+// };
+
+To delete a property from an object, use the delete operator. The delete operator removes both the value and the property from the object.
+
+delete phoneBook.linda;
+delete phoneBook.heather;
+delete phoneBook.david;
+
+// {
+//   jim: "07586548207"
+// };
+
+Making changes to an object is called mutation.
+
+Learn To Code

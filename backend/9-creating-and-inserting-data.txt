@@ -1,0 +1,49 @@
+Creating and Inserting Data
+Creating a database
+
+The following SQL statement creates a database called "my_database":
+
+CREATE DATABASE my_database;
+
+Dropping a database
+
+To drop a database (if it exists), including all tables and records, use the DROP DATABASE IF EXISTS query:
+
+DROP DATABASE IF EXISTS my_database;
+
+Creating a table
+
+To create a table inside a database, the name of the table must be specified, as well as the table's column names and their data types.
+
+The following statement will create a table of Northcoders, where the Primary Key of each row is an id:
+
+CREATE TABLE northcoders (
+  northcoder_id INT PRIMARY KEY,
+  northcoder VARCHAR(40) NOT NULL,
+  date_of_birth DATE,
+  northcoders_points INT DEFAULT 0
+);
+
+NOT NULL prevents the creation of a row without a value in the specified column.
+
+DEFAULT allows a default value to be set if one is not provided when a row is added to the table.
+Inserting into a table
+
+Data can be inserted into the table using the following statements:
+
+INSERT INTO northcoders
+  (northcoder_id, northcoder)
+VALUES
+  (1, 'Callum');
+
+Multiple records can be inserted in one statement by separating the entries with commas:
+
+INSERT INTO northcoders
+  (northcoder, date_of_birth)
+VALUES
+  ('Callum', '1992-05-17'),
+  ('Ali', null),
+  ('Kev', '1826-10-24'),
+  ('Rayhaan', null);
+
+Learn To Code

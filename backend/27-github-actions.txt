@@ -1,0 +1,157 @@
+GitHub Actions
+
+To use GitHub Actions on a repository, a .github/workflows directory must exist at the repository's root, containing workflow files in YAML format. Workflow is the name given to what might be called a pipeline with other providers.
+
+Workflows are triggered by events like push or pull_request, with actions defined for different stages of the CI/CD pipeline.
+YAML
+
+There may be multiple pipelines for a project. For example, a repo may be responsible for multiple applications deployed separately. Or the CI and CD parts of your pipeline could be separated. Each workflow needs a YAML file to configure it.
+
+In this example, the file will be named test-and-deploy.yml.
+
+Each workflow will need a name property:
+
+name: Test & Deploy
+
+Triggers
+
+For deciding when a workflow should be executed, a trigger needs to be added to the YAML file. Usually, this trigger will be an event such as code being pushed to the main branch of a repo, or when a branch is successfully merged into main through a pull request.
+
+In this case, the trigger is some code being pushed to the main branch:
+
+on:
+  push:
+    branches:
+      - main
+
+Other events that can trigger actions can be found in the GitHub Actions documentation.
+Jobs
+
+GitHub Actions can be used to define separate tasks, or jobs, that can be integrated into the pipeline.
+
+Jobs are defined under a jobs key, followed by a <job_id> and any extra configuration needed for the job to run. For example, running unit tests on code that has been pushed up may look like this:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+On this test job property, a human-readable name has been defined which will be used by the GitHub UI to inform developers about the pipeline's progress. A runs-on property is also added to specify the environment that tests should be run on. This should be the same environment as the one used for deployment. On GitHub Actions, Linux machines are the cheapest, so ubuntu-latest will work fine as a default.
+Steps
+
+Jobs can be further broken down into steps that need to be undertaken sequentially. The first step is fairly specific to GitHub Actions - checking out the code that will be used.
+
+As GitHub Actions is one of the most popular CI/CD tools, a lot of common actions have already been created by other users or GitHub. In order to check out a repo's code, an action already exists:
+
+lint:
+  name: Lint
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+
+The syntax for the action referred to under uses is <owner>/<repo>@<branch>. Anything with an owner of actions is an official GitHub action.
+
+Other pre-written Actions can be found in the GitHub Actions Marketplace
+Node environment
+
+The next step is to set up a node environment. There is another common GitHub-made Action that can be used here. Information can be provided to the action using the with key, such as specifying a specific Node version:
+
+steps:
+  - name: Use Node.js
+    uses: actions/setup-node@v4
+    with:
+      node-version: 18
+
+Provisioning a database
+
+If the tests make use of a database, it will also be important to provision a database as part of the job.
+
+There is a PostgreSQL GitHub Action that can be used. It is necessary to define the name of the database that needs to be created, as well as a user and password to allow access to it:
+
+steps:
+  - name: Checkout Repo
+    uses: actions/checkout@v4
+
+  - name: Use Node.js
+    uses: actions/setup-node@v4
+    with:
+      node-version: 18
+
+  - name: Use PostgreSQL
+    uses: harmon758/postgresql-action@v1
+    with:
+      postgresql db: 'my_db'
+      postgresql user: 'test_user'
+      postgresql password: 'test_password'
+
+Note that the password and username do not need to be hidden here because they are only for use on a test database that will quickly be disposed of.
+Install and run
+
+There are two more steps for the job: install dependencies and run the test script. A test script must be made in the package.json.
+
+When running the test script, environment variables need to be provided that will enable connection to the database created in the Use PostgreSQL step.
+
+In the workflow file, there is now a complete job:
+
+test:
+  name: Test
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+
+    - name: Use PostgreSQL
+      uses: harmon758/postgresql-action@v1
+      with:
+        postgresql db: 'my_db'
+        postgresql user: 'test_user'
+        postgresql password: 'test_password'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run tests
+      run: PGDATABASE=my_db PGUSER=test_user PGPASSWORD=test_password npm t
+
+npm ci is a similar command to npm install that is recommended for use in CI/CD environments. It will rely upon a package-lock.json and only install the specified versions of listed dependencies. More about the npm ci command can be found in the npm documentation
+Deployment
+
+If the application is hosted on certain platforms, such as Render, it may offer automatic deployments when code is pushed to a branch. This feature will deploy the code from the main branch, but doesn't run any checks on it.
+
+An alternative is a manual deployment using a webhook.
+
+A request can be made to this endpoint from the CI to deploy code automatically once all of the checks have passed. This ensures that everything is working as expected before deploying.
+Secrets
+
+The endpoint that hosting platforms such as Render provides is unique to an application. Anyone with this endpoint could re-deploy the app at any point, so take care that it is not committed to the code or viewable through the logs that GitHub provides when running its Actions.
+
+The solution is to declare them as Secrets, which can be found from the sidebar under the settings tab for a repo.
+
+To access secrets in the pipeline, the ${{ secrets.NAME_OF_SECRET }} syntax is used. These values will be masked in the logs of the pipeline to keep them safe when used as part of jobs.
+
+For example, the curl terminal command can be used to make a request to the deploy endpoint:
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Render
+        run: curl $\{{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+Action sequencing
+
+In a pipeline, each step should be increasing confidence that the code is of sufficient quality to apply the next check. There's no hard and fast order things should happen in, but it makes sense that inexpensive (both in time and money) tasks should be completed before moving on to tasks that take longer.
+
+With the example above, there would be nothing preventing both jobs from running at the same time, but it is usually the case that the quality checks should pass before deploying the changes. To do so, a needs property can be added to a job. The value of the needs property should refer to any jobs that must be completed successfully before the workflow undertakes this next job:
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test # wait until test is successful before running this job
+    steps:
+      - name: Deploy to Render
+        run: curl $\{{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+Learn To Code

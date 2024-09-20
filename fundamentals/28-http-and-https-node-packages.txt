@@ -1,0 +1,95 @@
+HTTP and HTTPS Node Packages
+
+Node has in-built http and https modules to make requests to other servers or APIs. They can be required directly into the file:
+
+const https = require("https");
+const http = require("http");
+
+Making a GET Request
+
+To make an HTTP GET request, an options object configured with the appropriate values is required. This provides additional information to send the request:
+
+function getTracks() {
+  const options = {
+    hostname: "itunes.apple.com",
+    path: "/search?term=beyonce&limit=5",
+    method: "GET",
+  };
+
+  const request = https.request(options, (response) => {
+      // logic to handle the response
+  });
+  
+  request.end();
+}
+
+This example makes use of the https module to get information about Beyoncé's tracks from the iTunes API. The hostname is the URL of the API itself, and the path is the endpoint of the API being accessed.
+
+Once the options object is configured, the request is set up by invoking the https.request() method with two arguments:
+
+    the options object
+    a callback function to handle the response
+
+Once the request has been configured, invoking the request.end() method will send the request and make the reponse body available to the callback function passed to it.
+Building The Response Body
+
+Information transmitted in the response bodies arrives in small chunks of data called packets. These packets need reconstructing into the response body before it can be worked with.
+
+Node's request triggers a "data" event whenever a new packet is received. By using the request.on() method, the server listens for this "data" event, and invokes another callback function to build up the response body:
+
+  const request = https.request(options, (response) => {
+     let body = '';
+   
+    response.on("data", (packet) => {
+      body += packet.toString();
+    });
+  });
+
+Once all the packets have been received, the request.on() method can be used to invoke a callback by passing "end" as the event:
+
+  const request = https.request(options, (response) => {
+    let body = "";
+
+    response.on("data", (packet) => {
+      body += packet.toString();
+    });
+
+    response.on("end", () => {
+      const parsedBody = JSON.parse(body);
+    });
+  });
+
+Making a POST Request
+
+To make a POST request, specify the request method as "POST" and update the header with the correct Content-Type. The format for the rest of the request follows a similar structure as a GET request, but the body is added using .write():
+
+function postTrack() {
+  const trackData = JSON.stringify({
+    artist: "Beyoncé",
+    title: "Single Ladies",
+  });
+
+  const options = {
+    hostname: "yourapi.com",
+    path: "/addtrack",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const request = https.request(options, (response) => {
+    // logic to handle the response
+  });
+
+  request.write(trackData);
+  request.end();
+}
+
+The request.write() method takes the post body as an argument and sends this as part of the request.
+Documentation
+
+    Node HTTP
+    Node HTTPS
+
+Learn To Code

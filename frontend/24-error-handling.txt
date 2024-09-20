@@ -1,0 +1,127 @@
+Error Handling
+
+When working with a frontend connected to an API, issues can sometimes arise. With a well-designed backend, errors will come with an error code and potentially a message to highlight what has gone wrong. However, carefully translating these errors into something meaningful for users is an important part of frontend development.
+Client-side errors
+
+Client-side errors can be addressed before a request is sent to the backend, such as missing information on a form that prevents submission, or user navigating to a nonexistent URL.
+
+Where possible, it is important to foresee these types of user interactions and control the UI, such as disabling a submission button until certain conditions are met, or provide visual feedback, like a 404 page for invalid routes.
+Server-side errors
+
+Server-side errors are only detected after a request is sent to the backend.
+
+These can include:
+
+    The server responding with a status code in the 400s or 500s.
+    An incorrect ID in the URL resulting in 404 when trying to request a non-existent resource.
+    A user not being authorised to access a resource.
+
+In situations where a server-side error is returned, translating this into something that makes sense to a frontend user, who will likely have no understanding of the backend API, is important.
+Error components
+
+Errors messages can be handled by specific error components that are rendered based on a parent component's error state:
+
+import { useState, useEffect } from "react";
+
+const Page = () => {
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    getData()
+      .then((data) => {
+        // handle data
+      })
+      .catch((err) => {
+        setError(err);
+      });
+  }, []);
+
+  if (error) {
+    return <ErrorComponent message={error.message} />;
+  }
+  return <Stuff />;
+};
+
+Create reusable error components to handle different error messages and codes:
+
+const ErrorComponent = ({ message }) => {
+  return (
+    <div>
+      <h1>Error</h1>
+      <p>{message}</p>
+    </div>
+  );
+};
+
+Conditionally rendering errors
+
+Errors can also be displayed conditionally using a ternary operator or short-circuit evaluation.
+Using ternary operators
+
+A ternary operator can be used to conditionally render an error message, or any desired component, based on a component's state:
+
+const Page = () => {
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    getData()
+      .then((data) => {
+        setData(data);
+      })
+      .catch((err) => {
+        setError(err);
+      });
+  }, []);
+
+  return (
+    <div>
+      {error ? (
+        <ErrorComponent message={error.message} />
+      ) : (
+        <DataComponent data={data} />
+      )}
+    </div>
+  );
+};
+
+Using short-circuit evaluation
+
+Short-circuit evaluation can be used to render an error message if an error exists. Otherwise, it will render the desired component:
+
+const Page = () => {
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    getData()
+      .then((data) => {
+        setData(data);
+      })
+      .catch((err) => {
+        setError(err);
+      });
+  }, []);
+
+  return (
+    <div>
+      {error && <ErrorComponent message={error.message} />}
+      {!error && <DataComponent data={data} />}
+    </div>
+  );
+};
+
+Both methods provide a clear and concise way to handle errors within your components, ensuring a better user experience by displaying appropriate feedback.
+Invalid routes
+
+Error messages for invalid routes can be handled by using React Router to define a catch-all route:
+
+import { Route, Routes } from "react-router-dom";
+
+<Routes>
+  <Route path="*" element={<ErrorPage />} />
+</Routes>
+
+This ensures that when a user tries to access any route that has not been defined, the error component will be rendered instead.
+
+Learn To Code

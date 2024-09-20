@@ -1,0 +1,74 @@
+This
+
+A context refers to the object where the code that is running is stored. The this keyword references the current context, specifically to the object that "owns" the current code and allows developers to interact with it.
+
+There are several scenarios where this behaves differently. A few of them are detailed below.
+Implicit binding
+
+
+const person = {
+  name: "Poppy",
+  sayName: sayName,
+};
+
+function sayName() {
+  return `Hi, I'm ${this.name}`;
+
+person.sayName(); //returns "Hi, I'm Poppy"
+
+The keyword this refers to the context in which the method was called from. When you invoke the sayName method of the person object, this gets bound to the object that is calling the function, which in this case is person. This is known as implicit binding.
+Default binding
+
+Invoking a function containing the this keyword without providing any context will cause this to be assigned a value by default binding. This means that it will bind to the global object.
+
+function addFavouriteAnimal(animal) {
+  this.favouriteAnimal = animal;
+}
+addFavouriteAnimal('Hedgehog');
+console.log(global); // The global object now has a new keypair of favouriteAnimal with a value of "Hedgehog"
+
+The default this binding of a function is the global object.
+Explicit binding
+
+Use methods such as .call and .apply to explicitly define which context the function should be invoked in.
+
+function addSnack(...items) {
+  this.fridge.push(...items);
+}
+
+const myKitchen = {
+  fridge: [],
+  addSnack: addSnack
+};
+addSnack.call(myKitchen, 'mango', 'cake');
+addSnack.apply(myKitchen, ['banana']);
+console.log(myKitchen.fridge); // ["mango", "cake", "banana"]
+
+Invoking the addSnack function in the context of the myKitchen object can be done using either the apply or call methods. The difference between these two methods is that apply takes an array of arguments, while call takes multiple arguments.
+
+Another method available is bind.
+
+const addSnackToKitchen = addSnack.bind(myKitchen);
+
+bind returns a new function - in the example above, it returns a copy of addSnack where the value of this is always going to be the myKitchen object. A bound function cannot have the this value changed.
+Arrow functions
+
+Unlike in function declarations, the this value in an arrow function is bound to the this value of the context the function was created in, not at the point of invocation. The this value cannot be set via implicit or explicit binding.
+
+const changeName = (newName) => {
+  this.name = newName;
+};
+
+const user = {
+  name: 'David',
+  changeName: changeName
+};
+
+user.changeName('Tom');
+
+console.log(user.name); // "David"
+console.log(this.name); // "Tom"
+
+changeName is an arrow function, which means that its this value is set to the global scope where it was defined. As a result, the name property has been set on the global this object, with a value of "Tom". However, this change doesn't affect the name property on davidsAccount. It remains unchanged.
+
+Learn To Code
