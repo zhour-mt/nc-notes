@@ -1,0 +1,46 @@
+Agile Development
+
+Agile software development is a project management methodology that focuses on individuals and interactions over processes and tools. As opposed to concentrating purely on measurable output, it is a practice that emphasises how people work together and are able to respond to change during the development process.
+
+Although Agile development has different implementations, there are several common tools or features that facilitate an 'agile approach'.
+Kanban boards
+
+Kanban boards are tools used to visualise workflows and minimise the amount of work currently in process.
+
+The board itself is split into multiple columns, e.g. 'to do', 'doing', 'done'. Cards are then added to the first column of the board to represent individual tasks.
+
+Depending on the team, cards may also have additional properties such as due date, the name of the person completing the task, the name of the person responsible for approving the task, or a measure of the task's difficulty.
+Stand-up/SCRUM
+
+A stand-up is a daily team meeting where everyone provides an update since the last meeting. The name comes from the idea that all team members should be physically standing, so that everyone is uncomfortable enough to keep discussions to a minimum.
+
+An individual's update would normally include:
+
+    A progress update on how the work has developed since the last stand-up
+    An brief overview of what work will be undertaken until the next stand-up
+    Raising any blockers or hindrances that are making progress difficult
+
+Alternatively, the focus on updates can be based on each task rather than an individual team member.
+
+As stand-ups are task oriented, they often use Kanban boards as a focus point to better visualise the movement and distribution of tasks.
+Spiking
+
+Spikes are exploratory phases in software development, representing activities such as research, design, investigation and prototyping.
+
+The purpose of a spike is to gain the knowledge necessary to reduce the risk of a technical approach, better understand requirements, or increase the reliability of a story estimate.
+
+Spiking may involve:
+
+    Reading documentation for a new piece of technology
+    Researching and evaluating different technical approaches to discover which one will be adopted
+    Looking through existing code to see how similar features have been implemented in other situations
+
+RATS
+
+Related to minimum viable products (MVP) and spiking, Riskiest Assumption Tests (RATS) put the focus on learning and overcoming any major stumbling blocks that could derail a project.
+
+The aim of RATS is to prove elements of a project are doable and therefore the project viable.
+
+RATS test small individual units or integrations of tools that a project is based upon. It helps to ascertain the viability of an idea without having to develop the whole product.
+
+Learn To Code

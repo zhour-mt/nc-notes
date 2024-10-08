@@ -1,0 +1,31 @@
+Project Pitches
+Minimum viable product
+
+A minimum viable product (MVP) is the absolute smallest and simplest version of a project. It is essentially a proof of concept - a prototype that proves an app works and could be used in the real world.
+
+At this point, there will certainly be a number of small, quality-of-life features that would be added to a real app. These features do not add a great deal of value to a project but would be included in the full version.
+
+The MVP should focus on the critical-paths of an application, i.e. identify what is the core concept of the app and make it do that well!
+
+An app that does one thing well presents better than an app that does something simple with lots of little features.
+User stories
+
+To help with identifying the core concept of an app, write some user stories. They should take the form:
+
+As a < role >, I want/should/would/can < feature >.
+
+When creating an MVP, user stories should be short and simple. If the word 'and' is included in a feature description, it should probably be two separate user stories.
+Tech stack
+
+Once user stories have been created, it is important to think about what tech choices are needed to implement each feature. Is there existing tech familiar to the development team that could be used, or will new tech need to be introduced?
+
+For new projects, it can be useful to experiment with unfamiliar technologies as a way of developing a new skillset. Be sure to research any tech choices to find out how easily it can achieve each of your user stories.
+RATS
+
+Each project will likely have new tech, whether that be new hardware, an unfamiliar coding language, or a new package being integrated into the project. Each feature also comes with a degree of difficulty to implement.
+
+The next step is to identify which of these presents the biggest barrier to completing the project through Riskiest Assumption Tests.
+
+These potential obstacles to development should be evaluated individually to assess whether they will impact the project's progress. Spiking out mock repos, researching more about a new technology or finding open-source codebases with existing implementations can all be useful options.
+
+Learn To Code
